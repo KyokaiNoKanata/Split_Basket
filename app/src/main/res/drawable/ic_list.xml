@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Classic list icon -->
+    <path android:fillColor="#00897B" android:pathData="M3,7h18V5H3z"/>
+    <path android:fillColor="#00897B" android:pathData="M3,13h18v-2H3z"/>
+    <path android:fillColor="#00897B" android:pathData="M3,19h18v-2H3z"/>
+</vector>
