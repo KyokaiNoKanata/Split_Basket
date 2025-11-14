@@ -1,0 +1,15 @@
+{
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.jdt.ls.androidSupport.enabled": "on",
+    "java.import.gradle.refresh.afterBuild": true,
+    "java.import.gradle.wrapper.enabled": true,
+    "java.import.gradle.version": "wrapper",
+    "java.import.gradle.java.home": "/Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home",
+    "java.configuration.runtimes": [
+        {
+            "name": "JavaSE-17",
+            "path": "/Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home"
+        }
+    ],
+    "java.compile.nullAnalysis.mode": "automatic"
+}

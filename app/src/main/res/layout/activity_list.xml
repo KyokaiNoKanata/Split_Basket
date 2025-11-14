@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <!-- 移除右上角品牌徽标 -->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/scrollContent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/actionButtons">
+
+        <LinearLayout
+            android:id="@+id/headerArea"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="0dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <!-- 统一的大标题 -->
+            <TextView
+                android:id="@+id/pageTitleList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/PageTitleText"
+                android:text="@string/shopping_list"
+                android:paddingBottom="6dp"
+                tools:ignore="HardcodedText"/>
+
+            <!-- Recommendation chips -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardUseCompatPadding="true"
+                app:cardElevation="1dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/recommendation"
+                        android:textStyle="bold"
+                        android:paddingBottom="2dp" />
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chipGroupRecommend"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:singleLine="true"
+                        app:chipSpacingHorizontal="8dp"
+                        app:chipSpacingVertical="0dp">
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipBread"
+                            style="@style/Widget.MaterialComponents.Chip.Action"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/bread" />
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipTissue"
+                            style="@style/Widget.MaterialComponents.Chip.Action"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tissue" />
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipEggs"
+                            style="@style/Widget.MaterialComponents.Chip.Action"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/eggs" />
+                    </com.google.android.material.chip.ChipGroup>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            
+        </LinearLayout>
+
+        <!-- Summary and empty state placed just above the list card -->
+        <TextView
+            android:id="@+id/textSummary"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/total_purchased_default"
+            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+            android:paddingTop="6dp"
+            android:paddingBottom="2dp"
+            app:layout_constraintTop_toBottomOf="@id/headerArea"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_goneMarginTop="0dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            tools:text="Total: 4    Purchased: 1" />
+
+        <TextView
+            android:id="@+id/textEmptyState"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/empty_list"
+            android:textAlignment="center"
+            android:visibility="gone"
+            android:paddingBottom="4dp"
+            app:layout_constraintTop_toBottomOf="@id/textSummary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:visibility="visible"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardShoppingList"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="0dp"
+            app:cardUseCompatPadding="true"
+            app:cardElevation="1dp"
+            app:strokeColor="#22000000"
+            app:strokeWidth="1dp"
+            app:cardCornerRadius="12dp"
+            app:layout_constraintTop_toBottomOf="@id/textEmptyState"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerShoppingList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:paddingTop="0dp"
+                android:paddingBottom="8dp"
+                android:overScrollMode="always"
+                android:fadingEdgeLength="8dp"
+                android:nestedScrollingEnabled="true"
+                tools:listitem="@layout/item_shopping" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Fixed action buttons above bottom bar -->
+    <LinearLayout
+        android:id="@+id/actionButtons"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bottomBar">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAddItems"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:text="@string/add_items" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSettlement"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:text="@string/settlement" />
+    </LinearLayout>
+
+    <!-- Bottom bar with slider -->
+    <FrameLayout
+        android:id="@+id/bottomBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+
+
+        <LinearLayout
+            android:id="@+id/bottomBarContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnHome"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Home"
+                    style="@style/BottomNavButton"
+                    android:checkable="true"
+                    android:textColor="@color/bottom_nav_tint"
+                    app:iconTint="@color/bottom_nav_tint"
+                    app:iconGravity="textTop"
+                    android:background="@drawable/button_background_selector"
+                    app:icon="@drawable/ic_home" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnInventory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Inventory"
+                    style="@style/BottomNavButton"
+                    android:checkable="true"
+                    android:textColor="@color/bottom_nav_tint"
+                    app:iconTint="@color/bottom_nav_tint"
+                    app:iconGravity="textTop"
+                    android:background="@drawable/button_background_selector"
+                    app:icon="@drawable/ic_inventory" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="List"
+                    style="@style/BottomNavButton"
+                    android:checkable="true"
+                    android:checked="true"
+                    android:textColor="@color/bottom_nav_tint"
+                    app:iconTint="@color/bottom_nav_tint"
+                    app:iconGravity="textTop"
+                    android:background="@drawable/button_background_selector"
+                    app:icon="@drawable/ic_list" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnBill"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Bill"
+                    style="@style/BottomNavButton"
+                    android:checkable="true"
+                    android:textColor="@color/bottom_nav_tint"
+                    app:iconTint="@color/bottom_nav_tint"
+                    app:iconGravity="textTop"
+                    android:background="@drawable/button_background_selector"
+                    app:icon="@drawable/ic_bill" />
+            </FrameLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
