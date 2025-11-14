@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 统一页面大标题样式（更有"标题"的气场） -->
+    <style name="PageTitleText">
+        <item name="android:textSize">34sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:letterSpacing">0.02</item>
+        <item name="android:paddingBottom">12dp</item>
+    </style>
+
+    <!-- 顶部主操作按钮统一样式：单行、等高、居中 -->
+    <style name="PrimaryActionButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:minHeight">48dp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <!-- 账单页分摊方式单选项样式：支持两行、末尾省略、垂直居中 -->
+    <style name="SplitMethodRadio" parent="Widget.MaterialComponents.CompoundButton.RadioButton">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <!-- 列表条目统一样式：左侧小图标、统一字号 -->
+    <style name="ListItemText">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:drawableStart">@drawable/ic_item_bullet</item>
+        <item name="android:drawablePadding">6dp</item>
+    </style>
+
+    <!-- 底部导航栏按钮样式：增大字体并加粗 -->
+    <style name="BottomNavButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+</resources>
