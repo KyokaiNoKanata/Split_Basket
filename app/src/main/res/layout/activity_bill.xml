@@ -184,55 +184,246 @@
                             android:layout_height="wrap_content"
                             android:text="@string/equal" />
                         <RadioButton
-                            android:id="@+id/radioByQuantity"
-                            style="@style/SplitMethodRadio"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/by_quantity" />
-                        <RadioButton
-                            android:id="@+id/radioByItem"
-                            style="@style/SplitMethodRadio"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/by_item" />
-                        <RadioButton
-                            android:id="@+id/radioCustom"
-                            style="@style/SplitMethodRadio"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/custom" />
+                    android:id="@+id/radioByQuantity"
+                    style="@style/SplitMethodRadio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/by_quantity" />
+                <RadioButton
+                    android:id="@+id/radioByItem"
+                    style="@style/SplitMethodRadio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/by_item" />
+                <RadioButton
+                    android:id="@+id/radioCustom"
+                    style="@style/SplitMethodRadio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/custom" />
                     </RadioGroup>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/members"
-                        android:paddingTop="8dp" />
-
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingTop="4dp">
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/name_of_members" />
-                        <CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" />
-                    </LinearLayout>
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingTop="4dp">
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/name_of_members" />
-                        <CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" />
-                    </LinearLayout>
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingTop="4dp">
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/name_of_members" />
-                        <CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" />
-                    </LinearLayout>
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingTop="4dp">
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/name_of_members" />
-                        <CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" />
-                    </LinearLayout>
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnCreateBill"
+                    <!-- 平均付款方式的布局 -->
+                    <LinearLayout
+                        android:id="@+id/layoutEqualSplit"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/create_new_bill"
-                        android:layout_marginTop="12dp" />
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/members"
+                            android:paddingTop="8dp" />
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingTop="4dp">
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="User1" />
+                            <CheckBox android:id="@+id/checkBox1" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingTop="4dp">
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="User2" />
+                            <CheckBox android:id="@+id/checkBox2" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingTop="4dp">
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="User3" />
+                            <CheckBox android:id="@+id/checkBox3" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingTop="4dp">
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="User4" />
+                            <CheckBox android:id="@+id/checkBox4" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tvPerPersonAmount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Per person: ¥0.00"
+                            android:textStyle="bold"
+                            android:paddingTop="8dp"
+                            android:gravity="center_horizontal" />
+                    </LinearLayout>
+
+                    <!-- 自定义付款方式的布局 -->
+                    <LinearLayout
+                        android:id="@+id/layoutCustomSplit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/members"
+                            android:paddingTop="8dp" />
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingTop="4dp">
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="User1" />
+                            <CheckBox android:id="@+id/customCheckBox1" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                            <EditText
+                                android:id="@+id/editUser1Amount"
+                                android:layout_width="100dp"
+                                android:layout_height="wrap_content"
+                                android:hint="0.00"
+                                android:inputType="numberDecimal"
+                                android:enabled="false" />
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingTop="4dp">
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="User2" />
+                            <CheckBox android:id="@+id/customCheckBox2" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                            <EditText
+                                android:id="@+id/editUser2Amount"
+                                android:layout_width="100dp"
+                                android:layout_height="wrap_content"
+                                android:hint="0.00"
+                                android:inputType="numberDecimal"
+                                android:enabled="false" />
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingTop="4dp">
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="User3" />
+                            <CheckBox android:id="@+id/customCheckBox3" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                            <EditText
+                                android:id="@+id/editUser3Amount"
+                                android:layout_width="100dp"
+                                android:layout_height="wrap_content"
+                                android:hint="0.00"
+                                android:inputType="numberDecimal"
+                                android:enabled="false" />
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingTop="4dp">
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="User4" />
+                            <CheckBox android:id="@+id/customCheckBox4" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                            <EditText
+                                android:id="@+id/editUser4Amount"
+                                android:layout_width="100dp"
+                                android:layout_height="wrap_content"
+                                android:hint="0.00"
+                                android:inputType="numberDecimal"
+                                android:enabled="false" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tvCalculatedTotal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Total calculated: ¥0.00"
+                            android:textStyle="bold"
+                            android:paddingTop="8dp"
+                            android:gravity="center_horizontal" />
+                    </LinearLayout>
+                    <!-- 平均付款方式的布局 -->
+                    <LinearLayout
+                        android:id="@+id/layoutEqualSplit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/members"
+                            android:paddingTop="8dp" />
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingTop="4dp">
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="User1" />
+                            <CheckBox android:id="@+id/checkBox1" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingTop="4dp">
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="User2" />
+                            <CheckBox android:id="@+id/checkBox2" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingTop="4dp">
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="User3" />
+                            <CheckBox android:id="@+id/checkBox3" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingTop="4dp">
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="User4" />
+                            <CheckBox android:id="@+id/checkBox4" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tvPerPersonAmount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Per person: ¥0.00"
+                            android:textStyle="bold"
+                            android:paddingTop="8dp"
+                            android:gravity="center_horizontal" />
+                    </LinearLayout>
+
+                    <!-- 自定义付款方式的布局 -->
+                    <LinearLayout
+                        android:id="@+id/layoutCustomSplit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/members"
+                            android:paddingTop="8dp" />
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingTop="4dp">
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="User1" />
+                            <CheckBox android:id="@+id/customCheckBox1" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                            <EditText
+                                android:id="@+id/editUser1Amount"
+                                android:layout_width="100dp"
+                                android:layout_height="wrap_content"
+                                android:hint="0.00"
+                                android:inputType="numberDecimal"
+                                android:enabled="false" />
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingTop="4dp">
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="User2" />
+                            <CheckBox android:id="@+id/customCheckBox2" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                            <EditText
+                                android:id="@+id/editUser2Amount"
+                                android:layout_width="100dp"
+                                android:layout_height="wrap_content"
+                                android:hint="0.00"
+                                android:inputType="numberDecimal"
+                                android:enabled="false" />
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingTop="4dp">
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="User3" />
+                            <CheckBox android:id="@+id/customCheckBox3" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                            <EditText
+                                android:id="@+id/editUser3Amount"
+                                android:layout_width="100dp"
+                                android:layout_height="wrap_content"
+                                android:hint="0.00"
+                                android:inputType="numberDecimal"
+                                android:enabled="false" />
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingTop="4dp">
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="User4" />
+                            <CheckBox android:id="@+id/customCheckBox4" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                            <EditText
+                                android:id="@+id/editUser4Amount"
+                                android:layout_width="100dp"
+                                android:layout_height="wrap_content"
+                                android:hint="0.00"
+                                android:inputType="numberDecimal"
+                                android:enabled="false" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tvCalculatedTotal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Total calculated: ¥0.00"
+                            android:textStyle="bold"
+                            android:paddingTop="8dp"
+                            android:gravity="center_horizontal" />
+                    </LinearLayout>
+
                 </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnCreateBill"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/create_new_bill"
+                    android:layout_marginTop="12dp" />
             </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>

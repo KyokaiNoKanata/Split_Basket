@@ -87,8 +87,6 @@ public class HomeActivity extends AppCompatActivity {
         newBill.setOnClickListener(v -> showNewBillDialog());
     }
 
-    //底部导航
-
     private void updateButtonStates(MaterialButton selectedButton) {
         btnHome.setSelected(false);
         btnInventory.setSelected(false);
