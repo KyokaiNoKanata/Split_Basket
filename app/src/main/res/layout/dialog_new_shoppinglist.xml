@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvNewListTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/new_shared_shopping_list"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:paddingBottom="8dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_items_and_quantities_long_press_an_item_to_remove"
+            android:textSize="13sp"
+            android:paddingBottom="8dp" />
+
+        <!-- 输入：物品名称 -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/item_name">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etListItemName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- 输入：数量 -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Quantity">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etListItemQuantity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- 添加按钮 -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAddItem"
+            style="@style/PrimaryActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add item"
+            android:layout_marginTop="8dp" />
+
+        <!-- 多选项容器 -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_marginTop="8dp">
+
+            <LinearLayout
+                android:id="@+id/containerListItems"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </ScrollView>
+
+        <!-- 底部按钮 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end"
+            android:paddingTop="12dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCancelNewList"
+                style="@style/BorderlessActionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cancel" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnConfirmNewList"
+                style="@style/PrimaryActionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Create" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>
