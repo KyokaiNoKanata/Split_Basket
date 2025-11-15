@@ -1,14 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- 页面标题文字样式：居中、加粗、大字体 -->
     <style name="PageTitleText" parent="TextAppearance.MaterialComponents.Headline4">
         <item name="android:layout_gravity">center</item>
         <item name="android:textAlignment">center</item>
+    <!-- 统一页面大标题样式（更有"标题"的气场） -->
+    <style name="PageTitleText">
+        <item name="android:textSize">34sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">24sp</item>
         <item name="android:paddingTop">16dp</item>
         <item name="android:paddingBottom">8dp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:letterSpacing">0.02</item>
+        <item name="android:paddingBottom">12dp</item>
     </style>
 
+    <!-- 顶部主操作按钮统一样式：单行、等高、居中 -->
     <!-- 主操作按钮样式：圆形背景、白色文字 -->
     <style name="PrimaryActionButton" parent="Widget.MaterialComponents.Button">
         <item name="android:textColor">@android:color/white</item>
@@ -20,11 +30,19 @@
         <item name="android:paddingTop">12dp</item>
         <item name="android:paddingBottom">12dp</item>
         <item name="android:layout_gravity">center</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
         <item name="android:gravity">center</item>
         <item name="android:stateListAnimator">@null</item>
     </style>
 
     <!-- 结算方式选择的单选按钮样式：自定义颜色和大小 -->
+    <!-- 账单页分摊方式单选项样式：支持两行、末尾省略、垂直居中 -->
     <style name="SplitMethodRadio" parent="Widget.MaterialComponents.CompoundButton.RadioButton">
         <item name="android:textColor">?attr/colorPrimary</item>
         <item name="android:textSize">16sp</item>
@@ -35,8 +53,20 @@
     <style name="ListItemText" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textSize">16sp</item>
         <item name="android:gravity">center</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
         <item name="android:includeFontPadding">false</item>
+        <item name="android:gravity">center_vertical</item>
         <item name="android:letterSpacing">0</item>
+    </style>
+
+    <!-- 列表条目统一样式：左侧小图标、统一字号 -->
+    <style name="ListItemText">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:drawableStart">@drawable/ic_item_bullet</item>
+        <item name="android:drawablePadding">6dp</item>
     </style>
 
     <!-- 底部导航栏按钮样式：增大字体并加粗 -->

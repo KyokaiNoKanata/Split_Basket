@@ -7,17 +7,39 @@
     <string name="nav_inventory">Inventory</string>
     <string name="nav_list">List</string>
     <string name="nav_bill">Bill</string>
+
+    <!-- Common navigation -->
     <string name="home">Home</string>
     <string name="inventory">Inventory</string>
-    
+    <string name="list">List</string>
+    <string name="bill">Bill</string>
+
     <!-- Onboarding -->
     <string name="skip">Skip</string>
     <string name="next">Next</string>
     <string name="get_started">Get Started</string>
     <string name="welcome">Welcome to SplitBasket!</string>
     <string name="welcome_desc">Manage your groceries and split bills with friends effortlessly.</string>
-    
+    <!-- Bill splitting -->
+    <string name="bill_splitting">Bill Splitting</string>
+    <string name="recent_bills">Recent bills</string>
+    <string name="create_new_bill">Create a new bill</string>
+    <string name="split_payment_method">Split payment method:</string>
+    <string name="equal">Equal</string>
+    <string name="by_quantity">By quantity</string>
+    <string name="by_item">By item</string>
+    <string name="custom">Custom</string>
+    <string name="members">Members:</string>
+    <string name="name_of_members">Name of Members</string>
+    <string name="create">Create</string>
+    <string name="unpaid">Unpaid</string>
+    <string name="paid">Paid</string>
+
     <!-- Home -->
+    <!-- Home screen -->
+    <string name="split_basket">SplitBasket</string>
+    <string name="quick_add">Quick Add</string>
+    <string name="add_ingredients">Add ingredients to inventory</string>
     <string name="overview">Overview</string>
     <string name="quick_overview">Quick overview of inventory</string>
     <string name="new_list">New List</string>
@@ -58,19 +80,45 @@
     <string name="xxx_added">xxx Added</string>
     <string name="add_items">Add Items</string>
     <string name="settlement">Settlement</string>
-    
+    <string name="error_item_name_required">Please enter an item name.</string>
+    <string name="error_item_duplicate">%1$s is already in the list.</string>
+    <string name="error_item_duplicate_with_user">%1$s by %2$s is already in the list.</string>
+    <string name="item_added_success">Added %1$s.</string>
+    <string name="added_by_template">%1$s added</string>
+    <string name="default_added_by">You</string>
+    <string name="total_purchased_default">Total: 0    Purchased: 0</string>
+    <string name="total_purchased_template">Total: %1$d    Purchased: %2$d</string>
+    <string name="empty_list">Your shopping list is empty. Tap “Add Items” or choose a recommendation below.</string>
+    <string name="added_by_hint">Who added this item?</string>
+    <string name="add_item_title">Add shopping item</string>
+    <string name="edit_item_title">Edit shopping item</string>
+    <string name="action_add">Add</string>
+    <string name="action_save">Save</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="settlement_title">Settlement preview</string>
+    <string name="settlement_message">Remaining items (%1$d):
+%2$s</string>
+    <string name="no_remaining_items">All items purchased! 🎉</string>
+    <string name="chip_added_feedback">Added %1$s ×%2$d</string>
+    <string name="action_mark_all_purchased">Mark all purchased</string>
+    <string name="item_deleted">Removed %1$s</string>
+    <string name="action_undo">Undo</string>
+
     <!-- Activity titles -->
     <string name="weekend_gathering">Weekend gathering</string>
     <string name="daily_purchases">Daily purchases</string>
     <string name="dinner">Dinner</string>
     
     <!-- Status messages -->
+    <string name="bought_chopsticks">xxx bought \'Chopsticks\'</string>
     <string name="bought_chopsticks">xxx bought Chopsticks</string>
     <string name="minutes_ago">20 minutes ago</string>
+    <string name="adds_chopsticks">xxx adds \'chopsticks\' to the shopping list</string>
     <string name="adds_chopsticks">xxx adds chopsticks to the shopping list</string>
     <string name="hours_ago">1 hours ago</string>
     <string name="paid_for_lunch">xxx paid $60 for lunch</string>
     <string name="two_hours_ago">2 hours ago</string>
+
     <string name="add_items_and_quantities_long_press_an_item_to_remove">Add items and quantities (long press an item to remove)</string>
 
     <!-- Placeholder values -->
@@ -80,6 +128,8 @@
     <string name="placeholder_amount">$150 For 3 people</string>
     <string name="placeholder_amount2">$89.5 For 4 people</string>
     <string name="placeholder_amount3">$100 For 2 people</string>
+
+
     <string name="new_shared_shopping_list">New Shared Shopping List</string>
     <string name="item_name">Item name</string>
     <string name="item_quantity">Item quantity</string>
