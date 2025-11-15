@@ -96,11 +96,11 @@ public class InventoryActivity extends AppCompatActivity {
     }
 
     private void updateButtonStates(MaterialButton selectedButton) {
-        btnHome.setSelected(false);
-        btnInventory.setSelected(false);
-        btnList.setSelected(false);
-        btnBill.setSelected(false);
-        selectedButton.setSelected(true);
+        btnHome.setChecked(false);
+        btnInventory.setChecked(false);
+        btnList.setChecked(false);
+        btnBill.setChecked(false);
+        selectedButton.setChecked(true);
     }
 
     private void navigateTo(Class<?> targetActivity) {
