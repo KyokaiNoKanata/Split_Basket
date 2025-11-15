@@ -90,6 +90,16 @@ public class ShoppingListRepository {
         executorService.execute(() -> shoppingListDao.delete(item));
     }
 
+    public List<ShoppingItem> getPurchasedItems() {
+        List<ShoppingItem> result = null;
+        try {
+            result = executorService.submit(shoppingListDao::getPurchasedItems).get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result != null ? result : java.util.Collections.emptyList();
+    }
+
     public void clearAll() {
         executorService.execute(shoppingListDao::clearAll);
     }

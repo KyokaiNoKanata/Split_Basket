@@ -27,6 +27,9 @@ public interface ShoppingListDao {
     @Query("UPDATE shopping_items SET purchased = 1 WHERE id IN (:ids)")
     void markPurchasedByIds(List<Long> ids);
 
+    @Query("SELECT * FROM shopping_items WHERE purchased = 1")
+    List<ShoppingItem> getPurchasedItems();
+
     @Delete
     void delete(ShoppingItem item);
 
