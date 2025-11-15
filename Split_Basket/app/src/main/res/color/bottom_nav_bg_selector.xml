@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Pressed: deepen background color for tactile feedback -->
-    <item android:state_pressed="true" android:color="@color/nav_active_bg_pressed" />
-    <!-- Selected: active page background color -->
-    <item android:state_selected="true" android:color="@color/nav_active_bg" />
-    <!-- Default: transparent -->
-    <item android:color="@android:color/transparent" />
-</selector>
