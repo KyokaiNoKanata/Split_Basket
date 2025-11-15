@@ -98,66 +98,67 @@ public class InventoryActivity extends AppCompatActivity {
             Toast.makeText(this, "Category: " + selected, Toast.LENGTH_SHORT).show();
         });
 
-        // 首次进入页面渲染
+        // Render when first entering the page
         renderItems(selectedCategory);
         updateOverview(selectedCategory);
     }
 
     private void importPurchasedItems() {
-        // 初始化 ShoppingListRepository
+        // Initialize ShoppingListRepository
         ShoppingListRepository shoppingListRepository = ShoppingListRepository.getInstance(getApplication());
 
-        // 获取所有已支付的项目
+        // Get all paid items
         List<ShoppingItem> purchasedItems = shoppingListRepository.getPurchasedItems();
 
         if (purchasedItems.isEmpty()) {
-            Toast.makeText(InventoryActivity.this, "没有已支付的项目可导入", Toast.LENGTH_SHORT).show();
+            Toast.makeText(InventoryActivity.this, "No paid items to import", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // 将已支付的项目转换为 InventoryItem 并添加到库存
+        // Convert paid items to InventoryItem and add to inventory
         List<Future<Void>> futures = new ArrayList<>();
         for (ShoppingItem item : purchasedItems) {
-            // 生成唯一 ID
+            // Generate unique ID
             String id = UUID.randomUUID().toString();
 
-            // 创建 InventoryItem 对象（默认分类为 "Other"）
+            // Create InventoryItem object (default category: "Other")
             InventoryItem inventoryItem = new InventoryItem(
                     id,
                     item.getName(),
                     item.getQuantity(),
-                    "Other", // 默认分类
-                    null, // 没有过期日期
-                    item.getCreatedAt() // 使用购物项的创建时间
+                    "Other", // Default category
+                    null, // No expiry date
+                    item.getCreatedAt() // Use shopping item creation time
             );
 
-            // 添加到库存（异步操作，保存 Future）
+            // Add to inventory (async operation, save Future)
             futures.add(inventoryRepository.addItem(inventoryItem));
-            // 从购物清单中删除已导入的项目
+            // Delete imported items from shopping list
             shoppingListRepository.deleteItem(item);
         }
 
-        // 等待所有异步操作完成
+        // Wait for all async operations to complete
         for (Future<Void> future : futures) {
             try {
-                future.get(); // 阻塞直到操作完成
+                future.get(); // Block until operation completes
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-        // 刷新界面以显示新导入的项目
+        // Refresh UI to show newly imported items
         renderItems(selectedCategory);
         updateOverview(selectedCategory);
 
-        // 显示导入成功消息
-        Toast.makeText(InventoryActivity.this, "已导入 " + purchasedItems.size() + " 个项目到库存", Toast.LENGTH_SHORT).show();
+        // Display import success message
+        Toast.makeText(InventoryActivity.this, "Imported " + purchasedItems.size() + " items to inventory",
+                Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        // 从新增页返回时刷新
+        // Refresh when returning from the add page
         renderItems(selectedCategory);
         updateOverview(selectedCategory);
     }
@@ -177,7 +178,7 @@ public class InventoryActivity extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             startActivity(intent);
             overridePendingTransition(0, 0);
-            finish(); // 结束当前Activity，避免后台栈堆积
+            finish(); // Finish current activity to avoid background stack accumulation
         }).start();
     }
 
@@ -220,7 +221,7 @@ public class InventoryActivity extends AppCompatActivity {
             row.addView(date);
             row.addView(qty);
 
-            // 点击行 -> 弹出编辑/删除
+            // Click row -> show edit/delete options
             row.setOnClickListener(v -> showItemActions(it));
         }
 
@@ -232,7 +233,7 @@ public class InventoryActivity extends AppCompatActivity {
         }
     }
 
-    // 弹出操作选择
+    // Show operation options
     private void showItemActions(InventoryItem item) {
         new android.app.AlertDialog.Builder(this)
                 .setTitle("Item actions")
@@ -240,7 +241,7 @@ public class InventoryActivity extends AppCompatActivity {
                     if (which == 0) {
                         showEditDialog(item);
                     } else if (which == 1) {
-                        // 删除：取消提醒 + 移除数据
+                        // Delete: cancel reminder + remove data
                         ExpiryReminderScheduler.cancelReminder(this, item.id);
                         InventoryRepository repo = InventoryRepository.getInstance(this);
                         repo.removeItem(item.id);
@@ -253,7 +254,7 @@ public class InventoryActivity extends AppCompatActivity {
                 .show();
     }
 
-    // 编辑弹窗
+    // Edit dialog
     private void showEditDialog(InventoryItem item) {
         android.widget.LinearLayout container = new android.widget.LinearLayout(this);
         container.setOrientation(android.widget.LinearLayout.VERTICAL);
@@ -305,7 +306,7 @@ public class InventoryActivity extends AppCompatActivity {
                     } catch (Exception ignored) {
                     }
                     if (qty <= 0)
-                        qty = item.quantity; // 简单保护
+                        qty = item.quantity; // Simple protection
 
                     String cat = (String) spCat.getSelectedItem();
                     String daysStr = etDays.getText().toString().trim();
@@ -326,7 +327,7 @@ public class InventoryActivity extends AppCompatActivity {
                     InventoryItem updated = new InventoryItem(item.id, name.isEmpty() ? item.name : name, qty, cat,
                             expire, item.createdAtMillis);
 
-                    // 重新设置提醒：先取消旧提醒，再按新值安排
+                    // Reset reminder: first cancel old reminder, then schedule with new value
                     ExpiryReminderScheduler.cancelReminder(this, item.id);
                     if (expire != null && providedDays) {
                         try {
@@ -383,7 +384,7 @@ public class InventoryActivity extends AppCompatActivity {
                 continue;
             if (!"All".equalsIgnoreCase(category)) {
                 String[] parts = line.split(" \\| ");
-                // 期望格式: time | OUT | name xqty | category
+                // Expected format: time | OUT | name xqty | category
                 if (parts.length >= 4) {
                     String cat = parts[3].trim();
                     if (!category.equalsIgnoreCase(cat))

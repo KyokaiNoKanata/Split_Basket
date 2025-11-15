@@ -71,11 +71,11 @@ public class InventoryRepository {
     public Future<Void> addItem(@NonNull InventoryItem item) {
         return executorService.submit(() -> {
             inventoryDao.insert(item);
-            // 添加日志记录
+            // Add log record
             eventLogManager.addLog(
                     EventLogManager.EVENT_TYPE_INVENTORY_ADD,
                     item.name + " x" + item.quantity + " | " + item.category,
-                    "xxx" // 默认用户
+                    "xxx" // Default user
             );
             return null;
         });
@@ -84,11 +84,11 @@ public class InventoryRepository {
     public void updateItem(@NonNull InventoryItem updated) {
         executorService.execute(() -> {
             inventoryDao.update(updated);
-            // 添加日志记录
+            // Add log record
             eventLogManager.addLog(
                     EventLogManager.EVENT_TYPE_INVENTORY_UPDATE,
                     updated.name + " x" + updated.quantity + " | " + updated.category,
-                    "xxx" // 默认用户
+                    "xxx" // Default user
             );
         });
     }
@@ -99,12 +99,12 @@ public class InventoryRepository {
             InventoryItem item = inventoryDao.getItemById(id);
             inventoryDao.deleteById(id);
 
-            // 添加日志记录
+            // Add log record
             if (item != null) {
                 eventLogManager.addLog(
                         EventLogManager.EVENT_TYPE_INVENTORY_REMOVE,
                         item.name + " x" + item.quantity + " | " + item.category,
-                        "xxx" // 默认用户
+                        "xxx" // Default user
                 );
             }
         });

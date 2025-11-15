@@ -24,7 +24,7 @@ record FoodDetectionResult(String label, float score) {
 
 public class FoodObjectDetector {
     private final Context appContext;
-    // COCO SSD MobileNet v1 量化模型：输入 300x300x3 的 UINT8
+    // COCO SSD MobileNet v1 quantized model: input 300x300x3 UINT8
     private final int inputSize = 300;
     private final float scoreThreshold = 0.6f;
     private final boolean isQuantized = true;
@@ -34,7 +34,7 @@ public class FoodObjectDetector {
     public FoodObjectDetector(Context context) {
         this.appContext = context.getApplicationContext();
         try {
-            // 使用 COCO SSD MobileNet v1 的 tflite 与标签文件
+            // Use COCO SSD MobileNet v1 tflite and label files
             this.interpreter = new Interpreter(loadModelFile("detect.tflite"), new Interpreter.Options());
             this.labels = loadLabels("labelmap.txt");
         } catch (Exception e) {
@@ -59,9 +59,10 @@ public class FoodObjectDetector {
             Bitmap scaled = Bitmap.createScaledBitmap(cropped, inputSize, inputSize, true);
             ByteBuffer input = isQuantized ? convertBitmapToUint8(scaled) : convertBitmapToFloat(scaled);
 
-            // SSD 输出张量：locations [1][N][4], classes [1][N], scores [1][N], numDetections
+            // SSD output tensors: locations [1][N][4], classes [1][N], scores [1][N],
+            // numDetections
             // [1]
-            int numDetections = 10; // 常见默认输出数量
+            int numDetections = 10; // Common default output quantity
             float[][][] locations = new float[1][numDetections][4];
             float[][] classes = new float[1][numDetections];
             float[][] scores = new float[1][numDetections];
@@ -76,7 +77,7 @@ public class FoodObjectDetector {
             Object[] inputs = new Object[]{input};
             interpreter.runForMultipleInputsOutputs(inputs, outputs);
 
-            // 取最高分的类别
+            // Take the category with the highest score
             int bestIndex = -1;
             float bestScore = 0f;
             for (int i = 0; i < numDetections; i++) {
@@ -87,12 +88,13 @@ public class FoodObjectDetector {
                 }
             }
             if (bestIndex >= 0 && bestScore >= scoreThreshold) {
-                // 标签索引自适应（COCO 的 labelmap 第一行通常是 "???", 类索引从 1 开始）
+                // Adapt label index (COCO's labelmap first line is usually "???", class index
+                // starts from 1)
                 int labelIdx = (int) classes[0][bestIndex];
                 if (!labels.isEmpty() && !"???".equals(labels.get(0)) && labelIdx > 0) {
                     labelIdx -= 1;
                 }
-                // Food.AI 的标签文件第一行通常为 "???"
+                // Food.AI's label file first line is usually "???"
                 String label = labelIdx >= 0 && labelIdx < labels.size() ? labels.get(labelIdx) : "unknown";
                 return new FoodDetectionResult(label, bestScore);
             }

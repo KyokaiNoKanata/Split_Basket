@@ -12,9 +12,9 @@ public class InventoryItem {
     public String name;
     public int quantity;
     public String category; // Vegetable/Meat/Fruit/Other
-    public Long expireDateMillis; // 可空
+    public Long expireDateMillis; // nullable
     public long createdAtMillis;
-    public String photoUri; // 新增：可空的照片地址
+    public String photoUri; // Added: nullable photo URI
 
     // Default constructor for Room
     public InventoryItem() {

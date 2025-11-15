@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <!-- 移除右上角品牌徽标 -->
+    <!-- Remove the top-right corner brand logo -->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/scrollContent"
@@ -30,7 +30,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <!-- 统一的大标题 -->
+            <!-- Unified large title -->
             <TextView
                 android:id="@+id/pageTitleList"
                 style="@style/PageTitleText"

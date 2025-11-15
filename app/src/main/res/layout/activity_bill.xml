@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <!-- 移除右上角品牌徽标 -->
+    <!-- Remove top-right corner brand logo -->
 
     <ScrollView
         android:id="@+id/scrollContent"
@@ -25,7 +25,7 @@
             android:padding="16dp"
             android:paddingTop="12dp">
 
-            <!-- 统一的大标题 -->
+            <!-- Uniform large title -->
             <TextView
                 android:id="@+id/pageTitleBill"
                 style="@style/PageTitleText"
@@ -241,7 +241,7 @@
                             android:text="@string/custom" />
                     </RadioGroup>
 
-                    <!-- 平均付款方式的布局 -->
+                    <!-- Equal payment method layout -->
                     <LinearLayout
                         android:id="@+id/layoutEqualSplit"
                         android:layout_width="match_parent"
@@ -336,7 +336,7 @@
                             android:textStyle="bold" />
                     </LinearLayout>
 
-                    <!-- 自定义付款方式的布局 -->
+                    <!-- Custom payment method layout -->
                     <LinearLayout
                         android:id="@+id/layoutCustomSplit"
                         android:layout_width="match_parent"

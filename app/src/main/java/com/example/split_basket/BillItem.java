@@ -35,8 +35,8 @@ public class BillItem implements Parcelable {
     private String status;
     private String method;
     private List<String> participants;
-    private List<Double> customAmounts; // 用于存储自定义金额
-    private String creationDate; // 账单创建日期
+    private List<Double> customAmounts; // Used to store custom amounts
+    private String creationDate; // Bill creation date
 
     public BillItem(String id, String name, String amount, String status, String method, String creationDate) {
         this.id = id;
@@ -57,7 +57,7 @@ public class BillItem implements Parcelable {
         method = in.readString();
         creationDate = in.readString();
         participants = in.createStringArrayList();
-        // 读取自定义金额
+        // Read custom amounts
         int size = in.readInt();
         customAmounts = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
@@ -136,13 +136,13 @@ public class BillItem implements Parcelable {
         this.customAmounts.add(amount);
     }
 
-    // 计算平均金额
+    // Calculate average amount
     public double getAverageAmount() {
         if (participants.isEmpty())
             return 0;
 
         try {
-            // 移除货币符号和空格，转换为double
+            // Remove currency symbols and spaces, convert to double
             String cleanAmount = amount.replace("¥", "").replace("$", "").trim();
             double total = Double.parseDouble(cleanAmount);
             return total / participants.size();
@@ -173,7 +173,7 @@ public class BillItem implements Parcelable {
         parcel.writeString(method);
         parcel.writeString(creationDate);
         parcel.writeStringList(participants);
-        // 写入自定义金额
+        // Write custom amounts
         parcel.writeInt(customAmounts.size());
         for (Double amount : customAmounts) {
             parcel.writeDouble(amount);

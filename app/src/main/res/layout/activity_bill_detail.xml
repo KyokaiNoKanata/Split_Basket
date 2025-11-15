@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <!-- 顶部标题栏 -->
+    <!-- Top Title Bar -->
     <LinearLayout
         android:id="@+id/topHeader"
         android:layout_width="match_parent"
@@ -51,7 +51,7 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- 账单信息卡片 -->
+            <!-- Bill Information Card -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardBillInfo"
                 android:layout_width="match_parent"
@@ -70,7 +70,7 @@
                         android:id="@+id/tvBillName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="周末聚会"
+                        android:text="Weekend Gathering"
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
@@ -151,7 +151,7 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- 参与者信息 -->
+            <!-- Participants -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -198,12 +198,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
-                        <!-- 参与者会动态添加在这里 -->
+                        <!-- Participants will be dynamically added here -->
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- 支付按钮 -->
+            <!-- Payment button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnPayBill"
                 android:layout_width="match_parent"
@@ -213,7 +213,7 @@
                 android:text="Mark as Paid"
                 android:textColor="@android:color/white" />
 
-            <!-- 删除账单按钮 -->
+            <!-- Delete bill button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnDeleteBill"
                 android:layout_width="match_parent"

@@ -66,9 +66,9 @@ public class StatusLogAdapter extends ListAdapter<EventLogManager.LogEntry, Stat
         }
 
         void bind(EventLogManager.LogEntry logEntry) {
-            // 使用LogEntry的description直接展示
+            // Use LogEntry's description directly
             textLogContent.setText(logEntry.description());
-            // 格式化时间
+            // Format time
             String formattedTime = EventLogManager.formatTimeAgo(logEntry.timestamp());
             textLogTime.setText(formattedTime);
         }

@@ -76,7 +76,7 @@ public class ShoppingListRepository {
                 return;
             }
             shoppingListDao.insert(item);
-            // 添加日志记录
+            // Add log record
             eventLogManager.addLog(EventLogManager.EVENT_TYPE_SHOPPING_LIST_ADD, item.getName(), item.getQuantity(),
                     "");
             notifyCallback(callback, true,
@@ -87,7 +87,7 @@ public class ShoppingListRepository {
     public void updateItem(@NonNull ShoppingItem item) {
         executorService.execute(() -> {
             shoppingListDao.update(item);
-            // 添加日志记录
+            // Add log record
             eventLogManager.addLog(EventLogManager.EVENT_TYPE_SHOPPING_LIST_UPDATE, item.getName(), item.getQuantity(),
                     "");
         });
@@ -97,10 +97,10 @@ public class ShoppingListRepository {
         if (ids.isEmpty())
             return;
         executorService.execute(() -> {
-            // 获取被标记为购买的商品信息
+            // Get information of items marked as purchased
             List<ShoppingItem> items = shoppingListDao.getItemsByIds(ids);
             shoppingListDao.markPurchasedByIds(ids);
-            // 为每个商品添加日志记录
+            // Add log record for each item
             for (ShoppingItem item : items) {
                 eventLogManager.addLog(EventLogManager.EVENT_TYPE_SHOPPING_LIST_PURCHASE, item.getName(),
                         item.getQuantity(), "");
@@ -111,7 +111,7 @@ public class ShoppingListRepository {
     public void deleteItem(@NonNull ShoppingItem item) {
         executorService.execute(() -> {
             shoppingListDao.delete(item);
-            // 添加日志记录
+            // Add log record
             eventLogManager.addLog(EventLogManager.EVENT_TYPE_SHOPPING_LIST_REMOVE, item.getName(), item.getQuantity(),
                     "");
         });

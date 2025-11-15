@@ -7,7 +7,7 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <!-- 底部导航激活态背景和文字颜色，以及列表条目小图标颜色 -->
+    <!-- Bottom navigation active background and text color, and list item small icon color -->
     <color name="nav_active_bg">#2962FF</color>
     <color name="nav_active_bg_pressed">#1E40FF</color>
     <color name="nav_active_text">#FFFFFFFF</color>

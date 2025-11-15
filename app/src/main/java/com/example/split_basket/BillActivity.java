@@ -37,7 +37,7 @@ public class BillActivity extends AppCompatActivity {
     private BillRepository billStorage;
     private List<BillItem> billItems = new ArrayList<>();
 
-    // UI元素引用
+    // UI element references
     private EditText inputBillName, inputTotalSpent;
     private RadioGroup radioSplitMethod;
     private RadioButton radioEqual, radioCustom;
@@ -56,11 +56,11 @@ public class BillActivity extends AppCompatActivity {
         scroll.setAlpha(0f);
         scroll.animate().alpha(1f).setDuration(300).start();
 
-        // 初始化账单存储
+        // Initialize bill storage
         billStorage = BillRepository.getInstance(this);
         billStorage.ensureSeedData();
 
-        // 使用LiveData观察账单数据变化
+        // Use LiveData to observe bill data changes
         billStorage.observeBills().observe(this, new Observer<List<BillItem>>() {
             @Override
             public void onChanged(List<BillItem> bills) {
@@ -95,7 +95,7 @@ public class BillActivity extends AppCompatActivity {
             Toast.makeText(this, "Already on Bill page", Toast.LENGTH_SHORT).show();
         });
 
-        // 初始化UI元素
+        // Initialize UI elements
         inputBillName = findViewById(R.id.inputBillName);
         inputTotalSpent = findViewById(R.id.inputTotalSpent);
         radioSplitMethod = findViewById(R.id.radioSplitMethod);
@@ -106,13 +106,13 @@ public class BillActivity extends AppCompatActivity {
         tvPerPersonAmount = findViewById(R.id.tvPerPersonAmount);
         tvCalculatedTotal = findViewById(R.id.tvCalculatedTotal);
 
-        // 平均付款模式的复选框
+        // Checkboxes for equal payment mode
         checkBox1 = findViewById(R.id.checkBox1);
         checkBox2 = findViewById(R.id.checkBox2);
         checkBox3 = findViewById(R.id.checkBox3);
         checkBox4 = findViewById(R.id.checkBox4);
 
-        // 自定义付款模式的复选框和输入框
+        // Checkboxes and input fields for custom payment mode
         customCheckBox1 = findViewById(R.id.customCheckBox1);
         customCheckBox2 = findViewById(R.id.customCheckBox2);
         customCheckBox3 = findViewById(R.id.customCheckBox3);
@@ -122,16 +122,16 @@ public class BillActivity extends AppCompatActivity {
         editUser3Amount = findViewById(R.id.editUser3Amount);
         editUser4Amount = findViewById(R.id.editUser4Amount);
 
-        // 处理来自HomeActivity的意图数据
+        // Handle intent data from HomeActivity
         Intent intent = getIntent();
         if (intent != null) {
-            // 从意图中提取数据
+            // Extract data from intent
             String billName = intent.getStringExtra(HomeActivity.EXTRA_BILL_NAME);
             String totalAmount = intent.getStringExtra(HomeActivity.EXTRA_BILL_TOTAL);
             String billDate = intent.getStringExtra(HomeActivity.EXTRA_BILL_DATE);
             int selectedModeId = intent.getIntExtra(HomeActivity.EXTRA_BILL_MODE, R.id.rbEqual);
 
-            // 填充UI字段
+            // Fill UI fields
             if (billName != null) {
                 inputBillName.setText(billName);
             }
@@ -139,45 +139,48 @@ public class BillActivity extends AppCompatActivity {
                 inputTotalSpent.setText(totalAmount);
             }
             if (billDate != null) {
-                // 目前UI中没有日期输入框，会在创建账单时使用
+                // There's currently no date input field in the UI; it will be used when
+                // creating the bill
             }
-            // 设置付款方式
+            // Set payment method
             if (selectedModeId == R.id.rbEqual) {
                 radioEqual.setChecked(true);
             } else if (selectedModeId == R.id.rbByQuantity || selectedModeId == R.id.rbByItem) {
-                // "按数量分配"和"按项目分配"模式在当前设计中不存在，默认使用自定义分配
+                // The "split by quantity" and "split by item" modes don't exist in the current
+                // design; default to custom split
                 radioCustom.setChecked(true);
             } else {
                 radioEqual.setChecked(true);
             }
         }
 
-        // 设置付款方式切换逻辑
+        // Set payment method switching logic
         radioSplitMethod.setOnCheckedChangeListener((group, checkedId) -> {
             String mode;
             if (checkedId == R.id.radioEqual) {
                 mode = "Equal";
                 layoutEqualSplit.setVisibility(View.VISIBLE);
                 layoutCustomSplit.setVisibility(View.GONE);
-                inputTotalSpent.setEnabled(true); // 平均模式下启用总金额输入
+                inputTotalSpent.setEnabled(true); // Enable total amount input in equal mode
             } else if (checkedId == R.id.radioCustom) {
                 mode = "Custom";
                 layoutEqualSplit.setVisibility(View.GONE);
                 layoutCustomSplit.setVisibility(View.VISIBLE);
-                inputTotalSpent.setEnabled(false); // 自定义模式下禁用总金额输入，由系统自动计算
+                inputTotalSpent.setEnabled(false); // Disable total amount input in custom mode, calculated
+                // automatically by the system
             } else {
-                mode = "Equal"; // 默认
+                mode = "Equal"; // Default
                 layoutEqualSplit.setVisibility(View.VISIBLE);
                 layoutCustomSplit.setVisibility(View.GONE);
             }
             group.setTag(mode); // store current mode for later use
         });
 
-        // 设置监听器
+        // Set listeners
         setupEqualSplitListeners();
         setupCustomSplitListeners();
 
-        // 默认选中平均付款
+        // Default to equal payment
         radioEqual.setChecked(true);
 
         findViewById(R.id.btnCreateBill).setOnClickListener(v -> {
@@ -185,7 +188,7 @@ public class BillActivity extends AppCompatActivity {
         });
     }
 
-    // 从存储加载账单
+    // Load bills from storage
     private void loadBillsFromStorage() {
         new Thread(() -> {
             try {
@@ -193,10 +196,10 @@ public class BillActivity extends AppCompatActivity {
 
                 runOnUiThread(() -> {
                     billItems = loadedBills;
-                    // 隐藏XML中定义的静态账单卡片
+                    // Hide static bill cards defined in XML
                     hideStaticBillCards();
 
-                    // 动态加载账单
+                    // Dynamically load bills
                     displayBills();
                 });
             } catch (Exception e) {
@@ -207,10 +210,10 @@ public class BillActivity extends AppCompatActivity {
         }).start();
     }
 
-    // 隐藏XML中定义的静态账单卡片
-    // 设置平均付款模式下的监听器
+    // Hide static bill cards defined in XML
+    // Set listeners for equal split payment mode
     private void setupEqualSplitListeners() {
-        // 监听总金额输入变化
+        // Listen for changes in total amount input
         inputTotalSpent.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -226,7 +229,7 @@ public class BillActivity extends AppCompatActivity {
             }
         });
 
-        // 监听成员选择变化
+        // Listen for changes in member selection
         CompoundButton.OnCheckedChangeListener checkListener = new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -240,15 +243,16 @@ public class BillActivity extends AppCompatActivity {
         checkBox4.setOnCheckedChangeListener(checkListener);
     }
 
-    // 设置自定义付款模式下的监听器
+    // Set listeners for custom split payment mode
     private void setupCustomSplitListeners() {
-        // 为每个复选框设置监听器，控制对应金额输入框的可用性
+        // Set listener for each checkbox to control the availability of the
+        // corresponding amount input field
         setupCustomMemberListener(customCheckBox1, editUser1Amount);
         setupCustomMemberListener(customCheckBox2, editUser2Amount);
         setupCustomMemberListener(customCheckBox3, editUser3Amount);
         setupCustomMemberListener(customCheckBox4, editUser4Amount);
 
-        // 为每个金额输入框设置变化监听，用于计算总金额
+        // Set change listeners for each amount input field to calculate total amount
         TextWatcher amountTextWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -270,7 +274,7 @@ public class BillActivity extends AppCompatActivity {
         editUser4Amount.addTextChangedListener(amountTextWatcher);
     }
 
-    // 设置自定义模式下成员选择的监听器
+    // Set listeners for member selection in custom mode
     private void setupCustomMemberListener(CheckBox checkBox, EditText editText) {
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -284,7 +288,7 @@ public class BillActivity extends AppCompatActivity {
         });
     }
 
-    // 计算平均付款模式下每人应付金额
+    // Calculate amount per person in equal split payment mode
     private void calculatePerPersonAmount() {
         String totalSpentStr = inputTotalSpent.getText().toString().trim();
         if (totalSpentStr.isEmpty()) {
@@ -300,7 +304,7 @@ public class BillActivity extends AppCompatActivity {
             return;
         }
 
-        // 计算选中的人数
+        // Calculate the number of selected members
         int checkedCount = 0;
         if (checkBox1.isChecked())
             checkedCount++;
@@ -319,7 +323,7 @@ public class BillActivity extends AppCompatActivity {
         }
     }
 
-    // 计算自定义付款模式下的总金额
+    // Calculate total amount in custom split payment mode
     private void calculateCustomTotalAmount() {
         double total = 0;
 
@@ -330,11 +334,11 @@ public class BillActivity extends AppCompatActivity {
 
         tvCalculatedTotal.setText(String.format("Total calculated: ¥%.2f", total));
 
-        // 更新总金额输入框（虽然在自定义模式下它是禁用的）
+        // Update total amount input field (even though it's disabled in custom mode)
         inputTotalSpent.setText(String.format("%.2f", total));
     }
 
-    // 从EditText获取金额
+    // Get amount from EditText
     private double getAmountFromEditText(EditText editText) {
         String text = editText.getText().toString().trim();
         if (text.isEmpty()) {
@@ -347,19 +351,19 @@ public class BillActivity extends AppCompatActivity {
         }
     }
 
-    // 创建新账单
+    // Create a new bill
     private void createNewBill() {
         String name = inputBillName.getText().toString().trim();
         Object modeObj = radioSplitMethod.getTag();
         String mode = modeObj instanceof String ? (String) modeObj : "Equal"; // default to Equal
 
-        // 验证输入
+        // Validate input
         if (name.isEmpty()) {
             Toast.makeText(this, "Please enter bill name", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // 格式化当前日期为英文格式
+        // Format current date to English format
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String creationDate = sdf.format(new Date());
 
@@ -367,14 +371,14 @@ public class BillActivity extends AppCompatActivity {
             String total;
 
             if (radioEqual.isChecked()) {
-                // 平均付款模式
+                // Equal split payment mode
                 total = inputTotalSpent.getText().toString().trim();
                 if (total.isEmpty()) {
                     Toast.makeText(this, "Please enter total amount", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                // 检查是否有选中的成员
+                // Check if there are selected members
                 CheckBox[] checkBoxes = new CheckBox[]{
                         checkBox1, checkBox2, checkBox3, checkBox4
                 };
@@ -392,11 +396,11 @@ public class BillActivity extends AppCompatActivity {
                     return;
                 }
 
-                // 创建新账单对象
+                // Create new bill object
                 String billId = UUID.randomUUID().toString();
                 BillItem newBill = new BillItem(billId, name, total, "Unpaid", mode, creationDate);
 
-                // 添加选中的参与者
+                // Add selected participants
                 String[] participantNames = {"User1", "User2", "User3", "User4"};
 
                 for (int i = 0; i < checkBoxes.length; i++) {
@@ -405,19 +409,19 @@ public class BillActivity extends AppCompatActivity {
                     }
                 }
 
-                // 保存到存储
+                // Save to storage
                 billStorage.addBill(newBill);
             } else {
-                // 自定义付款模式
-                // 计算总金额
+                // Custom split payment mode
+                // Calculate total amount
                 double totalAmount = 0;
 
-                // 创建新账单对象
+                // Create new bill object
                 String billId = UUID.randomUUID().toString();
                 BillItem newBill = new BillItem(billId, name, String.format("%.2f", totalAmount), "Unpaid", mode,
                         creationDate);
 
-                // 添加选中的参与者和金额
+                // Add selected participants and amounts
                 if (customCheckBox1.isChecked()) {
                     double amount = getAmountFromEditText(editUser1Amount);
                     if (amount <= 0) {
@@ -464,14 +468,14 @@ public class BillActivity extends AppCompatActivity {
                     return;
                 }
 
-                // 更新账单总金额
+                // Update bill total amount
                 newBill.setAmount(String.format("%.2f", totalAmount));
 
-                // 保存到存储
+                // Save to storage
                 billStorage.addBill(newBill);
             }
 
-            // 重置表单
+            // Reset form
             resetForm();
 
             Toast.makeText(this, "Bill created successfully", Toast.LENGTH_SHORT).show();
@@ -481,20 +485,20 @@ public class BillActivity extends AppCompatActivity {
         }
     }
 
-    // 重置表单
+    // Reset form
     private void resetForm() {
         inputBillName.setText("");
         inputTotalSpent.setText("");
         radioSplitMethod.clearCheck();
-        radioEqual.setChecked(true); // 默认选中平均付款
+        radioEqual.setChecked(true); // Default to equal split payment
 
-        // 重置平均付款模式的复选框
+        // Reset checkboxes for equal split payment mode
         checkBox1.setChecked(false);
         checkBox2.setChecked(false);
         checkBox3.setChecked(false);
         checkBox4.setChecked(false);
 
-        // 重置自定义付款模式的复选框和输入框
+        // Reset checkboxes and input fields for custom split payment mode
         customCheckBox1.setChecked(false);
         customCheckBox2.setChecked(false);
         customCheckBox3.setChecked(false);
@@ -504,7 +508,7 @@ public class BillActivity extends AppCompatActivity {
         editUser3Amount.setText("");
         editUser4Amount.setText("");
 
-        // 重置显示文本
+        // Reset display text
         tvPerPersonAmount.setText("Per person: ¥0.00");
         tvCalculatedTotal.setText("Total calculated: ¥0.00");
     }
@@ -522,19 +526,19 @@ public class BillActivity extends AppCompatActivity {
             cardPaidBill2.setVisibility(View.GONE);
     }
 
-    // 显示所有账单
+    // Display all bills
     private void displayBills() {
         try {
-            // 获取账单列表容器
+            // Get bill list container
             View scrollContent = findViewById(R.id.scrollContent);
             if (scrollContent instanceof ScrollView) {
                 View child = ((ScrollView) scrollContent).getChildAt(0);
                 if (child instanceof LinearLayout scrollLayout) {
 
-                    // 先移除动态添加的账单（保留标题和创建区域）
+                    // First remove dynamically added bills (keep title and creation area)
                     removeDynamicBills(scrollLayout);
 
-                    // 找到最近账单标题
+                    // Find recent bills title
                     int recentBillsTitleIndex = -1;
                     for (int i = 0; i < scrollLayout.getChildCount(); i++) {
                         View view = scrollLayout.getChildAt(i);
@@ -545,7 +549,7 @@ public class BillActivity extends AppCompatActivity {
                     }
 
                     if (recentBillsTitleIndex != -1) {
-                        // 先添加未支付账单
+                        // First add unpaid bills
                         List<BillItem> unpaidBills = billStorage.getUnpaidBills();
                         for (BillItem bill : unpaidBills) {
                             MaterialCardView card = createBillCard(bill);
@@ -553,7 +557,7 @@ public class BillActivity extends AppCompatActivity {
                             recentBillsTitleIndex++;
                         }
 
-                        // 再添加已支付账单
+                        // Then add paid bills
                         List<BillItem> paidBills = billStorage.getPaidBills();
                         for (BillItem bill : paidBills) {
                             MaterialCardView card = createBillCard(bill);
@@ -569,20 +573,20 @@ public class BillActivity extends AppCompatActivity {
         }
     }
 
-    // 移除动态添加的账单卡片
+    // Remove dynamically added bill cards
     private void removeDynamicBills(LinearLayout layout) {
         List<View> viewsToRemove = new ArrayList<>();
 
         for (int i = 0; i < layout.getChildCount(); i++) {
             View view = layout.getChildAt(i);
-            // 标记要移除的动态添加的账单卡片
+            // Mark dynamically added bill cards to remove
             if (view instanceof MaterialCardView &&
                     view.getTag() != null && "dynamic_bill_card".equals(view.getTag().toString())) {
                 viewsToRemove.add(view);
             }
         }
 
-        // 移除所有标记的视图
+        // Remove all marked views
         for (View view : viewsToRemove) {
             layout.removeView(view);
         }
@@ -598,21 +602,21 @@ public class BillActivity extends AppCompatActivity {
         startActivityForResult(intent, REQUEST_CODE_BILL_DETAIL);
     }
 
-    // 创建账单卡片
+    // Create bill card
     private MaterialCardView createBillCard(BillItem bill) {
         MaterialCardView card = new MaterialCardView(this);
-        card.setTag("dynamic_bill_card"); // 标记为动态创建的卡片
+        card.setTag("dynamic_bill_card"); // Mark as dynamically created card
 
-        // 设置卡片属性，与XML中定义的卡片保持一致
+        // Set card properties to match those defined in XML
         LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
-        cardParams.setMargins(0, 0, 0, 8); // 底部边距
+        cardParams.setMargins(0, 0, 0, 8); // Bottom margin
         card.setLayoutParams(cardParams);
         card.setUseCompatPadding(true);
         card.setCardElevation(1);
 
-        // 创建内部布局
+        // Create inner layout
         LinearLayout mainLayout = new LinearLayout(this);
         mainLayout.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -620,7 +624,7 @@ public class BillActivity extends AppCompatActivity {
         mainLayout.setOrientation(LinearLayout.HORIZONTAL);
         mainLayout.setPadding(12, 12, 12, 12);
 
-        // 左侧布局（账单名称和金额）
+        // Left layout (bill name and amount)
         LinearLayout leftLayout = new LinearLayout(this);
         LinearLayout.LayoutParams leftParams = new LinearLayout.LayoutParams(
                 0,
@@ -629,7 +633,7 @@ public class BillActivity extends AppCompatActivity {
         leftLayout.setLayoutParams(leftParams);
         leftLayout.setOrientation(LinearLayout.VERTICAL);
 
-        // 账单名称
+        // Bill name
         TextView nameTv = new TextView(this);
         nameTv.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -638,7 +642,7 @@ public class BillActivity extends AppCompatActivity {
         nameTv.setTypeface(null, android.graphics.Typeface.BOLD);
         nameTv.setTextSize(16);
 
-        // 账单金额
+        // Bill amount
         TextView amountTv = new TextView(this);
         amountTv.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -650,18 +654,18 @@ public class BillActivity extends AppCompatActivity {
         leftLayout.addView(nameTv);
         leftLayout.addView(amountTv);
 
-        // 状态文本
+        // Status text
         TextView statusTv = new TextView(this);
         statusTv.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT));
 
-        // 根据状态显示对应的英文文本并设置颜色
+        // Display corresponding English text based on status and set color
         String status = bill.getStatus();
-        if ("已支付".equals(status) || "Paid".equals(status)) {
+        if ("Paid".equals(status)) {
             statusTv.setText("Paid");
             statusTv.setTextColor(getResources().getColor(android.R.color.holo_green_dark));
-        } else if ("未支付".equals(status) || "Unpaid".equals(status)) {
+        } else if ("Unpaid".equals(status)) {
             statusTv.setText("Unpaid");
             statusTv.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
         } else {
@@ -674,17 +678,12 @@ public class BillActivity extends AppCompatActivity {
 
         card.addView(mainLayout);
 
-        // 设置点击事件，所有账单都可以点击查看详情
+        // Set click event for all bills to view details
         card.setClickable(true);
         card.setOnClickListener(v -> {
-            // 确保传递英文状态值
+            // Ensure to pass English status value
             String currentStatus = bill.getStatus();
             String englishStatus = currentStatus;
-            if ("已支付".equals(currentStatus)) {
-                englishStatus = "Paid";
-            } else if ("未支付".equals(currentStatus)) {
-                englishStatus = "Unpaid";
-            }
 
             openBillDetail(
                     bill.getName(),
@@ -705,10 +704,10 @@ public class BillActivity extends AppCompatActivity {
             String billId = data.getStringExtra(BillDetailActivity.EXTRA_BILL_ID);
 
             if (resultCode == BillDetailActivity.RESULT_BILL_PAID) {
-                // 更新UI中的支付状态
+                // Update payment status in UI
                 updateBillStatus(billId);
             } else if (resultCode == RESULT_OK) {
-                // 账单被删除，重新加载和显示账单列表
+                // Bill deleted, reload and display bill list
                 loadBillsFromStorage();
                 displayBills();
             }
@@ -717,13 +716,13 @@ public class BillActivity extends AppCompatActivity {
 
     private void updateBillStatus(String billId) {
         try {
-            // 从存储中找到并更新账单
+            // Find and update bill from storage
             BillItem bill = billStorage.getBillById(billId);
             if (bill != null) {
                 bill.setStatus("Paid");
                 billStorage.updateBill(bill);
 
-                // 更新UI
+                // Update UI
                 displayBills();
             }
         } catch (Exception e) {
@@ -735,11 +734,11 @@ public class BillActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // 每次返回页面时重新加载账单数据，确保数据一致性
+        // Reload bill data every time returning to page to ensure data consistency
         loadBillsFromStorage();
     }
 
-    // 辅助方法：设置Margin
+    // Helper method: Set margin
     private void setMargin(View view, int left, int top, int right, int bottom) {
         if (view != null) {
             ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(
@@ -765,7 +764,7 @@ public class BillActivity extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             startActivity(intent);
             overridePendingTransition(0, 0);
-            finish(); // 结束当前Activity，避免后台栈堆积
+            finish(); // End current Activity to avoid background stack accumulation
         }).start();
     }
 }

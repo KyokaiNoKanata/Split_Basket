@@ -20,10 +20,10 @@ public interface BillDao {
     @Query("SELECT * FROM bills")
     LiveData<List<BillItem>> observeBills();
 
-    @Query("SELECT * FROM bills WHERE status = 'Unpaid' OR status = '未支付'")
+    @Query("SELECT * FROM bills WHERE status = 'Unpaid'")
     List<BillItem> getUnpaidBills();
 
-    @Query("SELECT * FROM bills WHERE status = 'Paid' OR status = '已支付'")
+    @Query("SELECT * FROM bills WHERE status = 'Paid'")
     List<BillItem> getPaidBills();
 
     @Query("SELECT * FROM bills WHERE id = :billId")

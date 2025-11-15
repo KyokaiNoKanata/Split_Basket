@@ -11,7 +11,7 @@
         android:padding="16dp"
         android:paddingTop="12dp">
 
-        <!-- 顶部标题，风格与其它页面一致 -->
+        <!-- Top title, consistent style with other pages -->
         <TextView
             android:id="@+id/pageTitleInventoryAdd"
             style="@style/PageTitleText"
@@ -31,7 +31,7 @@
             app:iconGravity="textStart"
             app:iconPadding="8dp" />
 
-        <!-- Category 放在 Name 之前 -->
+        <!-- Category before Name -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

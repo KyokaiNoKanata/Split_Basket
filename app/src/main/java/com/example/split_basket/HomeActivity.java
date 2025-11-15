@@ -30,7 +30,7 @@ import java.util.concurrent.Future;
 
 public class HomeActivity extends AppCompatActivity {
 
-    // 用于 Intent 传参的 key，方便其他页面接收
+    // Keys for Intent parameters, used to pass data between activities
     public static final String EXTRA_INVENTORY_NAME = "com.example.split_basket.EXTRA_INVENTORY_NAME";
     public static final String EXTRA_INVENTORY_DATE = "com.example.split_basket.EXTRA_INVENTORY_DATE";
     public static final String EXTRA_INVENTORY_QUANTITY = "com.example.split_basket.EXTRA_INVENTORY_QUANTITY";
@@ -45,12 +45,12 @@ public class HomeActivity extends AppCompatActivity {
 
     private MaterialButton btnHome, btnInventory, btnList, btnBill;
 
-    // 新增提醒功能相关变量
+    // Variables related to the reminder feature
     private TextView tvReminder1, tvReminder2;
     private RecyclerView recyclerViewReminders;
     private ReminderAdapter reminderAdapter;
 
-    // 日志相关新增日志功能相关变量
+    // Variables related to the log feature
     private RecyclerView recyclerViewStatus;
     private StatusLogAdapter statusLogAdapter;
 
@@ -94,31 +94,31 @@ public class HomeActivity extends AppCompatActivity {
         View newList = findViewById(R.id.cardNewList);
         View newBill = findViewById(R.id.cardNewBill);
 
-        // 库存添加弹窗
+        // Inventory quick add dialog
         quickAdd.setOnClickListener(v -> showQuickAddDialog());
 
-        // 简单汇总/说明弹窗（之后可以接真实数据）
+        // Simple overview dialog (can be connected to real data later)
         overview.setOnClickListener(v -> showOverviewDialog());
 
-        // 共享购物清单，多选列表 + 动态添加/删除项目
+        // Shared shopping list, with multi-select and dynamic add/remove items
         newList.setOnClickListener(v -> showNewListDialog());
 
-        // New Bill → 快速创建账单
+        // New Bill -> Quickly create a bill
         newBill.setOnClickListener(v -> showNewBillDialog());
 
-        // 初始化提醒RecyclerView
+        // Initialize reminder RecyclerView
         recyclerViewReminders = findViewById(R.id.recyclerViewReminders);
         reminderAdapter = new ReminderAdapter(new ArrayList<>());
         recyclerViewReminders.setAdapter(reminderAdapter);
-        // 更新提醒内容
+        // Update reminder content
         updateReminders();
-        // 初始化日志RecyclerView
+        // Initialize log RecyclerView
         initStatusRecyclerView();
-        // 加载日志数据
+        // Load log data
         loadLogs();
     }
 
-    // 底部导航
+    // Bottom navigation
 
     private void updateButtonStates(MaterialButton selectedButton) {
         btnHome.setChecked(false);
@@ -135,7 +135,7 @@ public class HomeActivity extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             startActivity(intent);
             overridePendingTransition(0, 0);
-            finish(); // 结束当前Activity，避免后台栈堆积
+            finish(); // Finish the current Activity to avoid background stack accumulation
         }).start();
     }
 
@@ -278,7 +278,7 @@ public class HomeActivity extends AppCompatActivity {
                 .setCancelable(true)
                 .create();
 
-        // 动态添加新的选项（物品 + 数量），以多选框形式展示
+        // Dynamically add new items (name + quantity) as checkboxes
         btnAddItem.setOnClickListener(v -> {
             String name = etItemName.getText() != null ? etItemName.getText().toString().trim() : "";
             String quantity = etItemQuantity.getText() != null ? etItemQuantity.getText().toString().trim() : "";
@@ -299,7 +299,7 @@ public class HomeActivity extends AppCompatActivity {
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT));
 
-            // 长按删除该选项
+            // Long-press to delete this option
             checkBox.setOnLongClickListener(view -> {
                 container.removeView(view);
                 Toast.makeText(this, "Removed item: " + label, Toast.LENGTH_SHORT).show();
@@ -335,7 +335,7 @@ public class HomeActivity extends AppCompatActivity {
                 return;
             }
 
-            // 将新清单条目传递到 ListActivity
+            // Pass new list items to ListActivity
             Intent intent = new Intent(HomeActivity.this, ListActivity.class);
             intent.putStringArrayListExtra(EXTRA_NEW_LIST_ITEMS, selectedItems);
             startActivity(intent);
@@ -386,7 +386,7 @@ public class HomeActivity extends AppCompatActivity {
                 splitMode = "By item";
             }
 
-            // 将账单信息传递到 BillActivity
+            // Pass bill information to BillActivity
             Intent intent = new Intent(HomeActivity.this, BillActivity.class);
             intent.putExtra(EXTRA_BILL_NAME, billName);
             intent.putExtra(EXTRA_BILL_TOTAL, totalSpend);
@@ -400,17 +400,17 @@ public class HomeActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    // 新增提醒功能核心逻辑
+    // Core logic for reminder feature
     private void updateReminders() {
-        // 获取库存数据
+        // Get inventory data
         InventoryRepository inventoryRepo = InventoryRepository.getInstance(this);
         List<InventoryItem> items = inventoryRepo.getItems();
 
-        // 获取账单数据
+        // Get bill data
         BillRepository billRepository = BillRepository.getInstance(this);
         List<BillItem> unpaidBills = billRepository.getUnpaidBills();
 
-        // 检查即将过期的库存商品（7天内）
+        // Check for inventory items expiring soon (within 7 days)
         long currentTime = System.currentTimeMillis();
         long sevenDays = 7 * 24 * 60 * 60 * 1000;
         List<String> inventoryReminders = new ArrayList<>();
@@ -423,7 +423,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         }
 
-        // 检查未支付的账单
+        // Check for unpaid bills
         List<String> billReminders = new ArrayList<>();
         if (!unpaidBills.isEmpty()) {
             for (BillItem bill : unpaidBills) {
@@ -431,7 +431,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         }
 
-        // 更新提醒界面
+        // Update reminder interface
         List<String> allReminders = new ArrayList<>();
         allReminders.addAll(inventoryReminders);
         allReminders.addAll(billReminders);
@@ -441,33 +441,33 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // 返回主界面时更新提醒
+        // Update reminders when returning to the main interface
         updateReminders();
-        // 返回主界面时重新加载日志
+        // Reload logs when returning to the main interface
         loadLogs();
     }
 
-    // 初始化日志RecyclerView
+    // Initialize log RecyclerView
     private void initStatusRecyclerView() {
         recyclerViewStatus = findViewById(R.id.recyclerViewStatus);
         statusLogAdapter = new StatusLogAdapter(this);
         recyclerViewStatus.setAdapter(statusLogAdapter);
-        // 使用默认的LinearLayoutManager（已在XML中设置）
+        // Use the default LinearLayoutManager (already set in XML)
     }
 
-    // 加载日志数据
+    // Load log data
     private void loadLogs() {
         EventLogManager eventLogManager = EventLogManager.getInstance(this);
         List<EventLogManager.LogEntry> logs = eventLogManager.getLogs();
         statusLogAdapter.submitList(logs);
-        // 使用post确保列表更新完成后再滚动
+        // Use post to ensure scrolling happens after list update is complete
         recyclerViewStatus.post(() -> {
-            // 滚动到最新日志条目
+            // Scroll to the latest log entry
             recyclerViewStatus.scrollToPosition(0);
         });
     }
 
-    // 日期格式化工具方法
+    // Date formatting utility method
     private String formatDate(long millis) {
         SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
         return sdf.format(new Date(millis));

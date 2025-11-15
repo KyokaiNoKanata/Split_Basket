@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths>
-    <!-- App 专属外部图片目录，无需存储权限 -->
+    <!-- App's exclusive external image directory, no storage permission required -->
     <external-files-path
         name="images"
         path="Pictures/" />

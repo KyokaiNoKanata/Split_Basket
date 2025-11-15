@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <!-- 移除右上角品牌徽标 -->
+    <!-- Remove the top-right corner brand logo -->
 
     <ScrollView
         android:id="@+id/scrollContent"
@@ -25,7 +25,7 @@
             android:padding="16dp"
             android:paddingTop="12dp">
 
-            <!-- 统一的大标题 -->
+            <!-- Unified large title -->
             <TextView
                 android:id="@+id/pageTitleHome"
                 style="@style/PageTitleText"
@@ -209,7 +209,7 @@
                 android:layout_marginBottom="16dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-            <!-- 分隔线 -->
+            <!-- Separator line -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"

@@ -28,7 +28,7 @@
             android:text="@string/add_items_and_quantities_long_press_an_item_to_remove"
             android:textSize="13sp" />
 
-        <!-- 输入：物品名称 -->
+        <!-- Input: Item Name -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -40,7 +40,7 @@
                 android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- 输入：数量 -->
+        <!-- Input: Quantity -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -53,7 +53,7 @@
                 android:inputType="number" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- 添加按钮 -->
+        <!-- Add Button -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnAddItem"
             style="@style/PrimaryActionButton"
@@ -62,7 +62,7 @@
             android:layout_marginTop="8dp"
             android:text="Add item" />
 
-        <!-- 多选项容器 -->
+        <!-- Multi-select container -->
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="180dp"
@@ -75,7 +75,7 @@
                 android:orientation="vertical" />
         </ScrollView>
 
-        <!-- 底部按钮 -->
+        <!-- Bottom buttons -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

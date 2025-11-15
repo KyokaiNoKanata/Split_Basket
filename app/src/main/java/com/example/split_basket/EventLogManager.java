@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class EventLogManager {
-    // 事件类型
+    // Event types
     public static final String EVENT_TYPE_INVENTORY_ADD = "INVENTORY_ADD";
     public static final String EVENT_TYPE_INVENTORY_REMOVE = "INVENTORY_REMOVE";
     public static final String EVENT_TYPE_INVENTORY_UPDATE = "INVENTORY_UPDATE";
@@ -46,7 +46,7 @@ public class EventLogManager {
     }
 
     /**
-     * 格式化时间为"x minutes/hours ago"格式
+     * Format time as "x minutes/hours ago" format
      */
     public static String formatTimeAgo(long timestamp) {
         long currentTime = System.currentTimeMillis();
@@ -66,36 +66,36 @@ public class EventLogManager {
     }
 
     /**
-     * 添加一条日志记录
+     * Add a log entry
      *
-     * @param type     事件类型
-     * @param content  事件内容
-     * @param quantity 数量（可选）
-     * @param user     用户（可选）
+     * @param type     Event type
+     * @param content  Event content
+     * @param quantity Quantity (optional)
+     * @param user     User (optional)
      */
     public synchronized void addLog(String type, String content, int quantity, String user) {
-        // 包装成字符串调用另一个addLog方法
+        // Wrap into string and call another addLog method
         addLog(type, content + " (" + quantity + ")", user);
     }
 
     /**
-     * 添加一条日志记录
+     * Add a log entry
      *
-     * @param type    事件类型
-     * @param content 事件内容
-     * @param user    用户（可选）
+     * @param type    Event type
+     * @param content Event content
+     * @param user    User (optional)
      */
     public synchronized void addLog(String type, String content, String user) {
         long timestamp = System.currentTimeMillis();
 
-        // 创建日志条目字符串
+        // Create log entry string
         String userPart = user != null ? " | " + user : "";
         String logEntryString = timestamp + " | " + type + " | " + content + userPart;
 
-        // 格式化日志条目为用户友好的描述
+        // Format log entry to user-friendly description
         String formattedDescription = formatLogEntry(logEntryString);
 
-        // 创建 LogEntry 对象
+        // Create LogEntry object
         LogEntry logEntry = new LogEntry(timestamp, type, formattedDescription, user);
 
         JSONArray logsArray;
@@ -108,7 +108,7 @@ public class EventLogManager {
             logsArray = new JSONArray();
         }
 
-        // 将 LogEntry 转换为 JSON 对象并添加到数组
+        // Convert LogEntry to JSON object and add to array
         try {
             JSONObject jsonLog = new JSONObject();
             jsonLog.put("timestamp", logEntry.timestamp());
@@ -125,7 +125,7 @@ public class EventLogManager {
     }
 
     /**
-     * 从存储中获取所有日志记录（用于初始化缓存）
+     * Get all log entries from storage (for initializing cache)
      */
     private synchronized List<LogEntry> getAllLogsFromStorage() {
         List<LogEntry> logs = new ArrayList<>();
@@ -136,7 +136,7 @@ public class EventLogManager {
             for (int i = 0; i < logsArray.length(); i++) {
                 Object logObj = logsArray.get(i);
                 if (logObj instanceof String logString) {
-                    // 旧格式：字符串形式的日志条目
+                    // Old format: log entry in string form
                     try {
                         String[] parts = logString.split(" \\| ", 3);
                         if (parts.length < 3)
@@ -146,7 +146,7 @@ public class EventLogManager {
                         String type = parts[1];
                         String content = parts[2];
 
-                        // 提取用户
+                        // Extract user
                         String user = "";
                         if (content.contains(" | ")) {
                             int userIndex = content.lastIndexOf(" | ");
@@ -154,17 +154,17 @@ public class EventLogManager {
                             content = content.substring(0, userIndex);
                         }
 
-                        // 格式化日志
+                        // Format log
                         String formattedDescription = formatLogEntry(logString);
 
-                        // 创建 LogEntry
+                        // Create LogEntry
                         LogEntry logEntry = new LogEntry(timestamp, type, formattedDescription, user);
                         logs.add(logEntry);
                     } catch (Exception e) {
                         Log.e(TAG, "Failed to parse old format log: " + logString, e);
                     }
                 } else if (logObj instanceof JSONObject jsonLog) {
-                    // 新格式：JSON 对象形式的日志条目
+                    // New format: log entry in JSON object form
                     try {
                         long timestamp = jsonLog.getLong("timestamp");
                         String actionType = jsonLog.getString("actionType");
@@ -182,27 +182,27 @@ public class EventLogManager {
             Log.e(TAG, "Failed to parse logs array", e);
         }
 
-        // 按时间倒序排列
+        // Sort in reverse chronological order
         Collections.reverse(logs);
         return logs;
     }
 
     /**
-     * 获取所有日志记录（按时间倒序）
+     * Get all log entries (sorted by time descending)
      */
     public synchronized List<LogEntry> getAllLogs() {
         return new ArrayList<>(logsCache);
     }
 
     /**
-     * 获取所有日志记录（按时间倒序）- 供外部调用
+     * Get all log entries (sorted by time descending) - for external calls
      */
     public synchronized List<LogEntry> getLogs() {
         return getAllLogs();
     }
 
     /**
-     * 清空所有日志
+     * Clear all log entries
      */
     public synchronized void clearLogs() {
         prefs.edit().putString(KEY_LOGS, "[]").apply();
@@ -210,7 +210,7 @@ public class EventLogManager {
     }
 
     /**
-     * 解析日志条目为更友好的显示格式
+     * Parse log entry into a more user-friendly display format
      */
     public String formatLogEntry(String logEntry) {
         try {
@@ -222,7 +222,7 @@ public class EventLogManager {
             String type = parts[1];
             String content = parts[2];
 
-            // 解析用户部分
+            // Parse user part
             String user = "";
             if (content.contains(" | ")) {
                 int userIndex = content.lastIndexOf(" | ");
@@ -230,7 +230,7 @@ public class EventLogManager {
                 content = content.substring(0, userIndex);
             }
 
-            // 根据类型格式化内容
+            // Format content by type
             String formattedContent = content;
             switch (type) {
                 case EVENT_TYPE_INVENTORY_ADD:
@@ -272,7 +272,7 @@ public class EventLogManager {
                     break;
             }
 
-            // 格式化时间
+            // Format time
             String timeAgo = EventLogManager.formatTimeAgo(timestamp);
 
             return formattedContent + " | " + timeAgo;
@@ -283,11 +283,11 @@ public class EventLogManager {
         }
     }
 
-    // 日志条目类
+    // Log entry class
     public record LogEntry(long timestamp, String actionType, String description, String user) {
 
         public String getItemName() {
-            // 从描述中提取物品名称（简单实现）
+            // Extract item name from description (simple implementation)
             return description;
         }
     }

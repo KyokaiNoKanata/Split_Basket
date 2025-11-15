@@ -52,12 +52,12 @@ public class BillRepository {
         if (seeded)
             return;
         executorService.execute(() -> {
-            // 首次启动时初始化默认账单数据
+            // Initialize default bill data on first launch
             if (preferences.getBoolean(KEY_FIRST_LAUNCH, true)) {
                 initializeDefaultBills();
                 preferences.edit().putBoolean(KEY_FIRST_LAUNCH, false).apply();
             } else {
-                // 如果不是首次启动，但没有账单数据，也初始化默认账单
+                // If it's not the first launch but there are no bills, initialize default bills
                 if (billDao.countBills() == 0) {
                     initializeDefaultBills();
                 }
@@ -66,12 +66,12 @@ public class BillRepository {
         });
     }
 
-    // 初始化默认账单数据
+    // Initialize default bill data
     private void initializeDefaultBills() {
         try {
             List<BillItem> defaultBills = new ArrayList<>();
 
-            // 添加默认的未支付账单
+            // Add default unpaid bill
             BillItem unpaidBill = new BillItem("unpaid_bill_1", "Weekend Party", "$ 389.50", "Unpaid", "Equal Split",
                     "2024-01-01");
             unpaidBill.addParticipant("User1");
@@ -80,7 +80,7 @@ public class BillRepository {
             unpaidBill.addParticipant("User4");
             defaultBills.add(unpaidBill);
 
-            // 添加默认的已支付账单
+            // Add default paid bill
             BillItem paidBill1 = new BillItem("paid_bill_1", "Daily Shopping", "$ 128.30", "Paid", "By Quantity",
                     "2024-01-02");
             paidBill1.addParticipant("User1");
@@ -148,7 +148,7 @@ public class BillRepository {
     public void addBill(@NonNull BillItem bill) {
         executorService.execute(() -> {
             billDao.insert(bill);
-            // 添加日志记录
+            // Add log record
             eventLogManager.addLog(EventLogManager.EVENT_TYPE_BILL_ADD, bill.getName() + " - " + bill.getAmount(), "");
         });
     }
@@ -156,7 +156,7 @@ public class BillRepository {
     public void updateBill(@NonNull BillItem updatedBill) {
         executorService.execute(() -> {
             billDao.update(updatedBill);
-            // 添加日志记录
+            // Add log record
             eventLogManager.addLog(EventLogManager.EVENT_TYPE_BILL_UPDATE,
                     updatedBill.getName() + " - " + updatedBill.getAmount(), "");
         });
@@ -164,11 +164,11 @@ public class BillRepository {
 
     public void deleteBill(String billId) {
         executorService.execute(() -> {
-            // 先记录要删除的账单信息
+            // First record the information of the bill to be deleted
             BillItem deletedBill = billDao.getBillById(billId);
             if (deletedBill != null) {
                 billDao.deleteById(billId);
-                // 记录删除日志
+                // Record deletion log
                 eventLogManager.addLog(EventLogManager.EVENT_TYPE_BILL_REMOVE,
                         deletedBill.getName() + " - " + deletedBill.getAmount(), "");
             }

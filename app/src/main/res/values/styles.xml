@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- 统一页面大标题样式 -->
+    <!-- Uniform page large title style -->
     <style name="PageTitleText" parent="TextAppearance.MaterialComponents.Headline4">
         <item name="android:layout_gravity">center</item>
         <item name="android:textAlignment">center</item>
@@ -14,8 +14,8 @@
         <item name="android:letterSpacing">0.02</item>
     </style>
 
-    <!-- 顶部主操作按钮统一样式：单行、等高、居中 -->
-    <!-- 主操作按钮样式：圆形背景、白色文字 -->
+    <!-- Top main action button uniform style: single line, equal height, centered -->
+    <!-- Main action button style: circular background, white text -->
     <style name="PrimaryActionButton" parent="Widget.MaterialComponents.Button">
         <item name="android:textColor">@android:color/white</item>
         <item name="android:background">@drawable/button_background_selector</item>
@@ -35,15 +35,15 @@
         <item name="android:stateListAnimator">@null</item>
     </style>
 
-    <!-- 结算方式选择的单选按钮样式：自定义颜色和大小 -->
-    <!-- 账单页分摊方式单选项样式：支持两行、末尾省略、垂直居中 -->
+    <!-- Payment method selection radio button style: custom color and size -->
+    <!-- Bill splitting method option style: supports two lines, ellipsis at the end, vertically centered -->
     <style name="SplitMethodRadio" parent="Widget.MaterialComponents.CompoundButton.RadioButton">
         <item name="android:textColor">?attr/colorPrimary</item>
         <item name="android:textSize">16sp</item>
         <item name="android:buttonTint">?attr/colorPrimary</item>
     </style>
 
-    <!-- 列表条目统一样式：左侧小图标、统一字号 -->
+    <!-- List item uniform style: left small icon, uniform font size -->
     <style name="ListItemText">
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
@@ -51,7 +51,7 @@
         <item name="android:drawablePadding">6dp</item>
     </style>
 
-    <!-- 底部导航栏按钮样式：增大字体并加粗 -->
+    <!-- Bottom navigation bar button style: enlarged font and bold -->
     <style name="BottomNavButton" parent="Widget.MaterialComponents.Button">
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
@@ -61,7 +61,7 @@
         <item name="android:letterSpacing">0</item>
     </style>
 
-    <!--部分弹窗所需样式-->
+    <!-- Styles needed for some popups -->
     <style name="BorderlessActionButton" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:textAllCaps">false</item>
         <item name="android:textSize">16sp</item>

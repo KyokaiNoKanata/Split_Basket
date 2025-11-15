@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <!-- 移除右上角品牌徽标 -->
+    <!-- Remove the top-right corner brand logo -->
 
     <ScrollView
         android:id="@+id/scrollContent"
@@ -25,7 +25,7 @@
             android:padding="16dp"
             android:paddingTop="12dp">
 
-            <!-- 统一的大标题 -->
+            <!-- Unified large title -->
             <TextView
                 android:id="@+id/pageTitleInventory"
                 style="@style/PageTitleText"
@@ -201,8 +201,8 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- 在 “All Items table” 卡片中，替换静态行为可动态填充的容器 -->
-            <!-- 保留标题与表头 -->
+            <!-- In the "All Items table" card, replace static rows with a dynamically fillable container -->
+            <!-- Keep the title and table header -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -252,7 +252,7 @@
                             android:textStyle="bold" />
                     </LinearLayout>
 
-                    <!-- 动态内容容器：代码里填充行 -->
+                    <!-- Dynamic content container: Fill rows in code -->
                     <LinearLayout
                         android:id="@+id/itemsContainer"
                         android:layout_width="match_parent"
