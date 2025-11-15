@@ -1,65 +1,124 @@
-#### 源代码 (app/src/main/java/com/example/split\_basket/)
+# Split Basket - Smart Shopping & Life Management App
 
-**核心Activity类：**
+Split Basket is an intelligent life management application that integrates shopping list, inventory
+management, and bill splitting functions, helping users easily manage family shopping and living
+expenses.
 
-1. **HomeActivity.java** - 主页面
+## Main Features
 
-    * 应用入口点（LAUNCHER Activity）
-    * 包含四个功能卡片：快速添加、概览、新建清单、新建账单
-    * 底部导航栏管理
-    * 平滑的页面切换动画效果
+### 1. Shopping List
 
-2. **InventoryActivity.java** - 库存管理页面
+- Create and manage shopping lists
+- Quickly add items
+- Check items as purchased
+- Quickly select frequently used items from recommended lists
 
-    * 物品分类管理（全部、蔬菜、肉类、水果、其他）
-    * 手动添加和从购物清单导入功能
-    * 库存概览统计（剩余数量、即将过期、已消耗）
-    * 物品列表展示（名称、购买日期、数量）
+### 2. Inventory Management
 
-3. **ListActivity.java** - 购物清单页面
+- Manually add inventory items
+- Automatically import purchased items from shopping lists
+- Item category management (Vegetables, Meat, Fruits, Others)
+- Inventory overview statistics (Remaining quantity, Expiring soon, Consumed)
+- Item expiration reminders
 
-    * 购物清单管理
-    * 添加物品和结算功能
-    * 底部导航集成
+### 3. Bill Splitting
 
-4. **BillActivity.java** - 账单分摊页面
+- Create and manage bills
+- Support multiple splitting methods (Equal, By Quantity, By Item, Custom)
+- Bill status management (Unpaid/Paid)
+- Member management functionality
+- Unpaid bill reminders
 
-    * 账单创建和管理
-    * 多种分摊方式：均等、按数量、按物品、自定义
-    * 近期账单展示（未付/已付状态）
-    * 成员管理功能
+### 4. Home Screen Reminders
 
-#### 资源文件 (app/src/main/res/)
+- Reminders for all unpaid bills
+- Reminders for all soon-to-expire items
+- Display all reminders using RecyclerView
 
-**布局文件 (layout/):**
+## Technology Architecture
 
-* **activity\_home.xml** - 主页布局，包含功能卡片网格
-* **activity\_inventory.xml** - 库存页面布局，包含分类筛选和物品表格
-* **activity\_list.xml** - 购物清单布局
-* **activity\_bill.xml** - 账单页面布局，包含分摊选项表单
+### Core Components
 
-**值资源 (values/):**
+- **HomeActivity.java** - Application main interface
+- **InventoryActivity.java** - Inventory management interface
+- **ListActivity.java** - Shopping list interface
+- **BillActivity.java** - Bill splitting interface
+- **ReminderAdapter.java** - Reminder list adapter
+- **StatusLogAdapter.java** - Log list adapter
 
-* **strings.xml** - 所有文本字符串资源（91个字符串）
-* **colors.xml** - 颜色定义，包含Material Design配色和自定义颜色
-* **styles.xml** - 样式定义：页面标题、按钮、单选按钮、列表项、底部导航
-* **themes.xml** - 应用主题配置，基于Material Components
+### Data Storage
 
-**Drawable资源:**
+- Local data persistence using Room database
+- Local storage for items, shopping lists, bills, etc.
 
-* 底部导航图标：ic\_home.xml, ic\_inventory.xml, ic\_list.xml, ic\_bill.xml
-* 按钮状态选择器：button\_background\_selector.xml
-* 项目符号图标：ic\_item\_bullet.xml
+### Interface Design
 
-**动画资源:**
+- Material Design style
+- Responsive layout
+- Smooth page transition animations
+- Bottom navigation bar for quick module switching
 
-* 按钮淡入淡出动画：button\_fade\_animation.xml
-* 底部导航状态动画
+## Project Structure
 
-#### 清单文件
+```
+app/
+├── src/
+│   └── main/
+│       ├── java/com/example/split_basket/
+│       │   ├── data/              # Data layer
+│       │   ├── HomeActivity.java  # Main interface
+│       │   ├── InventoryActivity.java  # Inventory management
+│       │   ├── ListActivity.java  # Shopping list
+│       │   ├── BillActivity.java  # Bill splitting
+│       │   ├── ReminderAdapter.java  # Reminder adapter
+│       │   └── StatusLogAdapter.java  # Log adapter
+│       └── res/
+│           ├── layout/            # Layout files
+│           ├── values/            # Resource files
+│           └── drawable/          # Image resources
+└── build.gradle.kts                # Project configuration
+```
 
-* **AndroidManifest.xml** - 应用配置
+## Quick Start
 
-    * 四个Activity声明，HomeActivity为主入口
-    * 支持RTL、全屏显示优化
-    * 数据备份规则配置
+### Environment Requirements
+
+- Android Studio 4.0+
+- Android SDK API Level 23+
+
+### Compilation and Running
+
+1. Clone the project locally
+2. Open Android Studio
+3. Import the project and wait for gradle synchronization to complete
+4. Connect an Android device or start an emulator
+5. Click the run button
+
+## Usage Instructions
+
+### Adding a Shopping List
+
+1. Click the "New List" card on the main interface
+2. Enter the list name
+3. Add items you need to buy
+4. Click the finish button to save
+
+### Managing Inventory
+
+1. Click the "Inventory" icon in the bottom navigation bar on the main interface
+2. Click the "Add Item" button to manually add items
+3. Or import purchased items from the shopping list
+4. You can filter and view items by category
+
+### Creating a Bill
+
+1. Click the "New Bill" card on the main interface
+2. Enter the bill name and total amount
+3. Select the splitting method
+4. Select participating members
+5. Save the bill
+
+### Viewing Reminders
+
+Check all unpaid bills and soon-to-expire items in the "Reminder" section on the main interface
+
