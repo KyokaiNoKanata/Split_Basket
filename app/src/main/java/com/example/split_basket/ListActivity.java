@@ -24,6 +24,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -107,7 +108,8 @@ public class ListActivity extends AppCompatActivity implements ShoppingListAdapt
     }
 
     private void addQuickRecommendation(@NonNull String itemName) {
-        if (viewModel == null) return;
+        if (viewModel == null)
+            return;
         viewModel.addItem(itemName, 1, getString(R.string.default_added_by), (success, message) -> {
             String toastMessage = success
                     ? getString(R.string.chip_added_feedback, itemName, 1)
@@ -136,7 +138,8 @@ public class ListActivity extends AppCompatActivity implements ShoppingListAdapt
                 .setView(dialogView)
                 .setPositiveButton(R.string.action_add, (dialog, which) -> {
                     String name = inputName.getText() != null ? inputName.getText().toString().trim() : "";
-                    String quantityText = inputQuantity.getText() != null ? inputQuantity.getText().toString().trim() : "";
+                    String quantityText = inputQuantity.getText() != null ? inputQuantity.getText().toString().trim()
+                            : "";
                     String addedBy = inputAddedBy.getText() != null ? inputAddedBy.getText().toString().trim() : "";
 
                     if (TextUtils.isEmpty(name)) {
@@ -166,13 +169,15 @@ public class ListActivity extends AppCompatActivity implements ShoppingListAdapt
                 .setNegativeButton(R.string.action_cancel, null)
                 .show();
     }
+
     private void handleAddResult(boolean success, @NonNull String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     private void refreshRecommendations() {
         ChipGroup group = findViewById(R.id.chipGroupRecommend);
-        if (group == null) return;
+        if (group == null)
+            return;
         group.removeAllViews();
 
         // Count frequency of names (case-insensitive)
@@ -180,16 +185,20 @@ public class ListActivity extends AppCompatActivity implements ShoppingListAdapt
         java.util.Map<String, String> canonical = new java.util.HashMap<>();
         for (ShoppingItem item : currentItems) {
             String name = item.getName() == null ? "" : item.getName().trim();
-            if (name.isEmpty()) continue;
+            if (name.isEmpty())
+                continue;
             String key = name.toLowerCase();
-            freq.put(key, freq.getOrDefault(key, 0) + 1);
+            Integer currentCount = freq.get(key);
+            int newCount = (currentCount != null ? currentCount : 0) + 1;
+            freq.put(key, newCount);
             // preserve first-seen original casing for display
-            if (!canonical.containsKey(key)) canonical.put(key, name);
+            if (!canonical.containsKey(key))
+                canonical.put(key, name);
         }
 
         // Build sorted list by count desc
         List<java.util.Map.Entry<String, Integer>> entries = new java.util.ArrayList<>(freq.entrySet());
-        entries.sort((a, b) -> Integer.compare(b.getValue(), a.getValue()));
+        Collections.sort(entries, (a, b) -> Integer.compare(b.getValue(), a.getValue()));
 
         int maxWidth = group.getWidth();
         if (maxWidth == 0) {
@@ -202,7 +211,8 @@ public class ListActivity extends AppCompatActivity implements ShoppingListAdapt
         int spacing = 0;
         try {
             spacing = (Integer) ChipGroup.class.getMethod("getChipSpacingHorizontal").invoke(group);
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
 
         int lineWidth = 0;
         int added = 0;
@@ -274,7 +284,8 @@ public class ListActivity extends AppCompatActivity implements ShoppingListAdapt
                         if (viewModel != null) {
                             // Persist to DB using bulk update by IDs; UI will refresh via LiveData
                             List<Long> ids = new ArrayList<>(remaining.size());
-                            for (ShoppingItem it : remaining) ids.add(it.getId());
+                            for (ShoppingItem it : remaining)
+                                ids.add(it.getId());
                             viewModel.markItemsPurchasedByIds(ids);
                             Toast.makeText(this, R.string.action_mark_all_purchased, Toast.LENGTH_SHORT).show();
                         }
@@ -289,7 +300,8 @@ public class ListActivity extends AppCompatActivity implements ShoppingListAdapt
         int total = currentItems.size();
         int purchased = 0;
         for (ShoppingItem item : currentItems) {
-            if (item.isPurchased()) purchased++;
+            if (item.isPurchased())
+                purchased++;
         }
         textSummary.setText(getString(R.string.total_purchased_template, total, purchased));
         textEmptyState.setVisibility(total == 0 ? View.VISIBLE : View.GONE);
@@ -331,14 +343,15 @@ public class ListActivity extends AppCompatActivity implements ShoppingListAdapt
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder,
-                                  @NonNull RecyclerView.ViewHolder target) {
+                    @NonNull RecyclerView.ViewHolder target) {
                 return false;
             }
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 int position = viewHolder.getBindingAdapterPosition();
-                if (position == RecyclerView.NO_POSITION) return;
+                if (position == RecyclerView.NO_POSITION)
+                    return;
                 ShoppingItem item = adapter.getItemAt(position);
                 if (item != null) {
                     deleteItemWithUndo(item);
@@ -349,7 +362,8 @@ public class ListActivity extends AppCompatActivity implements ShoppingListAdapt
     }
 
     private void deleteItemWithUndo(@NonNull ShoppingItem item) {
-        if (viewModel == null) return;
+        if (viewModel == null)
+            return;
         recentlyDeletedItem = snapshotItem(item);
         viewModel.deleteItem(item);
         Snackbar snackbar = Snackbar.make(findViewById(R.id.scrollContent),
@@ -378,20 +392,26 @@ public class ListActivity extends AppCompatActivity implements ShoppingListAdapt
         TextInputEditText inputQuantity = dialogView.findViewById(R.id.inputQuantity);
         TextInputEditText inputAddedBy = dialogView.findViewById(R.id.inputAddedBy);
 
-        if (inputName != null) inputName.setText(item.getName());
-        if (inputQuantity != null) inputQuantity.setText(String.valueOf(item.getQuantity()));
-        if (inputAddedBy != null) inputAddedBy.setText(item.getAddedBy());
+        if (inputName != null)
+            inputName.setText(item.getName());
+        if (inputQuantity != null)
+            inputQuantity.setText(String.valueOf(item.getQuantity()));
+        if (inputAddedBy != null)
+            inputAddedBy.setText(item.getAddedBy());
 
         new MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.edit_item_title)
                 .setView(dialogView)
                 .setPositiveButton(R.string.action_save, (dialog, which) -> {
                     String name = inputName != null && inputName.getText() != null
-                            ? inputName.getText().toString().trim() : "";
+                            ? inputName.getText().toString().trim()
+                            : "";
                     String quantityText = inputQuantity != null && inputQuantity.getText() != null
-                            ? inputQuantity.getText().toString().trim() : "";
+                            ? inputQuantity.getText().toString().trim()
+                            : "";
                     String addedBy = inputAddedBy != null && inputAddedBy.getText() != null
-                            ? inputAddedBy.getText().toString().trim() : "";
+                            ? inputAddedBy.getText().toString().trim()
+                            : "";
 
                     if (TextUtils.isEmpty(name)) {
                         Toast.makeText(this, R.string.error_item_name_required, Toast.LENGTH_SHORT).show();
@@ -433,4 +453,3 @@ public class ListActivity extends AppCompatActivity implements ShoppingListAdapt
         return copy;
     }
 }
-

@@ -19,25 +19,26 @@
     <string name="next">Next</string>
     <string name="get_started">Get Started</string>
     <string name="welcome">Welcome to SplitBasket!</string>
+    <string name="split_basket">Split Basket</string>
     <string name="welcome_desc">Manage your groceries and split bills with friends effortlessly.</string>
     <!-- Bill splitting -->
     <string name="bill_splitting">Bill Splitting</string>
     <string name="recent_bills">Recent bills</string>
     <string name="create_new_bill">Create a new bill</string>
-    <string name="split_payment_method">Split payment method:</string>
     <string name="equal">Equal</string>
+    <string name="split_payment_method">Split payment method:</string>
+
     <string name="by_quantity">By quantity</string>
     <string name="by_item">By item</string>
     <string name="custom">Custom</string>
-    <string name="members">Members:</string>
+
     <string name="name_of_members">Name of Members</string>
     <string name="create">Create</string>
-    <string name="unpaid">Unpaid</string>
-    <string name="paid">Paid</string>
+
 
     <!-- Home -->
     <!-- Home screen -->
-    <string name="split_basket">SplitBasket</string>
+
     <string name="quick_add">Quick Add</string>
     <string name="add_ingredients">Add ingredients to inventory</string>
     <string name="overview">Overview</string>
@@ -46,8 +47,7 @@
     <string name="create_shared_list">Create a shared list</string>
     <string name="new_bill">New Bill</string>
     <string name="create_shopping_bill">Create a shopping bill</string>
-    <string name="recent_bills">Recent bills</string>
-    <string name="bill_splitting">Bill splitting</string>
+
     <string name="reminder">Reminder</string>
     <string name="milk_expire">The milk will expire tomorrow.</string>
     <string name="unpaid_bill">You have an unpaid bill.</string>
@@ -110,10 +110,10 @@
     <string name="dinner">Dinner</string>
     
     <!-- Status messages -->
-    <string name="bought_chopsticks">xxx bought \'Chopsticks\'</string>
+
     <string name="bought_chopsticks">xxx bought Chopsticks</string>
     <string name="minutes_ago">20 minutes ago</string>
-    <string name="adds_chopsticks">xxx adds \'chopsticks\' to the shopping list</string>
+
     <string name="adds_chopsticks">xxx adds chopsticks to the shopping list</string>
     <string name="hours_ago">1 hours ago</string>
     <string name="paid_for_lunch">xxx paid $60 for lunch</string>
@@ -139,16 +139,11 @@
     <string name="split_manually">Split manually</string>
     <string name="unpaid">Unpaid</string>
     <string name="paid">Paid</string>
-    <string name="split_payment_method">Split payment method</string>
-    <string name="split_basket">Split Basket</string>
+
+
     <string name="members">Members</string>
-    <string name="bill">Bill</string>
-    <string name="list">List</string>
-    <string name="equal">Equal</string>
-    <string name="by_quantity">By Quantity</string>
-    <string name="by_item">By Item</string>
-    <string name="custom">Custom</string>
-    <string name="create_new_bill">Create New Bill</string>
+
+
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
     <string name="add_item">Add Item</string>
