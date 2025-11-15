@@ -7,7 +7,6 @@
     <string name="nav_inventory">Inventory</string>
     <string name="nav_list">List</string>
     <string name="nav_bill">Bill</string>
-
     <!-- Common navigation -->
     <string name="home">Home</string>
     <string name="inventory">Inventory</string>
@@ -27,18 +26,24 @@
     <string name="create_new_bill">Create a new bill</string>
     <string name="equal">Equal</string>
     <string name="split_payment_method">Split payment method:</string>
+    <string name="equal">Equal</string>
 
     <string name="by_quantity">By quantity</string>
     <string name="by_item">By item</string>
     <string name="custom">Custom</string>
+    <string name="members">Members:</string>
 
     <string name="name_of_members">Name of Members</string>
     <string name="create">Create</string>
+    <string name="unpaid">Unpaid</string>
+    <string name="paid">Paid</string>
+
 
 
     <!-- Home -->
     <!-- Home screen -->
 
+    <string name="split_basket">SplitBasket</string>
     <string name="quick_add">Quick Add</string>
     <string name="add_ingredients">Add ingredients to inventory</string>
     <string name="overview">Overview</string>
@@ -103,24 +108,20 @@
     <string name="action_mark_all_purchased">Mark all purchased</string>
     <string name="item_deleted">Removed %1$s</string>
     <string name="action_undo">Undo</string>
-
     <!-- Activity titles -->
     <string name="weekend_gathering">Weekend gathering</string>
     <string name="daily_purchases">Daily purchases</string>
     <string name="dinner">Dinner</string>
     
     <!-- Status messages -->
-
-    <string name="bought_chopsticks">xxx bought Chopsticks</string>
+    <string name="bought_chopsticks">xxx bought \'Chopsticks\'</string>
     <string name="minutes_ago">20 minutes ago</string>
-
-    <string name="adds_chopsticks">xxx adds chopsticks to the shopping list</string>
+    <string name="adds_chopsticks">xxx adds \'chopsticks\' to the shopping list</string>
     <string name="hours_ago">1 hours ago</string>
     <string name="paid_for_lunch">xxx paid $60 for lunch</string>
     <string name="two_hours_ago">2 hours ago</string>
 
     <string name="add_items_and_quantities_long_press_an_item_to_remove">Add items and quantities (long press an item to remove)</string>
-
     <!-- Placeholder values -->
     <string name="placeholder_name">XXXX</string>
     <string name="placeholder_date">XX-XX-XXXX</string>
