@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.button.MaterialButton;
+import com.example.split_basket.data.BillRepository;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -26,7 +27,7 @@ public class BillDetailActivity extends AppCompatActivity {
     
     private String billId;
     private boolean isPaid = false;
-    private BillStorage billStorage;
+    private BillRepository billStorage;
     private BillItem currentBill;
     private boolean isCustomAmountMode = false;
     
@@ -40,7 +41,7 @@ public class BillDetailActivity extends AppCompatActivity {
 
         try {
             // 初始化账单存储
-            billStorage = new BillStorage(this);
+        billStorage = BillRepository.getInstance(this);
             
             // 获取传入的账单信息
             Intent intent = getIntent();

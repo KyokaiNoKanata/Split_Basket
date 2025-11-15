@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButton;
+import com.example.split_basket.data.InventoryRepository;
 
 public class InventoryAddActivity extends AppCompatActivity {
     private static final int REQ_CAMERA = 101;
@@ -81,7 +82,7 @@ public class InventoryAddActivity extends AppCompatActivity {
                 name = "Unnamed";
             }
 
-            InventoryRepository repo = new InventoryRepository(this);
+            InventoryRepository repo = InventoryRepository.getInstance(this);
             InventoryItem item = new InventoryItem(String.valueOf(now), name, qty, cat, expire, now);
             // 新增：保存照片 Uri
             if (currentPhotoUri != null) {

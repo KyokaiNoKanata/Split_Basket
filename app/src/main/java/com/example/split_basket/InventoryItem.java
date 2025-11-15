@@ -1,9 +1,16 @@
 package com.example.split_basket;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+import androidx.annotation.NonNull;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
+@Entity(tableName = "inventory_items")
 public class InventoryItem {
+    @PrimaryKey
+    @NonNull
     public String id;
     public String name;
     public int quantity;
@@ -12,7 +19,8 @@ public class InventoryItem {
     public long createdAtMillis;
     public String photoUri; // 新增：可空的照片地址
 
-    public InventoryItem(String id, String name, int quantity, String category, Long expireDateMillis, long createdAtMillis) {
+    public InventoryItem(String id, String name, int quantity, String category, Long expireDateMillis,
+            long createdAtMillis) {
         this.id = id;
         this.name = name;
         this.quantity = quantity;
@@ -27,12 +35,16 @@ public class InventoryItem {
         o.put("name", name);
         o.put("quantity", quantity);
         o.put("category", category);
-        if (expireDateMillis != null) o.put("expireDateMillis", expireDateMillis);
-        else o.put("expireDateMillis", JSONObject.NULL);
+        if (expireDateMillis != null)
+            o.put("expireDateMillis", expireDateMillis);
+        else
+            o.put("expireDateMillis", JSONObject.NULL);
         o.put("createdAtMillis", createdAtMillis);
         // 新增：保存照片地址（可空）
-        if (photoUri != null) o.put("photoUri", photoUri);
-        else o.put("photoUri", JSONObject.NULL);
+        if (photoUri != null)
+            o.put("photoUri", photoUri);
+        else
+            o.put("photoUri", JSONObject.NULL);
         return o;
     }
 

@@ -22,6 +22,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import com.google.android.material.textfield.TextInputEditText;
+import com.example.split_basket.data.InventoryRepository;
+import com.example.split_basket.data.BillRepository;
 
 import java.util.ArrayList;
 
@@ -340,12 +342,12 @@ public class HomeActivity extends AppCompatActivity {
     // 新增提醒功能核心逻辑
     private void updateReminders() {
         // 获取库存数据
-        InventoryRepository inventoryRepo = new InventoryRepository(this);
+        InventoryRepository inventoryRepo = InventoryRepository.getInstance(this);
         List<InventoryItem> items = inventoryRepo.getItems();
 
         // 获取账单数据
-        BillStorage billStorage = new BillStorage(this);
-        List<BillItem> unpaidBills = billStorage.getUnpaidBills();
+        BillRepository billRepository = BillRepository.getInstance(this);
+        List<BillItem> unpaidBills = billRepository.getUnpaidBills();
 
         // 检查即将过期的库存商品（7天内）
         long currentTime = System.currentTimeMillis();

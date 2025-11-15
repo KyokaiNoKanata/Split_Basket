@@ -1,12 +1,23 @@
 package com.example.split_basket;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+import androidx.room.TypeConverter;
+import androidx.room.TypeConverters;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+import androidx.annotation.NonNull;
+
+@Entity(tableName = "bills")
+@TypeConverters({ BillItem.Converters.class })
 public class BillItem implements Parcelable {
+    @PrimaryKey
+    @NonNull
     private String id;
     private String name;
     private String amount;
@@ -104,6 +115,10 @@ public class BillItem implements Parcelable {
         this.participants.add(participant);
     }
 
+    public void setParticipants(List<String> participants) {
+        this.participants = participants;
+    }
+
     public List<Double> getCustomAmounts() {
         return customAmounts;
     }
@@ -118,10 +133,15 @@ public class BillItem implements Parcelable {
         this.customAmounts.add(amount);
     }
 
+    public void setCustomAmounts(List<Double> customAmounts) {
+        this.customAmounts = customAmounts;
+    }
+
     // 计算平均金额
     public double getAverageAmount() {
-        if (participants.isEmpty()) return 0;
-        
+        if (participants.isEmpty())
+            return 0;
+
         try {
             // 移除货币符号和空格，转换为double
             String cleanAmount = amount.replace("¥", "").replace("$", "").trim();
@@ -131,11 +151,11 @@ public class BillItem implements Parcelable {
             return 0;
         }
     }
-    
+
     public String getCreationDate() {
         return creationDate;
     }
-    
+
     public void setCreationDate(String creationDate) {
         this.creationDate = creationDate;
     }
@@ -158,6 +178,47 @@ public class BillItem implements Parcelable {
         parcel.writeInt(customAmounts.size());
         for (Double amount : customAmounts) {
             parcel.writeDouble(amount);
+        }
+    }
+
+    // TypeConverters for Room Database
+    public static class Converters {
+        // Convert List<String> to String (comma-separated)
+        @TypeConverter
+        public static String fromStringList(List<String> value) {
+            if (value == null)
+                return null;
+            return String.join(",", value);
+        }
+
+        // Convert String to List<String>
+        @TypeConverter
+        public static List<String> toStringList(String value) {
+            if (value == null)
+                return new ArrayList<>();
+            return List.of(value.split(","));
+        }
+
+        // Convert List<Double> to String (comma-separated)
+        @TypeConverter
+        public static String fromDoubleList(List<Double> value) {
+            if (value == null)
+                return null;
+            return value.stream()
+                    .map(String::valueOf)
+                    .collect(Collectors.joining(","));
+        }
+
+        // Convert String to List<Double>
+        @TypeConverter
+        public static List<Double> toDoubleList(String value) {
+            if (value == null || value.isEmpty())
+                return new ArrayList<>();
+            return List.of(value.split(","))
+                    .stream()
+                    .filter(s -> !s.isEmpty()) // Skip empty strings
+                    .map(Double::parseDouble)
+                    .collect(Collectors.toList());
         }
     }
 }

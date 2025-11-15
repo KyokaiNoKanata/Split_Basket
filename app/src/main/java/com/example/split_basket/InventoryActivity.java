@@ -16,6 +16,9 @@ import java.util.List;
 import java.util.UUID;
 import com.example.split_basket.ShoppingItem;
 import com.example.split_basket.data.ShoppingListRepository;
+import com.example.split_basket.data.InventoryRepository;
+import java.util.concurrent.Future;
+import java.util.ArrayList;
 
 public class InventoryActivity extends AppCompatActivity {
 
@@ -32,7 +35,7 @@ public class InventoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_inventory);
 
         // Initialize inventory repository
-        inventoryRepository = new InventoryRepository(this);
+        inventoryRepository = InventoryRepository.getInstance(this);
 
         View scroll = findViewById(R.id.scrollContent);
         scroll.setAlpha(0f);
@@ -114,6 +117,7 @@ public class InventoryActivity extends AppCompatActivity {
         }
 
         // 将已支付的项目转换为 InventoryItem 并添加到库存
+        List<Future<Void>> futures = new ArrayList<>();
         for (ShoppingItem item : purchasedItems) {
             // 生成唯一 ID
             String id = UUID.randomUUID().toString();
@@ -128,10 +132,19 @@ public class InventoryActivity extends AppCompatActivity {
                     item.getCreatedAt() // 使用购物项的创建时间
             );
 
-            // 添加到库存
-            inventoryRepository.addItem(inventoryItem);
+            // 添加到库存（异步操作，保存 Future）
+            futures.add(inventoryRepository.addItem(inventoryItem));
             // 从购物清单中删除已导入的项目
             shoppingListRepository.deleteItem(item);
+        }
+
+        // 等待所有异步操作完成
+        for (Future<Void> future : futures) {
+            try {
+                future.get(); // 阻塞直到操作完成
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         // 刷新界面以显示新导入的项目
@@ -170,7 +183,7 @@ public class InventoryActivity extends AppCompatActivity {
     }
 
     private void renderItems(String category) {
-        InventoryRepository repo = new InventoryRepository(this);
+        InventoryRepository repo = InventoryRepository.getInstance(this);
         java.util.List<InventoryItem> items = repo.getItems();
 
         itemsContainer.removeAllViews();
@@ -230,7 +243,7 @@ public class InventoryActivity extends AppCompatActivity {
                     } else if (which == 1) {
                         // 删除：取消提醒 + 移除数据
                         ExpiryReminderScheduler.cancelReminder(this, item.id);
-                        InventoryRepository repo = new InventoryRepository(this);
+                        InventoryRepository repo = InventoryRepository.getInstance(this);
                         repo.removeItem(item.id);
                         android.widget.Toast.makeText(this, "Deleted: " + item.name, android.widget.Toast.LENGTH_SHORT)
                                 .show();
@@ -310,7 +323,7 @@ public class InventoryActivity extends AppCompatActivity {
                         }
                     }
 
-                    InventoryRepository repo = new InventoryRepository(this);
+                    InventoryRepository repo = InventoryRepository.getInstance(this);
                     InventoryItem updated = new InventoryItem(item.id, name.isEmpty() ? item.name : name, qty, cat,
                             expire, item.createdAtMillis);
 
@@ -342,7 +355,7 @@ public class InventoryActivity extends AppCompatActivity {
     }
 
     private void updateOverview(String category) {
-        InventoryRepository repo = new InventoryRepository(this);
+        InventoryRepository repo = InventoryRepository.getInstance(this);
         java.util.List<InventoryItem> items = repo.getItems();
 
         long now = System.currentTimeMillis();
