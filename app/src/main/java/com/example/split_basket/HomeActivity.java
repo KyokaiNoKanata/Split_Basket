@@ -4,15 +4,22 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.radiobutton.MaterialRadioButton;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
@@ -33,6 +40,10 @@ public class HomeActivity extends AppCompatActivity {
     public static final String EXTRA_BILL_MODE = "com.example.split_basket.EXTRA_BILL_MODE";
 
     private MaterialButton btnHome, btnInventory, btnList, btnBill;
+
+    // 新增提醒功能相关变量
+    private TextView tvReminder1, tvReminder2;
+    private MaterialCardView cardReminder1, cardReminder2;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,20 +85,29 @@ public class HomeActivity extends AppCompatActivity {
         View newList = findViewById(R.id.cardNewList);
         View newBill = findViewById(R.id.cardNewBill);
 
-        //库存添加弹窗
+        // 库存添加弹窗
         quickAdd.setOnClickListener(v -> showQuickAddDialog());
 
-        //简单汇总/说明弹窗（之后可以接真实数据）
+        // 简单汇总/说明弹窗（之后可以接真实数据）
         overview.setOnClickListener(v -> showOverviewDialog());
 
-        //共享购物清单，多选列表 + 动态添加/删除项目
+        // 共享购物清单，多选列表 + 动态添加/删除项目
         newList.setOnClickListener(v -> showNewListDialog());
 
-        //New Bill → 快速创建账单
+        // New Bill → 快速创建账单
         newBill.setOnClickListener(v -> showNewBillDialog());
+
+        // 初始化提醒文本框
+        tvReminder1 = findViewById(R.id.tvReminder1);
+        tvReminder2 = findViewById(R.id.tvReminder2);
+        // 初始化提醒卡片
+        cardReminder1 = findViewById(R.id.cardReminder1);
+        cardReminder2 = findViewById(R.id.cardReminder2);
+        // 更新提醒内容
+        updateReminders();
     }
 
-    //底部导航
+    // 底部导航
 
     private void updateButtonStates(MaterialButton selectedButton) {
         btnHome.setChecked(false);
@@ -121,11 +141,10 @@ public class HomeActivity extends AppCompatActivity {
         MaterialButton btnConfirm = dialogView.findViewById(R.id.btnConfirmQuickAdd);
         MaterialButton btnCancel = dialogView.findViewById(R.id.btnCancelQuickAdd);
 
-        final androidx.appcompat.app.AlertDialog dialog =
-                new MaterialAlertDialogBuilder(this)
-                        .setView(dialogView)
-                        .setCancelable(true)
-                        .create();
+        final androidx.appcompat.app.AlertDialog dialog = new MaterialAlertDialogBuilder(this)
+                .setView(dialogView)
+                .setCancelable(true)
+                .create();
 
         btnCancel.setOnClickListener(v -> dialog.dismiss());
 
@@ -161,18 +180,17 @@ public class HomeActivity extends AppCompatActivity {
 
         MaterialButton btnClose = dialogView.findViewById(R.id.btnCloseOverview);
 
-        final androidx.appcompat.app.AlertDialog dialog =
-                new MaterialAlertDialogBuilder(this)
-                        .setView(dialogView)
-                        .setCancelable(true)
-                        .create();
+        final androidx.appcompat.app.AlertDialog dialog = new MaterialAlertDialogBuilder(this)
+                .setView(dialogView)
+                .setCancelable(true)
+                .create();
 
         btnClose.setOnClickListener(v -> dialog.dismiss());
 
         dialog.show();
     }
 
-    //  New List Dialog
+    // New List Dialog
 
     private void showNewListDialog() {
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_new_shoppinglist, null);
@@ -184,11 +202,10 @@ public class HomeActivity extends AppCompatActivity {
         MaterialButton btnCancel = dialogView.findViewById(R.id.btnCancelNewList);
         LinearLayout container = dialogView.findViewById(R.id.containerListItems);
 
-        final androidx.appcompat.app.AlertDialog dialog =
-                new MaterialAlertDialogBuilder(this)
-                        .setView(dialogView)
-                        .setCancelable(true)
-                        .create();
+        final androidx.appcompat.app.AlertDialog dialog = new MaterialAlertDialogBuilder(this)
+                .setView(dialogView)
+                .setCancelable(true)
+                .create();
 
         // 动态添加新的选项（物品 + 数量），以多选框形式展示
         btnAddItem.setOnClickListener(v -> {
@@ -209,8 +226,7 @@ public class HomeActivity extends AppCompatActivity {
             checkBox.setChecked(true);
             checkBox.setLayoutParams(new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-            ));
+                    LinearLayout.LayoutParams.WRAP_CONTENT));
 
             // 长按删除该选项
             checkBox.setOnLongClickListener(view -> {
@@ -275,11 +291,10 @@ public class HomeActivity extends AppCompatActivity {
         MaterialButton btnConfirm = dialogView.findViewById(R.id.btnConfirmNewBill);
         MaterialButton btnCancel = dialogView.findViewById(R.id.btnCancelNewBill);
 
-        final androidx.appcompat.app.AlertDialog dialog =
-                new MaterialAlertDialogBuilder(this)
-                        .setView(dialogView)
-                        .setCancelable(true)
-                        .create();
+        final androidx.appcompat.app.AlertDialog dialog = new MaterialAlertDialogBuilder(this)
+                .setView(dialogView)
+                .setCancelable(true)
+                .create();
 
         btnCancel.setOnClickListener(v -> dialog.dismiss());
 
@@ -312,5 +327,58 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         dialog.show();
+    }
+
+    // 新增提醒功能核心逻辑
+    private void updateReminders() {
+        // 获取库存数据
+        InventoryRepository inventoryRepo = new InventoryRepository(this);
+        List<InventoryItem> items = inventoryRepo.getItems();
+
+        // 获取账单数据
+        BillStorage billStorage = new BillStorage(this);
+        List<BillItem> unpaidBills = billStorage.getUnpaidBills();
+
+        // 检查即将过期的库存商品（7天内）
+        long currentTime = System.currentTimeMillis();
+        long sevenDays = 7 * 24 * 60 * 60 * 1000;
+        List<String> inventoryReminders = new ArrayList<>();
+
+        for (InventoryItem item : items) {
+            if (item.expireDateMillis != null && item.expireDateMillis <= currentTime + sevenDays
+                    && item.expireDateMillis > currentTime) {
+                String dateStr = formatDate(item.expireDateMillis);
+                inventoryReminders.add(item.name + " will expire on " + dateStr + ".");
+            }
+        }
+
+        // 检查未支付的账单
+        List<String> billReminders = new ArrayList<>();
+        if (!unpaidBills.isEmpty()) {
+            for (BillItem bill : unpaidBills) {
+                billReminders.add("Unpaid bill: " + bill.getName() + " (" + bill.getAmount() + ")");
+            }
+        }
+
+        // 更新提醒界面
+        if (!inventoryReminders.isEmpty()) {
+            tvReminder1.setText(inventoryReminders.get(0));
+            cardReminder1.setVisibility(View.VISIBLE);
+        } else {
+            cardReminder1.setVisibility(View.GONE);
+        }
+
+        if (!billReminders.isEmpty()) {
+            tvReminder2.setText(billReminders.get(0));
+            cardReminder2.setVisibility(View.VISIBLE);
+        } else {
+            cardReminder2.setVisibility(View.GONE);
+        }
+    }
+
+    // 日期格式化工具方法
+    private String formatDate(long millis) {
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
+        return sdf.format(new Date(millis));
     }
 }
