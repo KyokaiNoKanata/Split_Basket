@@ -214,80 +214,19 @@
                 android:paddingTop="12dp"
                 android:paddingBottom="6dp" />
 
-            <com.google.android.material.card.MaterialCardView
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewStatus"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardUseCompatPadding="true"
-                app:cardElevation="1dp"
-                android:layout_marginBottom="8dp">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="12dp">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="xxx bought 'Chopsticks'"
-                        style="@style/ListItemText" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="20 minutes ago"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+                android:layout_marginBottom="16dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-            <com.google.android.material.card.MaterialCardView
+            <!-- 分隔线 -->
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardUseCompatPadding="true"
-                app:cardElevation="1dp"
-                android:layout_marginBottom="8dp">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="12dp">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="xxx adds 'chopsticks' to the shopping list"
-                        style="@style/ListItemText" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="1 hours ago"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardUseCompatPadding="true"
-                app:cardElevation="1dp"
-                android:layout_marginBottom="16dp">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="12dp">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="xxx paid $60 for lunch"
-                        style="@style/ListItemText" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="2 hours ago"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginBottom="16dp" />
 
         </LinearLayout>
     </ScrollView>

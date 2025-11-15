@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.annotation.Nullable;
 
+import com.example.split_basket.EventLogManager;
 import com.example.split_basket.R;
 import com.example.split_basket.ShoppingItem;
 import com.example.split_basket.callback.OperationCallback;
@@ -21,12 +22,14 @@ public class ShoppingListRepository {
     private final ShoppingListDao shoppingListDao;
     private final ExecutorService executorService = Executors.newFixedThreadPool(2);
     private final Context appContext;
+    private final EventLogManager eventLogManager;
     private volatile boolean seeded = false;
 
     private ShoppingListRepository(@NonNull Context context) {
         appContext = context.getApplicationContext();
         SplitBasketDatabase database = SplitBasketDatabase.getInstance(appContext);
         shoppingListDao = database.shoppingListDao();
+        eventLogManager = EventLogManager.getInstance(appContext);
         Runtime.getRuntime().addShutdownHook(new Thread(this::shutdown));
     }
 
@@ -42,7 +45,8 @@ public class ShoppingListRepository {
     }
 
     public void ensureSeedData() {
-        if (seeded) return;
+        if (seeded)
+            return;
         executorService.execute(() -> {
             if (shoppingListDao.countItems() == 0) {
                 shoppingListDao.insert(new ShoppingItem(appContext.getString(R.string.bread), "Alice", 2));
@@ -72,22 +76,45 @@ public class ShoppingListRepository {
                 return;
             }
             shoppingListDao.insert(item);
+            // 添加日志记录
+            eventLogManager.addLog(EventLogManager.EVENT_TYPE_SHOPPING_LIST_ADD, item.getName(), item.getQuantity(),
+                    "");
             notifyCallback(callback, true,
                     appContext.getString(R.string.item_added_success, name));
         });
     }
 
     public void updateItem(@NonNull ShoppingItem item) {
-        executorService.execute(() -> shoppingListDao.update(item));
+        executorService.execute(() -> {
+            shoppingListDao.update(item);
+            // 添加日志记录
+            eventLogManager.addLog(EventLogManager.EVENT_TYPE_SHOPPING_LIST_UPDATE, item.getName(), item.getQuantity(),
+                    "");
+        });
     }
 
     public void markItemsPurchasedByIds(@NonNull List<Long> ids) {
-        if (ids.isEmpty()) return;
-        executorService.execute(() -> shoppingListDao.markPurchasedByIds(ids));
+        if (ids.isEmpty())
+            return;
+        executorService.execute(() -> {
+            // 获取被标记为购买的商品信息
+            List<ShoppingItem> items = shoppingListDao.getItemsByIds(ids);
+            shoppingListDao.markPurchasedByIds(ids);
+            // 为每个商品添加日志记录
+            for (ShoppingItem item : items) {
+                eventLogManager.addLog(EventLogManager.EVENT_TYPE_SHOPPING_LIST_PURCHASE, item.getName(),
+                        item.getQuantity(), "");
+            }
+        });
     }
 
     public void deleteItem(@NonNull ShoppingItem item) {
-        executorService.execute(() -> shoppingListDao.delete(item));
+        executorService.execute(() -> {
+            shoppingListDao.delete(item);
+            // 添加日志记录
+            eventLogManager.addLog(EventLogManager.EVENT_TYPE_SHOPPING_LIST_REMOVE, item.getName(), item.getQuantity(),
+                    "");
+        });
     }
 
     public List<ShoppingItem> getPurchasedItems() {
@@ -117,8 +144,8 @@ public class ShoppingListRepository {
     }
 
     private void notifyCallback(@Nullable OperationCallback callback,
-                                boolean success,
-                                @NonNull String message) {
+            boolean success,
+            @NonNull String message) {
         if (callback != null) {
             callback.onComplete(success, message);
         }

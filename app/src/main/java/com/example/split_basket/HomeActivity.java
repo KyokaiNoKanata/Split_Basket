@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
@@ -44,6 +45,9 @@ public class HomeActivity extends AppCompatActivity {
     // 新增提醒功能相关变量
     private TextView tvReminder1, tvReminder2;
     private MaterialCardView cardReminder1, cardReminder2;
+    // 新增日志功能相关变量
+    private RecyclerView recyclerViewStatus;
+    private StatusLogAdapter statusLogAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -105,6 +109,10 @@ public class HomeActivity extends AppCompatActivity {
         cardReminder2 = findViewById(R.id.cardReminder2);
         // 更新提醒内容
         updateReminders();
+        // 初始化日志RecyclerView
+        initStatusRecyclerView();
+        // 加载日志数据
+        loadLogs();
     }
 
     // 底部导航
@@ -374,6 +382,21 @@ public class HomeActivity extends AppCompatActivity {
         } else {
             cardReminder2.setVisibility(View.GONE);
         }
+    }
+
+    // 初始化日志RecyclerView
+    private void initStatusRecyclerView() {
+        recyclerViewStatus = findViewById(R.id.recyclerViewStatus);
+        statusLogAdapter = new StatusLogAdapter(this);
+        recyclerViewStatus.setAdapter(statusLogAdapter);
+        // 使用默认的LinearLayoutManager（已在XML中设置）
+    }
+
+    // 加载日志数据
+    private void loadLogs() {
+        EventLogManager eventLogManager = EventLogManager.getInstance(this);
+        List<EventLogManager.LogEntry> logs = eventLogManager.getLogs();
+        statusLogAdapter.submitList(logs);
     }
 
     // 日期格式化工具方法

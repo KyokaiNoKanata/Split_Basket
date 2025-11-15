@@ -44,4 +44,7 @@ public interface ShoppingListDao {
 
     @Query("SELECT COUNT(*) FROM shopping_items WHERE LOWER(name) = LOWER(:name) AND LOWER(added_by) = LOWER(:addedBy)")
     int countItemsByNameAndAdder(String name, String addedBy);
+
+    @Query("SELECT * FROM shopping_items WHERE id IN (:ids)")
+    List<ShoppingItem> getItemsByIds(List<Long> ids);
 }

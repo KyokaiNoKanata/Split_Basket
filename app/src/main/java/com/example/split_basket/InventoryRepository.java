@@ -16,8 +16,10 @@ public class InventoryRepository {
     private static final String KEY_LOGS = "logs";
 
     private final SharedPreferences prefs;
+    private final Context ctx;
 
     public InventoryRepository(Context ctx) {
+        this.ctx = ctx;
         this.prefs = ctx.getSharedPreferences(PREF, Context.MODE_PRIVATE);
     }
 
@@ -29,14 +31,18 @@ public class InventoryRepository {
             for (int i = 0; i < arr.length(); i++) {
                 list.add(InventoryItem.fromJson(arr.getJSONObject(i)));
             }
-        } catch (JSONException ignored) {}
+        } catch (JSONException ignored) {
+        }
         return list;
     }
 
     private synchronized void saveItems(List<InventoryItem> items) {
         JSONArray arr = new JSONArray();
         for (InventoryItem it : items) {
-            try { arr.put(it.toJson()); } catch (JSONException ignored) {}
+            try {
+                arr.put(it.toJson());
+            } catch (JSONException ignored) {
+            }
         }
         prefs.edit().putString(KEY_ITEMS, arr.toString()).apply();
     }
@@ -52,7 +58,10 @@ public class InventoryRepository {
         List<InventoryItem> items = getItems();
         InventoryItem target = null;
         for (InventoryItem it : items) {
-            if (it.id.equals(id)) { target = it; break; }
+            if (it.id.equals(id)) {
+                target = it;
+                break;
+            }
         }
         if (target != null) {
             items.remove(target);
@@ -78,17 +87,21 @@ public class InventoryRepository {
         List<String> out = new ArrayList<>();
         try {
             JSONArray arr = new JSONArray(raw);
-            for (int i = 0; i < arr.length(); i++) out.add(arr.getString(i));
-        } catch (JSONException ignored) {}
+            for (int i = 0; i < arr.length(); i++)
+                out.add(arr.getString(i));
+        } catch (JSONException ignored) {
+        }
         return out;
     }
 
     private synchronized void appendLog(String type, InventoryItem it) {
-        String raw = prefs.getString(KEY_LOGS, "[]");
-        JSONArray arr;
-        try { arr = new JSONArray(raw); } catch (JSONException e) { arr = new JSONArray(); }
-        String line = System.currentTimeMillis() + " | " + type + " | " + it.name + " x" + it.quantity + " | " + it.category;
-        arr.put(line);
-        prefs.edit().putString(KEY_LOGS, arr.toString()).apply();
+        // 使用统一的事件日志系统
+        EventLogManager.getInstance(ctx).addLog(
+                type.equals("IN") ? EventLogManager.EVENT_TYPE_INVENTORY_ADD
+                        : type.equals("OUT") ? EventLogManager.EVENT_TYPE_INVENTORY_REMOVE
+                                : EventLogManager.EVENT_TYPE_INVENTORY_UPDATE,
+                it.name + " x" + it.quantity + " | " + it.category,
+                "xxx" // 默认用户
+        );
     }
 }
