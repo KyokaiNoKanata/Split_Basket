@@ -1,16 +1,15 @@
 package com.example.split_basket;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.example.split_basket.data.LogDao;
+import com.example.split_basket.data.SplitBasketDatabase;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class EventLogManager {
     // Event types
@@ -27,15 +26,18 @@ public class EventLogManager {
     public static final String EVENT_TYPE_BILL_ADD = "BILL_ADD";
     public static final String EVENT_TYPE_BILL_REMOVE = "BILL_REMOVE";
     private static final String TAG = "EventLogManager";
-    private static final String PREF_NAME = "event_logs";
-    private static final String KEY_LOGS = "logs_array";
     private static EventLogManager instance;
-    private final SharedPreferences prefs;
+    private final LogDao logDao;
     private final List<LogEntry> logsCache;
+    private final ExecutorService executorService;
 
     private EventLogManager(Context context) {
-        prefs = context.getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        logsCache = new ArrayList<>(getAllLogsFromStorage());
+        SplitBasketDatabase db = SplitBasketDatabase.getInstance(context);
+        logDao = db.logDao();
+        logsCache = new ArrayList<>();
+        executorService = Executors.newSingleThreadExecutor();
+        // Load logs in background
+        loadLogsInBackground();
     }
 
     public static synchronized EventLogManager getInstance(Context context) {
@@ -73,7 +75,7 @@ public class EventLogManager {
      * @param quantity Quantity (optional)
      * @param user     User (optional)
      */
-    public synchronized void addLog(String type, String content, int quantity, String user) {
+    public void addLog(String type, String content, int quantity, String user) {
         // Wrap into string and call another addLog method
         addLog(type, content + " (" + quantity + ")", user);
     }
@@ -85,106 +87,46 @@ public class EventLogManager {
      * @param content Event content
      * @param user    User (optional)
      */
-    public synchronized void addLog(String type, String content, String user) {
+    public void addLog(String type, String content, String user) {
         long timestamp = System.currentTimeMillis();
 
-        // Create log entry string
+        // Create log entry string for formatting
         String userPart = user != null ? " | " + user : "";
         String logEntryString = timestamp + " | " + type + " | " + content + userPart;
 
         // Format log entry to user-friendly description
         String formattedDescription = formatLogEntry(logEntryString);
 
-        // Create LogEntry object
-        LogEntry logEntry = new LogEntry(timestamp, type, formattedDescription, user);
+        // Create database LogEntry
+        com.example.split_basket.data.LogEntry logEntry = new com.example.split_basket.data.LogEntry(timestamp, type,
+                formattedDescription, user != null ? user : "");
 
-        JSONArray logsArray;
-        String rawLogs = prefs.getString(KEY_LOGS, "[]");
-
-        try {
-            logsArray = new JSONArray(rawLogs);
-        } catch (JSONException e) {
-            Log.e(TAG, "Failed to parse logs", e);
-            logsArray = new JSONArray();
-        }
-
-        // Convert LogEntry to JSON object and add to array
-        try {
-            JSONObject jsonLog = new JSONObject();
-            jsonLog.put("timestamp", logEntry.timestamp());
-            jsonLog.put("actionType", logEntry.actionType());
-            jsonLog.put("description", logEntry.description());
-            jsonLog.put("user", logEntry.user());
-
-            logsArray.put(jsonLog);
-            prefs.edit().putString(KEY_LOGS, logsArray.toString()).apply();
-            logsCache.add(0, logEntry);
-        } catch (JSONException e) {
-            Log.e(TAG, "Failed to create JSON log entry", e);
-        }
+        // Insert into database in background
+        executorService.execute(() -> {
+            logDao.insert(logEntry);
+            // Update cache
+            synchronized (this) {
+                logsCache.add(0, new LogEntry(timestamp, type, formattedDescription, user != null ? user : ""));
+            }
+        });
     }
 
     /**
-     * Get all log entries from storage (for initializing cache)
+     * Load log entries from database in background
      */
-    private synchronized List<LogEntry> getAllLogsFromStorage() {
-        List<LogEntry> logs = new ArrayList<>();
-        String rawLogs = prefs.getString(KEY_LOGS, "[]");
-
-        try {
-            JSONArray logsArray = new JSONArray(rawLogs);
-            for (int i = 0; i < logsArray.length(); i++) {
-                Object logObj = logsArray.get(i);
-                if (logObj instanceof String logString) {
-                    // Old format: log entry in string form
-                    try {
-                        String[] parts = logString.split(" \\| ", 3);
-                        if (parts.length < 3)
-                            continue;
-
-                        long timestamp = Long.parseLong(parts[0]);
-                        String type = parts[1];
-                        String content = parts[2];
-
-                        // Extract user
-                        String user = "";
-                        if (content.contains(" | ")) {
-                            int userIndex = content.lastIndexOf(" | ");
-                            user = content.substring(userIndex + 3);
-                            content = content.substring(0, userIndex);
-                        }
-
-                        // Format log
-                        String formattedDescription = formatLogEntry(logString);
-
-                        // Create LogEntry
-                        LogEntry logEntry = new LogEntry(timestamp, type, formattedDescription, user);
-                        logs.add(logEntry);
-                    } catch (Exception e) {
-                        Log.e(TAG, "Failed to parse old format log: " + logString, e);
-                    }
-                } else if (logObj instanceof JSONObject jsonLog) {
-                    // New format: log entry in JSON object form
-                    try {
-                        long timestamp = jsonLog.getLong("timestamp");
-                        String actionType = jsonLog.getString("actionType");
-                        String description = jsonLog.getString("description");
-                        String user = jsonLog.optString("user", "");
-
-                        LogEntry logEntry = new LogEntry(timestamp, actionType, description, user);
-                        logs.add(logEntry);
-                    } catch (JSONException e) {
-                        Log.e(TAG, "Failed to parse JSON log entry", e);
-                    }
-                }
+    private void loadLogsInBackground() {
+        executorService.execute(() -> {
+            List<com.example.split_basket.data.LogEntry> dbLogs = logDao.getAllLogs();
+            List<LogEntry> loadedLogs = new ArrayList<>();
+            for (com.example.split_basket.data.LogEntry dbLog : dbLogs) {
+                loadedLogs.add(new LogEntry(dbLog.getTimestamp(), dbLog.getActionType(), dbLog.getDescription(),
+                        dbLog.getUser()));
             }
-        } catch (JSONException e) {
-            Log.e(TAG, "Failed to parse logs array", e);
-        }
-
-        // Sort in reverse chronological order
-        Collections.reverse(logs);
-        return logs;
+            synchronized (this) {
+                logsCache.clear();
+                logsCache.addAll(loadedLogs);
+            }
+        });
     }
 
     /**
@@ -204,9 +146,14 @@ public class EventLogManager {
     /**
      * Clear all log entries
      */
-    public synchronized void clearLogs() {
-        prefs.edit().putString(KEY_LOGS, "[]").apply();
-        logsCache.clear();
+    public void clearLogs() {
+        executorService.execute(() -> {
+            logDao.clearAllLogs();
+            // Clear cache
+            synchronized (this) {
+                logsCache.clear();
+            }
+        });
     }
 
     /**
@@ -283,7 +230,7 @@ public class EventLogManager {
         }
     }
 
-    // Log entry class
+    // Log entry class for UI
     public record LogEntry(long timestamp, String actionType, String description, String user) {
 
         public String getItemName() {

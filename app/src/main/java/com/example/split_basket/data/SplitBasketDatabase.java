@@ -11,7 +11,7 @@ import com.example.split_basket.BillItem;
 import com.example.split_basket.InventoryItem;
 import com.example.split_basket.ShoppingItem;
 
-@Database(entities = {ShoppingItem.class, InventoryItem.class, BillItem.class}, version = 3, exportSchema = false)
+@Database(entities = {ShoppingItem.class, InventoryItem.class, BillItem.class, LogEntry.class}, version = 4, exportSchema = false)
 public abstract class SplitBasketDatabase extends RoomDatabase {
 
     private static final String DB_NAME = "split_basket.db";
@@ -36,4 +36,6 @@ public abstract class SplitBasketDatabase extends RoomDatabase {
     public abstract InventoryDao inventoryDao();
 
     public abstract BillDao billDao();
+
+    public abstract LogDao logDao();
 }
