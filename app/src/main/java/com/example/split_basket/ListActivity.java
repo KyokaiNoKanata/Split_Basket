@@ -50,6 +50,46 @@ public class ListActivity extends AppCompatActivity implements ShoppingListAdapt
         setupShoppingList();
         setupRecommendations();
         setupActions();
+
+        // Handle intent from HomeActivity
+        Intent intent = getIntent();
+        if (intent != null) {
+            ArrayList<String> newItems = intent.getStringArrayListExtra(HomeActivity.EXTRA_NEW_LIST_ITEMS);
+            if (newItems != null && !newItems.isEmpty()) {
+                // Split each item into name and quantity
+                for (String itemStr : newItems) {
+                    final String[] name = {itemStr};
+                    final int[] quantity = {1};
+
+                    // Extract quantity if present (format: "Item (x1)")
+                    if (itemStr.contains(" (x")) {
+                        int start = itemStr.indexOf(" (x");
+                        int end = itemStr.indexOf(")", start);
+                        try {
+                            String quantityStr = itemStr.substring(start + 3, end);
+                            quantity[0] = Integer.parseInt(quantityStr);
+                            name[0] = itemStr.substring(0, start);
+                        } catch (Exception e) {
+                            // Fallback to default quantity if parsing fails
+                        }
+                    }
+
+                    // Add item to shopping list
+                    if (viewModel != null) {
+                        viewModel.addItem(name[0], quantity[0], getString(R.string.default_added_by),
+                                (success, message) -> {
+                                    // Show feedback only for the first item to avoid spamming
+                                    if (newItems.indexOf(itemStr) == 0) {
+                                        String toastMessage = success
+                                                ? getString(R.string.chip_added_feedback, name[0], quantity[0])
+                                                : message;
+                                        Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                    }
+                }
+            }
+        }
     }
 
     private void setupBottomNavigation() {

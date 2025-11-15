@@ -120,10 +120,10 @@ public class InventoryRepository {
     public List<String> getLogs() {
         // Get logs from EventLogManager and convert to the expected format
         return eventLogManager.getAllLogs().stream()
-                .filter(logEntry -> logEntry.getActionType().startsWith("INVENTORY"))
+                .filter(logEntry -> logEntry.actionType().startsWith("INVENTORY"))
                 .map(logEntry -> {
                     // Convert the event log to the old format: "time | type | message | category"
-                    String description = logEntry.getDescription();
+                    String description = logEntry.description();
                     String category = "";
                     String formattedMessage = description;
 
@@ -136,7 +136,7 @@ public class InventoryRepository {
 
                     // Map event type to old format (IN/OUT/UPDATE)
                     String oldType = "";
-                    switch (logEntry.getActionType()) {
+                    switch (logEntry.actionType()) {
                         case EventLogManager.EVENT_TYPE_INVENTORY_ADD:
                             oldType = "IN";
                             break;
@@ -147,11 +147,11 @@ public class InventoryRepository {
                             oldType = "UPDATE";
                             break;
                         default:
-                            oldType = logEntry.getActionType();
+                            oldType = logEntry.actionType();
                     }
 
                     // Return in the expected format
-                    return String.format("%d | %s | %s | %s", logEntry.getTimestamp(), oldType, formattedMessage,
+                    return String.format("%d | %s | %s | %s", logEntry.timestamp(), oldType, formattedMessage,
                             category);
                 })
                 .collect(Collectors.toList());

@@ -48,6 +48,7 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.constraintlayout)
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
     // 添加Gson依赖
     implementation("com.google.code.gson:gson:2.13.2")
     // 添加Room依赖

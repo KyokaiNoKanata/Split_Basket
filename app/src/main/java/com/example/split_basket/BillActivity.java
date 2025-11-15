@@ -28,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 public class BillActivity extends AppCompatActivity {
 
@@ -120,6 +121,36 @@ public class BillActivity extends AppCompatActivity {
         editUser2Amount = findViewById(R.id.editUser2Amount);
         editUser3Amount = findViewById(R.id.editUser3Amount);
         editUser4Amount = findViewById(R.id.editUser4Amount);
+
+        // 处理来自HomeActivity的意图数据
+        Intent intent = getIntent();
+        if (intent != null) {
+            // 从意图中提取数据
+            String billName = intent.getStringExtra(HomeActivity.EXTRA_BILL_NAME);
+            String totalAmount = intent.getStringExtra(HomeActivity.EXTRA_BILL_TOTAL);
+            String billDate = intent.getStringExtra(HomeActivity.EXTRA_BILL_DATE);
+            int selectedModeId = intent.getIntExtra(HomeActivity.EXTRA_BILL_MODE, R.id.rbEqual);
+
+            // 填充UI字段
+            if (billName != null) {
+                inputBillName.setText(billName);
+            }
+            if (totalAmount != null) {
+                inputTotalSpent.setText(totalAmount);
+            }
+            if (billDate != null) {
+                // 目前UI中没有日期输入框，会在创建账单时使用
+            }
+            // 设置付款方式
+            if (selectedModeId == R.id.rbEqual) {
+                radioEqual.setChecked(true);
+            } else if (selectedModeId == R.id.rbByQuantity || selectedModeId == R.id.rbByItem) {
+                // "按数量分配"和"按项目分配"模式在当前设计中不存在，默认使用自定义分配
+                radioCustom.setChecked(true);
+            } else {
+                radioEqual.setChecked(true);
+            }
+        }
 
         // 设置付款方式切换逻辑
         radioSplitMethod.setOnCheckedChangeListener((group, checkedId) -> {
@@ -362,7 +393,7 @@ public class BillActivity extends AppCompatActivity {
                 }
 
                 // 创建新账单对象
-                String billId = "new_bill_" + System.currentTimeMillis();
+                String billId = UUID.randomUUID().toString();
                 BillItem newBill = new BillItem(billId, name, total, "Unpaid", mode, creationDate);
 
                 // 添加选中的参与者
@@ -382,7 +413,7 @@ public class BillActivity extends AppCompatActivity {
                 double totalAmount = 0;
 
                 // 创建新账单对象
-                String billId = "new_bill_" + System.currentTimeMillis();
+                String billId = UUID.randomUUID().toString();
                 BillItem newBill = new BillItem(billId, name, String.format("%.2f", totalAmount), "Unpaid", mode,
                         creationDate);
 

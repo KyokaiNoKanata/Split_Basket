@@ -17,15 +17,15 @@ public class StatusLogAdapter extends ListAdapter<EventLogManager.LogEntry, Stat
     private static final DiffUtil.ItemCallback<EventLogManager.LogEntry> DIFF_CALLBACK = new DiffUtil.ItemCallback<EventLogManager.LogEntry>() {
         @Override
         public boolean areItemsTheSame(@NonNull EventLogManager.LogEntry oldItem, @NonNull EventLogManager.LogEntry newItem) {
-            return oldItem.getTimestamp() == newItem.getTimestamp()
-                    && oldItem.getActionType().equals(newItem.getActionType())
+            return oldItem.timestamp() == newItem.timestamp()
+                    && oldItem.actionType().equals(newItem.actionType())
                     && oldItem.getItemName().equals(newItem.getItemName());
         }
 
         @Override
         public boolean areContentsTheSame(@NonNull EventLogManager.LogEntry oldItem, @NonNull EventLogManager.LogEntry newItem) {
-            return oldItem.getDescription().equals(newItem.getDescription())
-                    && oldItem.getTimestamp() == newItem.getTimestamp();
+            return oldItem.description().equals(newItem.description())
+                    && oldItem.timestamp() == newItem.timestamp();
         }
     };
     private final Context context;
@@ -67,9 +67,9 @@ public class StatusLogAdapter extends ListAdapter<EventLogManager.LogEntry, Stat
 
         void bind(EventLogManager.LogEntry logEntry) {
             // 使用LogEntry的description直接展示
-            textLogContent.setText(logEntry.getDescription());
+            textLogContent.setText(logEntry.description());
             // 格式化时间
-            String formattedTime = EventLogManager.formatTimeAgo(logEntry.getTimestamp());
+            String formattedTime = EventLogManager.formatTimeAgo(logEntry.timestamp());
             textLogTime.setText(formattedTime);
         }
     }

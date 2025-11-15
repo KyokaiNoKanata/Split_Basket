@@ -23,8 +23,11 @@ import com.google.android.material.textfield.TextInputEditText;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.concurrent.Future;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -159,22 +162,41 @@ public class HomeActivity extends AppCompatActivity {
 
         btnConfirm.setOnClickListener(v -> {
             String name = etName.getText() != null ? etName.getText().toString().trim() : "";
-            String date = etDate.getText() != null ? etDate.getText().toString().trim() : "";
-            String quantity = etQuantity.getText() != null ? etQuantity.getText().toString().trim() : "";
-            String user = etUser.getText() != null ? etUser.getText().toString().trim() : "";
+            String quantityStr = etQuantity.getText() != null ? etQuantity.getText().toString().trim() : "";
 
-            if (name.isEmpty() || quantity.isEmpty()) {
+            if (name.isEmpty() || quantityStr.isEmpty()) {
                 Toast.makeText(this, "Please fill in at least Name and Quantity", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // 将数据通过 Intent 传递到 InventoryActivity
-            Intent intent = new Intent(HomeActivity.this, InventoryActivity.class);
-            intent.putExtra(EXTRA_INVENTORY_NAME, name);
-            intent.putExtra(EXTRA_INVENTORY_DATE, date);
-            intent.putExtra(EXTRA_INVENTORY_QUANTITY, quantity);
-            intent.putExtra(EXTRA_INVENTORY_USER, user);
-            startActivity(intent);
+            // Parse quantity to int
+            int quantity = Integer.parseInt(quantityStr);
+
+            // Create new InventoryItem with UUID
+            String id = java.util.UUID.randomUUID().toString();
+            InventoryItem item = new InventoryItem(id, name, quantity, "Other",
+                    System.currentTimeMillis() + (30L * 24 * 60 * 60 * 1000), // Default 30 days
+                    System.currentTimeMillis(), null); // null for photoUri
+
+            // Add to inventory
+            InventoryRepository inventoryRepo = InventoryRepository.getInstance(this);
+            Future<Void> addItemFuture = inventoryRepo.addItem(item);
+
+            try {
+                // Wait for the item to be added and log to be written
+                addItemFuture.get();
+                // Show success message
+                Toast.makeText(this, "Item added to inventory", Toast.LENGTH_SHORT).show();
+
+                // Update reminders
+                updateReminders();
+                // Update logs immediately after adding item
+                loadLogs();
+            } catch (Exception e) {
+                // Show error message if something goes wrong
+                Toast.makeText(this, "Failed to add item", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
 
             dialog.dismiss();
         });
@@ -187,7 +209,48 @@ public class HomeActivity extends AppCompatActivity {
     private void showOverviewDialog() {
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_overview_inventory, null);
 
+        TextView tvOverviewContent = dialogView.findViewById(R.id.tvOverviewContent);
         MaterialButton btnClose = dialogView.findViewById(R.id.btnCloseOverview);
+
+        // Get inventory data
+        InventoryRepository inventoryRepo = InventoryRepository.getInstance(this);
+        List<InventoryItem> items = inventoryRepo.getItems();
+
+        // Calculate summary statistics
+        int totalItems = items.size();
+        long currentTime = System.currentTimeMillis();
+        long sevenDays = 7 * 24 * 60 * 60 * 1000;
+        int expiringSoon = 0;
+        Map<String, Integer> itemsByCategory = new HashMap<>();
+
+        for (InventoryItem item : items) {
+            // Count expiring items (within 7 days)
+            if (item.expireDateMillis != null && item.expireDateMillis <= currentTime + sevenDays
+                    && item.expireDateMillis > currentTime) {
+                expiringSoon++;
+            }
+
+            // Count items by category
+            String category = item.category;
+            itemsByCategory.put(category, itemsByCategory.getOrDefault(category, 0) + 1);
+        }
+
+        // Build overview text
+        StringBuilder overviewText = new StringBuilder();
+        overviewText.append("Total items in inventory: " + totalItems + "\n\n");
+
+        if (itemsByCategory.isEmpty()) {
+            overviewText.append("No items yet.");
+        } else {
+            overviewText.append("Items by category:\n");
+            for (Map.Entry<String, Integer> entry : itemsByCategory.entrySet()) {
+                overviewText.append("- " + entry.getKey() + ": " + entry.getValue() + "\n");
+            }
+
+            overviewText.append("\nItems expiring soon (within 7 days): " + expiringSoon);
+        }
+
+        tvOverviewContent.setText(overviewText.toString());
 
         final androidx.appcompat.app.AlertDialog dialog = new MaterialAlertDialogBuilder(this)
                 .setView(dialogView)
@@ -385,6 +448,15 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // 返回主界面时更新提醒
+        updateReminders();
+        // 返回主界面时重新加载日志
+        loadLogs();
+    }
+
     // 初始化日志RecyclerView
     private void initStatusRecyclerView() {
         recyclerViewStatus = findViewById(R.id.recyclerViewStatus);
@@ -398,6 +470,11 @@ public class HomeActivity extends AppCompatActivity {
         EventLogManager eventLogManager = EventLogManager.getInstance(this);
         List<EventLogManager.LogEntry> logs = eventLogManager.getLogs();
         statusLogAdapter.submitList(logs);
+        // 使用post确保列表更新完成后再滚动
+        recyclerViewStatus.post(() -> {
+            // 滚动到最新日志条目
+            recyclerViewStatus.scrollToPosition(0);
+        });
     }
 
     // 日期格式化工具方法

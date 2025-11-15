@@ -31,9 +31,11 @@ public class EventLogManager {
     private static final String KEY_LOGS = "logs_array";
     private static EventLogManager instance;
     private final SharedPreferences prefs;
+    private final List<LogEntry> logsCache;
 
     private EventLogManager(Context context) {
         prefs = context.getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        logsCache = new ArrayList<>(getAllLogsFromStorage());
     }
 
     public static synchronized EventLogManager getInstance(Context context) {
@@ -109,22 +111,23 @@ public class EventLogManager {
         // 将 LogEntry 转换为 JSON 对象并添加到数组
         try {
             JSONObject jsonLog = new JSONObject();
-            jsonLog.put("timestamp", logEntry.getTimestamp());
-            jsonLog.put("actionType", logEntry.getActionType());
-            jsonLog.put("description", logEntry.getDescription());
-            jsonLog.put("user", logEntry.getUser());
+            jsonLog.put("timestamp", logEntry.timestamp());
+            jsonLog.put("actionType", logEntry.actionType());
+            jsonLog.put("description", logEntry.description());
+            jsonLog.put("user", logEntry.user());
 
             logsArray.put(jsonLog);
             prefs.edit().putString(KEY_LOGS, logsArray.toString()).apply();
+            logsCache.add(0, logEntry);
         } catch (JSONException e) {
             Log.e(TAG, "Failed to create JSON log entry", e);
         }
     }
 
     /**
-     * 获取所有日志记录（按时间倒序）
+     * 从存储中获取所有日志记录（用于初始化缓存）
      */
-    public synchronized List<LogEntry> getAllLogs() {
+    private synchronized List<LogEntry> getAllLogsFromStorage() {
         List<LogEntry> logs = new ArrayList<>();
         String rawLogs = prefs.getString(KEY_LOGS, "[]");
 
@@ -185,6 +188,13 @@ public class EventLogManager {
     }
 
     /**
+     * 获取所有日志记录（按时间倒序）
+     */
+    public synchronized List<LogEntry> getAllLogs() {
+        return new ArrayList<>(logsCache);
+    }
+
+    /**
      * 获取所有日志记录（按时间倒序）- 供外部调用
      */
     public synchronized List<LogEntry> getLogs() {
@@ -196,6 +206,7 @@ public class EventLogManager {
      */
     public synchronized void clearLogs() {
         prefs.edit().putString(KEY_LOGS, "[]").apply();
+        logsCache.clear();
     }
 
     /**
@@ -273,35 +284,7 @@ public class EventLogManager {
     }
 
     // 日志条目类
-    public static class LogEntry {
-        private final long timestamp;
-        private final String actionType;
-        private final String description;
-        private final String user;
-
-        public LogEntry(long timestamp, String actionType, String description, String user) {
-            this.timestamp = timestamp;
-            this.actionType = actionType;
-            this.description = description;
-            this.user = user;
-        }
-
-        // Getters
-        public long getTimestamp() {
-            return timestamp;
-        }
-
-        public String getActionType() {
-            return actionType;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public String getUser() {
-            return user;
-        }
+    public record LogEntry(long timestamp, String actionType, String description, String user) {
 
         public String getItemName() {
             // 从描述中提取物品名称（简单实现）
