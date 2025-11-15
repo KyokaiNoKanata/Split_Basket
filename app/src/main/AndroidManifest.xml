@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -25,9 +27,13 @@
         </activity>
         <activity android:name=".InventoryActivity" android:launchMode="singleTop"
             android:windowLayoutInDisplayCutoutMode="shortEdges" />
+        <activity android:name=".InventoryAddActivity" android:launchMode="singleTop"
+            android:windowLayoutInDisplayCutoutMode="shortEdges" />
         <activity android:name=".ListActivity" android:launchMode="singleTop"
             android:windowLayoutInDisplayCutoutMode="shortEdges" />
         <activity android:name=".BillActivity" android:launchMode="singleTop"
+            android:windowLayoutInDisplayCutoutMode="shortEdges" />
+        <activity android:name=".BillDetailActivity" android:launchMode="singleTop"
             android:windowLayoutInDisplayCutoutMode="shortEdges" />
 
     </application>

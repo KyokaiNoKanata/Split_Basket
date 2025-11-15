@@ -218,7 +218,8 @@ public class ListActivity extends AppCompatActivity implements ShoppingListAdapt
         int added = 0;
         java.util.List<String> candidates = new java.util.ArrayList<>();
         for (java.util.Map.Entry<String, Integer> e : entries) {
-            candidates.add(canonical.getOrDefault(e.getKey(), e.getKey()));
+            // 替换getOrDefault以支持API 23
+            candidates.add(canonical.containsKey(e.getKey()) ? canonical.get(e.getKey()) : e.getKey());
         }
         if (candidates.isEmpty()) {
             candidates.add(getString(R.string.bread));

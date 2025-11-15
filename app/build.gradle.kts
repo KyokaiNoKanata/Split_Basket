@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.split_basket"
-        minSdk = 22
+        minSdk = 23
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -49,9 +49,14 @@ dependencies {
     // 添加Gson依赖
     implementation("com.google.code.gson:gson:2.13.2")
     // 添加Room依赖
-    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-runtime:2.8.3")
     implementation(libs.room.external.antlr)
-    annotationProcessor("androidx.room:room-compiler:2.6.1")
+    implementation(libs.exifinterface)
+    annotationProcessor("androidx.room:room-compiler:2.8.3")
+    // 添加ML Kit Vision Label dependencies
+    implementation("com.google.mlkit:image-labeling:17.0.7")
+    // 添加TensorFlow Lite Interpreter dependencies
+    implementation("org.tensorflow:tensorflow-lite:2.16.1")
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

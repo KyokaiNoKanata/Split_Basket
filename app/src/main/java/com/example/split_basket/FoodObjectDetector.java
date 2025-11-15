@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
 
-import androidx.room.jarjarred.org.antlr.v4.gui.Interpreter;
+import org.tensorflow.lite.Interpreter;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -44,21 +44,23 @@ public class FoodObjectDetector {
 
     public void close() {
         if (interpreter != null) {
-            interpreter.close();
             interpreter = null;
         }
     }
 
     public FoodDetectionResult detectTopLabel(android.net.Uri imageUri) {
-        if (interpreter == null) return null;
+        if (interpreter == null)
+            return null;
         try {
             Bitmap bitmap = decodeUri(imageUri);
-            if (bitmap == null) return null;
+            if (bitmap == null)
+                return null;
             Bitmap cropped = centerCropToSquare(bitmap);
             Bitmap scaled = Bitmap.createScaledBitmap(cropped, inputSize, inputSize, true);
             ByteBuffer input = isQuantized ? convertBitmapToUint8(scaled) : convertBitmapToFloat(scaled);
 
-            // SSD 输出张量：locations [1][N][4], classes [1][N], scores [1][N], numDetections [1]
+            // SSD 输出张量：locations [1][N][4], classes [1][N], scores [1][N], numDetections
+            // [1]
             int numDetections = 10; // 常见默认输出数量
             float[][][] locations = new float[1][numDetections][4];
             float[][] classes = new float[1][numDetections];
@@ -71,7 +73,7 @@ public class FoodObjectDetector {
             outputs.put(2, scores);
             outputs.put(3, detections);
 
-            Object[] inputs = new Object[]{input};
+            Object[] inputs = new Object[] { input };
             interpreter.runForMultipleInputsOutputs(inputs, outputs);
 
             // 取最高分的类别
@@ -112,7 +114,7 @@ public class FoodObjectDetector {
     private List<String> loadLabels(String assetName) throws Exception {
         List<String> result = new ArrayList<>();
         try (InputStream is = appContext.getAssets().open(assetName);
-             BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
+                BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
             String line;
             while ((line = br.readLine()) != null) {
                 result.add(line.trim());
@@ -130,8 +132,8 @@ public class FoodObjectDetector {
             for (int j = 0; j < inputSize; ++j) {
                 int val = intValues[pixel++];
                 input.put((byte) ((val >> 16) & 0xFF)); // R
-                input.put((byte) ((val >> 8) & 0xFF));  // G
-                input.put((byte) (val & 0xFF));         // B
+                input.put((byte) ((val >> 8) & 0xFF)); // G
+                input.put((byte) (val & 0xFF)); // B
             }
         }
         input.rewind();
@@ -163,10 +165,12 @@ public class FoodObjectDetector {
     private Bitmap decodeUri(android.net.Uri uri) throws Exception {
         try (java.io.InputStream is = appContext.getContentResolver().openInputStream(uri)) {
             Bitmap bm = android.graphics.BitmapFactory.decodeStream(is);
-            if (bm == null) return null;
+            if (bm == null)
+                return null;
             try (java.io.InputStream eis = appContext.getContentResolver().openInputStream(uri)) {
                 if (eis != null) {
-                    androidx.exifinterface.media.ExifInterface exif = new androidx.exifinterface.media.ExifInterface(eis);
+                    androidx.exifinterface.media.ExifInterface exif = new androidx.exifinterface.media.ExifInterface(
+                            eis);
                     int o = exif.getAttributeInt(androidx.exifinterface.media.ExifInterface.TAG_ORIENTATION,
                             androidx.exifinterface.media.ExifInterface.ORIENTATION_NORMAL);
                     bm = rotateBitmapIfRequired(bm, o);
