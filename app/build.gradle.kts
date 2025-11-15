@@ -50,6 +50,7 @@ dependencies {
     implementation("com.google.code.gson:gson:2.13.2")
     // 添加Room依赖
     implementation("androidx.room:room-runtime:2.6.1")
+    implementation(libs.room.external.antlr)
     annotationProcessor("androidx.room:room-compiler:2.6.1")
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

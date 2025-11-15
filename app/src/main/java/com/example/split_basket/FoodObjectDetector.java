@@ -3,10 +3,8 @@ package com.example.split_basket;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 
-import org.tensorflow.lite.Interpreter;
+import androidx.room.jarjarred.org.antlr.v4.gui.Interpreter;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -21,24 +19,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-class FoodDetectionResult {
-    final String label;
-    final float score;
-
-    FoodDetectionResult(String label, float score) {
-        this.label = label;
-        this.score = score;
-    }
+record FoodDetectionResult(String label, float score) {
 }
 
 public class FoodObjectDetector {
     private final Context appContext;
-    private Interpreter interpreter;
-    private List<String> labels = new ArrayList<>();
     // COCO SSD MobileNet v1 量化模型：输入 300x300x3 的 UINT8
     private final int inputSize = 300;
     private final float scoreThreshold = 0.6f;
     private final boolean isQuantized = true;
+    private Interpreter interpreter;
+    private List<String> labels = new ArrayList<>();
 
     public FoodObjectDetector(Context context) {
         this.appContext = context.getApplicationContext();
@@ -180,7 +171,8 @@ public class FoodObjectDetector {
                             androidx.exifinterface.media.ExifInterface.ORIENTATION_NORMAL);
                     bm = rotateBitmapIfRequired(bm, o);
                 }
-            } catch (Exception ignore) {}
+            } catch (Exception ignore) {
+            }
             return bm;
         }
     }
@@ -195,12 +187,23 @@ public class FoodObjectDetector {
     private Bitmap rotateBitmapIfRequired(Bitmap bm, int orientation) {
         android.graphics.Matrix m = new android.graphics.Matrix();
         switch (orientation) {
-            case androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_90:  m.postRotate(90); break;
-            case androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_180: m.postRotate(180); break;
-            case androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_270: m.postRotate(270); break;
-            case androidx.exifinterface.media.ExifInterface.ORIENTATION_FLIP_HORIZONTAL: m.preScale(-1, 1); break;
-            case androidx.exifinterface.media.ExifInterface.ORIENTATION_FLIP_VERTICAL:   m.preScale(1, -1); break;
-            default: return bm;
+            case androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_90:
+                m.postRotate(90);
+                break;
+            case androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_180:
+                m.postRotate(180);
+                break;
+            case androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_270:
+                m.postRotate(270);
+                break;
+            case androidx.exifinterface.media.ExifInterface.ORIENTATION_FLIP_HORIZONTAL:
+                m.preScale(-1, 1);
+                break;
+            case androidx.exifinterface.media.ExifInterface.ORIENTATION_FLIP_VERTICAL:
+                m.preScale(1, -1);
+                break;
+            default:
+                return bm;
         }
         return Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), m, true);
     }

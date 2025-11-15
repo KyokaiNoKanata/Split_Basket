@@ -18,25 +18,19 @@
     <string name="next">Next</string>
     <string name="get_started">Get Started</string>
     <string name="welcome">Welcome to SplitBasket!</string>
-    <string name="split_basket">Split Basket</string>
     <string name="welcome_desc">Manage your groceries and split bills with friends effortlessly.</string>
     <!-- Bill splitting -->
     <string name="bill_splitting">Bill Splitting</string>
     <string name="recent_bills">Recent bills</string>
     <string name="create_new_bill">Create a new bill</string>
-    <string name="equal">Equal</string>
     <string name="split_payment_method">Split payment method:</string>
-    <string name="equal">Equal</string>
 
     <string name="by_quantity">By quantity</string>
     <string name="by_item">By item</string>
     <string name="custom">Custom</string>
-    <string name="members">Members:</string>
 
     <string name="name_of_members">Name of Members</string>
     <string name="create">Create</string>
-    <string name="unpaid">Unpaid</string>
-    <string name="paid">Paid</string>
 
 
 
@@ -183,4 +177,5 @@
     <string name="notifications">Notifications</string>
     <string name="about">About</string>
     <string name="version">Version 1.0.0</string>
+    <string name="equal">equal</string>
 </resources>

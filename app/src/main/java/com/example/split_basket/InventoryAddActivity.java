@@ -1,10 +1,7 @@
 package com.example.split_basket;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.text.TextUtils;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -77,7 +74,8 @@ public class InventoryAddActivity extends AppCompatActivity {
                 try {
                     int days = Integer.parseInt(daysStr);
                     expire = now + days * 24L * 60 * 60 * 1000;
-                } catch (NumberFormatException ignored) {}
+                } catch (NumberFormatException ignored) {
+                }
             }
             if (android.text.TextUtils.isEmpty(name)) {
                 name = "Unnamed";
@@ -99,7 +97,8 @@ public class InventoryAddActivity extends AppCompatActivity {
                     if (trigger > now) {
                         ExpiryReminderScheduler.scheduleReminder(this, item.id, item.name, trigger);
                     }
-                } catch (NumberFormatException ignored) {}
+                } catch (NumberFormatException ignored) {
+                }
             }
 
             Toast.makeText(this, "Saved: " + item.name, Toast.LENGTH_SHORT).show();
@@ -120,10 +119,10 @@ public class InventoryAddActivity extends AppCompatActivity {
         if (requestCode == REQ_CAMERA && resultCode == RESULT_OK) {
             if (currentPhotoUri != null && foodDetector != null) {
                 FoodDetectionResult result = foodDetector.detectTopLabel(currentPhotoUri);
-                if (result != null && result.label != null && result.score >= 0.6f) {
-                    inputName.setText(result.label);            // 优先使用检测器的具体类别（如 orange）
-                    setSpinnerCategoryByLabel(result.label);
-                    Toast.makeText(this, "识别结果：" + result.label, Toast.LENGTH_SHORT).show();
+                if (result != null && result.label() != null && result.score() >= 0.6f) {
+                    inputName.setText(result.label());            // 优先使用检测器的具体类别（如 orange）
+                    setSpinnerCategoryByLabel(result.label());
+                    Toast.makeText(this, "识别结果：" + result.label(), Toast.LENGTH_SHORT).show();
                 } else {
                     // 检测器无结果或低分，再尝试 ML Kit 标签器
                     runImageLabeling(currentPhotoUri);
@@ -131,8 +130,7 @@ public class InventoryAddActivity extends AppCompatActivity {
             } else {
                 runImageLabeling(currentPhotoUri);
             }
-        }
-        else {
+        } else {
             inputName.setText("Captured Item");
             Toast.makeText(this, "Photo saved", Toast.LENGTH_SHORT).show();
         }
@@ -184,7 +182,8 @@ public class InventoryAddActivity extends AppCompatActivity {
         // 简单规则映射，可按需扩充
         if (containsAny(texts, "beef", "pork", "chicken", "meat", "lamb")) return "Meat";
         if (containsAny(texts, "apple", "banana", "orange", "grape", "fruit")) return "Fruit";
-        if (containsAny(texts, "cabbage", "carrot", "lettuce", "broccoli", "vegetable")) return "Vegetable";
+        if (containsAny(texts, "cabbage", "carrot", "lettuce", "broccoli", "vegetable"))
+            return "Vegetable";
         return "Other";
     }
 
@@ -205,7 +204,7 @@ public class InventoryAddActivity extends AppCompatActivity {
         if (label == null || spinnerCat == null || spinnerCat.getAdapter() == null) return;
         String l = label.toLowerCase();
         int index;
-    
+
         if (containsAny(l, "apple", "banana", "orange", "grape", "peach", "pear", "mango", "strawberry", "pineapple", "lemon", "lime")) {
             index = findSpinnerIndex("Fruit");
         } else if (containsAny(l, "broccoli", "carrot", "cucumber", "tomato", "onion", "potato", "lettuce", "pepper")) {
