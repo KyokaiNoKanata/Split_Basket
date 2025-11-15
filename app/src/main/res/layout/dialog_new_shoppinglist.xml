@@ -16,17 +16,17 @@
             android:id="@+id/tvNewListTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
             android:text="@string/new_shared_shopping_list"
             android:textSize="20sp"
-            android:textStyle="bold"
-            android:paddingBottom="8dp" />
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
             android:text="@string/add_items_and_quantities_long_press_an_item_to_remove"
-            android:textSize="13sp"
-            android:paddingBottom="8dp" />
+            android:textSize="13sp" />
 
         <!-- 输入：物品名称 -->
         <com.google.android.material.textfield.TextInputLayout
@@ -59,8 +59,8 @@
             style="@style/PrimaryActionButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add item"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="8dp"
+            android:text="Add item" />
 
         <!-- 多选项容器 -->
         <ScrollView
@@ -79,8 +79,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:gravity="end"
+            android:orientation="horizontal"
             android:paddingTop="12dp">
 
             <com.google.android.material.button.MaterialButton

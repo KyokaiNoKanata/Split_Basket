@@ -3,8 +3,8 @@ package com.example.split_basket.data;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.LiveData;
 
 import com.example.split_basket.EventLogManager;
 import com.example.split_basket.R;
@@ -144,8 +144,8 @@ public class ShoppingListRepository {
     }
 
     private void notifyCallback(@Nullable OperationCallback callback,
-            boolean success,
-            @NonNull String message) {
+                                boolean success,
+                                @NonNull String message) {
         if (callback != null) {
             callback.onComplete(success, message);
         }

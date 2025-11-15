@@ -2,11 +2,11 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="20dp"
     android:height="20dp"
+    android:tint="@color/icon_bullet"
     android:viewportWidth="24"
-    android:viewportHeight="24"
-    android:tint="@color/icon_bullet">
+    android:viewportHeight="24">
     <!-- 小圆点作为条目图标 -->
     <path
         android:fillColor="@color/icon_bullet"
-        android:pathData="M12,8c-2.21,0 -4,1.79 -4,4s1.79,4 4,4 4,-1.79 4,-4 -1.79,-4 -4,-4z"/>
+        android:pathData="M12,8c-2.21,0 -4,1.79 -4,4s1.79,4 4,4 4,-1.79 4,-4 -1.79,-4 -4,-4z" />
 </vector>

@@ -3,24 +3,24 @@
     <!-- Pressed: higher translationZ -->
     <item android:state_pressed="true">
         <objectAnimator
-            android:propertyName="translationZ"
             android:duration="120"
+            android:propertyName="translationZ"
             android:valueTo="6dp"
             android:valueType="floatType" />
     </item>
     <!-- Selected: slightly raised -->
     <item android:state_selected="true">
         <objectAnimator
-            android:propertyName="translationZ"
             android:duration="200"
+            android:propertyName="translationZ"
             android:valueTo="2dp"
             android:valueType="floatType" />
     </item>
     <!-- Default: flat -->
     <item>
         <objectAnimator
-            android:propertyName="translationZ"
             android:duration="200"
+            android:propertyName="translationZ"
             android:valueTo="0dp"
             android:valueType="floatType" />
     </item>

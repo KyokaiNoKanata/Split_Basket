@@ -106,7 +106,7 @@ public class ShoppingItem {
     public void setInventoryItemId(@Nullable String inventoryItemId) {
         this.inventoryItemId = inventoryItemId;
     }
-    
+
     @Override
     public boolean equals(@Nullable Object o) {
         if (this == o) return true;
@@ -120,7 +120,7 @@ public class ShoppingItem {
                 && addedBy.equals(that.addedBy)
                 && Objects.equals(inventoryItemId, that.inventoryItemId);
     }
-    
+
     @Override
     public int hashCode() {
         return Objects.hash(id, name, addedBy, quantity, purchased, createdAt, inventoryItemId);

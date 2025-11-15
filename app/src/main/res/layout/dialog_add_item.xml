@@ -20,8 +20,8 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/quantity"
-        android:layout_marginTop="12dp">
+        android:layout_marginTop="12dp"
+        android:hint="@string/quantity">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/inputQuantity"
@@ -33,8 +33,8 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/added_by_hint"
-        android:layout_marginTop="12dp">
+        android:layout_marginTop="12dp"
+        android:hint="@string/added_by_hint">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/inputAddedBy"

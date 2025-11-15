@@ -14,29 +14,29 @@
 ## 操作路径（用户视角）
 
 1. 点击“Add Items”打开添加对话框，填入：
-   - 名称（必填）
-   - 数量（默认 1）
-   - 添加人（默认 “You”）
+    - 名称（必填）
+    - 数量（默认 1）
+    - 添加人（默认 “You”）
 2. 点击推荐 Chip（如 Bread/Tissue/Eggs 或动态热度）可直接打开添加对话框，并已填好名称。
 3. 列表行：
-   - 复选框：标记已购/未购
-   - 长按：编辑名称/数量/添加人
-   - 左右滑动：删除（可撤销）
+    - 复选框：标记已购/未购
+    - 长按：编辑名称/数量/添加人
+    - 左右滑动：删除（可撤销）
 4. 点击“Settlement”：
-   - 若还有未购项，弹窗列出剩余物品，确认后批量标记为已购
-   - 若无未购项，弹窗提示“全部已购”
+    - 若还有未购项，弹窗列出剩余物品，确认后批量标记为已购
+    - 若无未购项，弹窗提示“全部已购”
 
 ## 技术实现（架构与数据流）
 
 - UI 层：`ListActivity` + `RecyclerView`（`ShoppingListAdapter`）
-  - 仅列表区域可滚动；顶部标题/推荐和底部操作按钮固定
-  - 推荐 Chip 一行显示；根据当前清单频率动态生成，空间不足即停止添加
+    - 仅列表区域可滚动；顶部标题/推荐和底部操作按钮固定
+    - 推荐 Chip 一行显示；根据当前清单频率动态生成，空间不足即停止添加
 - 状态/逻辑：`ShoppingListViewModel`
-  - 向仓库发起新增、更新、删除、批量更新等操作
-  - 暴露 `LiveData<List<ShoppingItem>>` 给界面层观察
+    - 向仓库发起新增、更新、删除、批量更新等操作
+    - 暴露 `LiveData<List<ShoppingItem>>` 给界面层观察
 - 数据层：`ShoppingListRepository` + `ShoppingListDao` + `SplitBasketDatabase`
-  - Room 持久化；所有写操作在后台线程执行
-  - 通过 `LiveData` 推送数据变更至界面
+    - Room 持久化；所有写操作在后台线程执行
+    - 通过 `LiveData` 推送数据变更至界面
 - Diff 与稳定 ID：`ShoppingListAdapter` 使用 `ListAdapter + DiffUtil` 与稳定 `getItemId()`，避免全量刷新
 
 ## 数据库规范（Room）
@@ -55,8 +55,9 @@
 
 当前查询/写入规范：
 
-- 列表订阅：`@Query("SELECT * FROM shopping_items ORDER BY purchased ASC, created_at ASC") LiveData<List<ShoppingItem>>`
-  - 未购（purchased = 0）在前，已购在后；同组内按 `created_at` 升序
+- 列表订阅：
+  `@Query("SELECT * FROM shopping_items ORDER BY purchased ASC, created_at ASC") LiveData<List<ShoppingItem>>`
+    - 未购（purchased = 0）在前，已购在后；同组内按 `created_at` 升序
 - 新增：`@Insert(onConflict = REPLACE)`（仓库层做“重复校验”，见下）
 - 单项更新：`@Update`
 - 批量已购：`@Query("UPDATE shopping_items SET purchased = 1 WHERE id IN (:ids)")`
@@ -65,7 +66,8 @@
 业务级唯一性策略：
 
 - 允许“不同的人添加同名物品”；阻止“同一人重复添加同名物品”。
-- 仓库层校验：`countItemsByNameAndAdder(name, addedBy)`（大小写不敏感）；若 > 0 则提示 `%1$s by %2$s is already in the list.`
+- 仓库层校验：`countItemsByNameAndAdder(name, addedBy)`（大小写不敏感）；若 > 0 则提示
+  `%1$s by %2$s is already in the list.`
 - 如后续需要在数据库层强约束，可新建唯一索引：
 
 ```sql
@@ -77,7 +79,8 @@ ON shopping_items(LOWER(name), LOWER(added_by));
 
 - 频率/查重：`CREATE INDEX IF NOT EXISTS idx_items_name ON shopping_items(LOWER(name));`
 - 人员过滤：`CREATE INDEX IF NOT EXISTS idx_items_added_by ON shopping_items(LOWER(added_by));`
-- 购买状态与排序：`CREATE INDEX IF NOT EXISTS idx_items_purchased_created ON shopping_items(purchased, created_at);`
+- 购买状态与排序：
+  `CREATE INDEX IF NOT EXISTS idx_items_purchased_created ON shopping_items(purchased, created_at);`
 
 版本与迁移建议：
 
@@ -125,17 +128,17 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
 
 - 以 `inventory_item_id` 作为软关联字段与“库存模块”对接（字符串 ID）；后续可演进为强外键（需统一主键类型）。
 - “账单模块”可复用 `shopping_items` 作为购物来源数据：
-  - 依据 `purchased` 和 `created_at` 过滤已购清单生成账目草稿
-  - 也可在账单侧保存快照，避免历史数据变动影响已结算账单
+    - 依据 `purchased` 和 `created_at` 过滤已购清单生成账目草稿
+    - 也可在账单侧保存快照，避免历史数据变动影响已结算账单
 
 ## 常见问题（FAQ）
 
 1. 为什么允许不同人添加同名物品？
-   - 因多人共同分工，同名物品可能由不同人分别购买或记录，需保留区分信息。
+    - 因多人共同分工，同名物品可能由不同人分别购买或记录，需保留区分信息。
 2. 为什么不直接用数据库唯一约束？
-   - 当前以应用层校验为主，兼容历史数据与灵活业务；如需严格约束，可按上文添加唯一索引并补齐迁移。
+    - 当前以应用层校验为主，兼容历史数据与灵活业务；如需严格约束，可按上文添加唯一索引并补齐迁移。
 3. 推荐是否会持久化历史？
-   - 现阶段只基于“当前清单”频次统计。若需要长期推荐，可新增“添加历史表”供全局统计与搜索。
+    - 现阶段只基于“当前清单”频次统计。若需要长期推荐，可新增“添加历史表”供全局统计与搜索。
 
 ---
 

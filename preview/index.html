@@ -1,96 +1,96 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>底部栏蓝色滑块预览</title>
-  <style>
-    :root {
-      --bar-height: 56px;
-      --item-count: 4;
-      --slider-color: #2196F3; /* 与 nav_slider_bg 接近的蓝色 */
-      --text-active: #1976D2;
-      --text-normal: #222;
-    }
-    body {
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Microsoft YaHei";
-      margin: 0;
-      background: #f7f7f7;
-      display: grid;
-      place-items: center;
-      height: 100vh;
-    }
-    .phone {
-      width: 380px;
-      height: 680px;
-      background: white;
-      border-radius: 18px;
-      box-shadow: 0 12px 40px rgba(0,0,0,0.1);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-    .content {
-      flex: 1;
-      padding: 16px;
-      color: #555;
-    }
-    .bottom {
-      height: var(--bar-height);
-      position: relative;
-      background: #E3F2FD; /* 轻微蓝底，接近 selector 的 inactive */
-      box-shadow: 0 -2px 8px rgba(0,0,0,0.06);
-    }
-    .bottom-inner {
-      position: absolute;
-      inset: 0;
-      display: grid;
-      grid-template-columns: repeat(var(--item-count), 1fr);
-      align-items: center;
-    }
-    .slider {
-      position: absolute;
-      inset: 0 auto 0 0;
-      width: calc(100% / var(--item-count));
-      height: 100%;
-      border-radius: 12px;
-      background: var(--slider-color);
-      transform: translateX(0%);
-      transition: transform 220ms cubic-bezier(.4,0,.2,1);
-    }
-    .btn {
-      position: relative;
-      z-index: 2;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      user-select: none;
-      cursor: pointer;
-      color: var(--text-normal);
-      transition: color 160ms ease;
-    }
-    .btn.active { color: #fff; font-weight: 600; }
-  </style>
+    <meta charset="UTF-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>底部栏蓝色滑块预览</title>
+    <style>
+        :root {
+          --bar-height: 56px;
+          --item-count: 4;
+          --slider-color: #2196F3; /* 与 nav_slider_bg 接近的蓝色 */
+          --text-active: #1976D2;
+          --text-normal: #222;
+        }
+        body {
+          font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Microsoft YaHei";
+          margin: 0;
+          background: #f7f7f7;
+          display: grid;
+          place-items: center;
+          height: 100vh;
+        }
+        .phone {
+          width: 380px;
+          height: 680px;
+          background: white;
+          border-radius: 18px;
+          box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+        }
+        .content {
+          flex: 1;
+          padding: 16px;
+          color: #555;
+        }
+        .bottom {
+          height: var(--bar-height);
+          position: relative;
+          background: #E3F2FD; /* 轻微蓝底，接近 selector 的 inactive */
+          box-shadow: 0 -2px 8px rgba(0,0,0,0.06);
+        }
+        .bottom-inner {
+          position: absolute;
+          inset: 0;
+          display: grid;
+          grid-template-columns: repeat(var(--item-count), 1fr);
+          align-items: center;
+        }
+        .slider {
+          position: absolute;
+          inset: 0 auto 0 0;
+          width: calc(100% / var(--item-count));
+          height: 100%;
+          border-radius: 12px;
+          background: var(--slider-color);
+          transform: translateX(0%);
+          transition: transform 220ms cubic-bezier(.4,0,.2,1);
+        }
+        .btn {
+          position: relative;
+          z-index: 2;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          user-select: none;
+          cursor: pointer;
+          color: var(--text-normal);
+          transition: color 160ms ease;
+        }
+        .btn.active { color: #fff; font-weight: 600; }
+    </style>
 </head>
 <body>
-  <div class="phone">
+<div class="phone">
     <div class="content">
-      <h3>Split Basket 预览</h3>
-      <p>下面模拟了底部栏蓝色滑块的移动效果，点击不同按钮查看滑动与对齐。</p>
+        <h3>Split Basket 预览</h3>
+        <p>下面模拟了底部栏蓝色滑块的移动效果，点击不同按钮查看滑动与对齐。</p>
     </div>
     <div class="bottom">
-      <div id="slider" class="slider"></div>
-      <div id="bar" class="bottom-inner">
-        <div class="btn active" data-index="0">首页</div>
-        <div class="btn" data-index="1">库存</div>
-        <div class="btn" data-index="2">清单</div>
-        <div class="btn" data-index="3">结算</div>
-      </div>
+        <div class="slider" id="slider"></div>
+        <div class="bottom-inner" id="bar">
+            <div class="btn active" data-index="0">首页</div>
+            <div class="btn" data-index="1">库存</div>
+            <div class="btn" data-index="2">清单</div>
+            <div class="btn" data-index="3">结算</div>
+        </div>
     </div>
-  </div>
+</div>
 
-  <script>
+<script>
     const slider = document.getElementById('slider');
     const bar = document.getElementById('bar');
     const btns = Array.from(bar.querySelectorAll('.btn'));
@@ -104,7 +104,7 @@
       const idx = Number(b.dataset.index);
       setActive(idx);
     }));
-  </script>
-  </body>
-  </html>
+</script>
+</body>
+</html>
 

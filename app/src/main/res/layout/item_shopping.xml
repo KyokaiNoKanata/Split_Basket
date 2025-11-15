@@ -5,21 +5,21 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="4dp"
-    app:cardUseCompatPadding="true"
-    app:cardElevation="1dp">
+    app:cardElevation="1dp"
+    app:cardUseCompatPadding="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="8dp"
-        android:gravity="center_vertical">
+        android:padding="8dp">
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/checkPurchased"
+            style="@style/Widget.Material3.CompoundButton.CheckBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/Widget.Material3.CompoundButton.CheckBox"
             android:paddingEnd="2dp" />
 
         <LinearLayout
@@ -33,17 +33,17 @@
                 android:id="@+id/textItemName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
                 android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                android:textStyle="bold"
                 tools:text="Bread" />
 
             <TextView
                 android:id="@+id/textAddedBy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/darker_gray"
                 android:textSize="13sp"
                 android:textStyle="bold"
-                android:textColor="@android:color/darker_gray"
                 tools:text="Alice added" />
         </LinearLayout>
 
@@ -51,8 +51,8 @@
             android:id="@+id/textQuantity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
             android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+            android:textStyle="bold"
             tools:text="2" />
     </LinearLayout>
 

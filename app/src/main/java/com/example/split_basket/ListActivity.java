@@ -12,8 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
@@ -25,17 +25,16 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class ListActivity extends AppCompatActivity implements ShoppingListAdapter.ItemInteractionListener {
 
+    private final List<ShoppingItem> currentItems = new ArrayList<>();
     private MaterialButton btnHome, btnInventory, btnList, btnBill;
     private TextView textSummary;
     private TextView textEmptyState;
     private ShoppingListAdapter adapter;
     private ShoppingListViewModel viewModel;
-    private final List<ShoppingItem> currentItems = new ArrayList<>();
     private ShoppingItem recentlyDeletedItem;
 
     @Override
@@ -344,7 +343,7 @@ public class ListActivity extends AppCompatActivity implements ShoppingListAdapt
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder,
-                    @NonNull RecyclerView.ViewHolder target) {
+                                  @NonNull RecyclerView.ViewHolder target) {
                 return false;
             }
 

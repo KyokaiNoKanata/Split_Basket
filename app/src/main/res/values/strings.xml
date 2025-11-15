@@ -33,7 +33,6 @@
     <string name="create">Create</string>
 
 
-
     <!-- Home -->
     <!-- Home screen -->
 
@@ -51,7 +50,7 @@
     <string name="milk_expire">The milk will expire tomorrow.</string>
     <string name="unpaid_bill">You have an unpaid bill.</string>
     <string name="status">Status</string>
-    
+
     <!-- Inventory -->
     <string name="manually_add">Manually add</string>
     <string name="import_from_list">Import from Shopping List</string>
@@ -67,7 +66,7 @@
     <string name="name">Name</string>
     <string name="purchase_date">Purchase date</string>
     <string name="quantity">Quantity</string>
-    
+
     <!-- Shopping List -->
     <string name="shopping_list">Shopping List</string>
     <string name="recommendation">Recommendation</string>
@@ -106,7 +105,7 @@
     <string name="weekend_gathering">Weekend gathering</string>
     <string name="daily_purchases">Daily purchases</string>
     <string name="dinner">Dinner</string>
-    
+
     <!-- Status messages -->
     <string name="bought_chopsticks">xxx bought \'Chopsticks\'</string>
     <string name="minutes_ago">20 minutes ago</string>

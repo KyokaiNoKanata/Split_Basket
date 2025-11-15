@@ -3,46 +3,48 @@
     <!-- Pressed state: animate to pressed color -->
     <item android:state_pressed="true">
         <animated-selector>
-            <item android:state_checked="true" android:drawable="@drawable/button_background_selected" />
+            <item
+                android:drawable="@drawable/button_background_selected"
+                android:state_checked="true" />
             <item android:drawable="@drawable/button_background_pressed" />
             <transition
+                android:drawable="@drawable/button_background_pressed"
                 android:fromId="@+id/normal"
-                android:toId="@+id/pressed"
-                android:drawable="@drawable/button_background_pressed" />
+                android:toId="@+id/pressed" />
             <transition
+                android:drawable="@drawable/button_background_pressed"
                 android:fromId="@+id/selected"
-                android:toId="@+id/pressed"
-                android:drawable="@drawable/button_background_pressed" />
+                android:toId="@+id/pressed" />
         </animated-selector>
     </item>
-    
+
     <!-- Checked state: animate to selected color -->
     <item android:state_checked="true">
         <animated-selector>
             <item android:drawable="@drawable/button_background_selected" />
             <transition
+                android:drawable="@drawable/button_background_selected"
                 android:fromId="@+id/normal"
-                android:toId="@+id/selected"
-                android:drawable="@drawable/button_background_selected" />
+                android:toId="@+id/selected" />
             <transition
+                android:drawable="@drawable/button_background_selected"
                 android:fromId="@+id/pressed"
-                android:toId="@+id/selected"
-                android:drawable="@drawable/button_background_selected" />
+                android:toId="@+id/selected" />
         </animated-selector>
     </item>
-    
+
     <!-- Default state -->
     <item>
         <animated-selector>
             <item android:drawable="@android:color/transparent" />
             <transition
+                android:drawable="@android:color/transparent"
                 android:fromId="@+id/pressed"
-                android:toId="@+id/normal"
-                android:drawable="@android:color/transparent" />
+                android:toId="@+id/normal" />
             <transition
+                android:drawable="@android:color/transparent"
                 android:fromId="@+id/selected"
-                android:toId="@+id/normal"
-                android:drawable="@android:color/transparent" />
+                android:toId="@+id/normal" />
         </animated-selector>
     </item>
 </selector>

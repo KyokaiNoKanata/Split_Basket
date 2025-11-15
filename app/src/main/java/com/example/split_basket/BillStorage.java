@@ -2,19 +2,11 @@ package com.example.split_basket;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Base64;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.example.split_basket.EventLogManager;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,9 +16,9 @@ public class BillStorage {
     private static final String KEY_BILLS = "bills_list";
     private static final String KEY_FIRST_LAUNCH = "first_launch";
 
-    private SharedPreferences preferences;
-    private Gson gson;
-    private EventLogManager eventLogManager;
+    private final SharedPreferences preferences;
+    private final Gson gson;
+    private final EventLogManager eventLogManager;
 
     public BillStorage(Context context) {
         this.preferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);

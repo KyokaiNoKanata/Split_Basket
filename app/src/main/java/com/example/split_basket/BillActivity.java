@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -19,11 +18,11 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
+
+import com.example.split_basket.data.BillRepository;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
-import com.example.split_basket.data.BillRepository;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,8 +31,8 @@ import java.util.List;
 
 public class BillActivity extends AppCompatActivity {
 
-    private MaterialButton btnHome, btnInventory, btnList, btnBill;
     private static final int REQUEST_CODE_BILL_DETAIL = 1001;
+    private MaterialButton btnHome, btnInventory, btnList, btnBill;
     private BillRepository billStorage;
     private List<BillItem> billItems = new ArrayList<>();
 
@@ -345,7 +344,7 @@ public class BillActivity extends AppCompatActivity {
                 }
 
                 // 检查是否有选中的成员
-                CheckBox[] checkBoxes = new CheckBox[] {
+                CheckBox[] checkBoxes = new CheckBox[]{
                         checkBox1, checkBox2, checkBox3, checkBox4
                 };
 
@@ -367,7 +366,7 @@ public class BillActivity extends AppCompatActivity {
                 BillItem newBill = new BillItem(billId, name, total, "Unpaid", mode, creationDate);
 
                 // 添加选中的参与者
-                String[] participantNames = { "User1", "User2", "User3", "User4" };
+                String[] participantNames = {"User1", "User2", "User3", "User4"};
 
                 for (int i = 0; i < checkBoxes.length; i++) {
                     if (checkBoxes[i] != null && checkBoxes[i].isChecked()) {
@@ -499,8 +498,7 @@ public class BillActivity extends AppCompatActivity {
             View scrollContent = findViewById(R.id.scrollContent);
             if (scrollContent instanceof ScrollView) {
                 View child = ((ScrollView) scrollContent).getChildAt(0);
-                if (child instanceof LinearLayout) {
-                    LinearLayout scrollLayout = (LinearLayout) child;
+                if (child instanceof LinearLayout scrollLayout) {
 
                     // 先移除动态添加的账单（保留标题和创建区域）
                     removeDynamicBills(scrollLayout);

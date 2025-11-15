@@ -7,6 +7,7 @@ package com.example.split_basket.callback;
 public interface OperationCallback {
     /**
      * Called when an operation completes
+     *
      * @param success true if operation succeeded, false otherwise
      * @param message status or error message
      */

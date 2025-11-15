@@ -1,5 +1,9 @@
 package com.example.split_basket;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverter;
@@ -9,13 +13,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-import androidx.annotation.NonNull;
-
 @Entity(tableName = "bills")
-@TypeConverters({ BillItem.Converters.class })
+@TypeConverters({BillItem.Converters.class})
 public class BillItem implements Parcelable {
+    public static final Creator<BillItem> CREATOR = new Creator<BillItem>() {
+        @Override
+        public BillItem createFromParcel(Parcel in) {
+            return new BillItem(in);
+        }
+
+        @Override
+        public BillItem[] newArray(int size) {
+            return new BillItem[size];
+        }
+    };
     @PrimaryKey
     @NonNull
     private String id;
@@ -53,18 +64,6 @@ public class BillItem implements Parcelable {
             customAmounts.add(in.readDouble());
         }
     }
-
-    public static final Creator<BillItem> CREATOR = new Creator<BillItem>() {
-        @Override
-        public BillItem createFromParcel(Parcel in) {
-            return new BillItem(in);
-        }
-
-        @Override
-        public BillItem[] newArray(int size) {
-            return new BillItem[size];
-        }
-    };
 
     // Getters and Setters
     public String getId() {
@@ -111,16 +110,20 @@ public class BillItem implements Parcelable {
         return participants;
     }
 
-    public void addParticipant(String participant) {
-        this.participants.add(participant);
-    }
-
     public void setParticipants(List<String> participants) {
         this.participants = participants;
     }
 
+    public void addParticipant(String participant) {
+        this.participants.add(participant);
+    }
+
     public List<Double> getCustomAmounts() {
         return customAmounts;
+    }
+
+    public void setCustomAmounts(List<Double> customAmounts) {
+        this.customAmounts = customAmounts;
     }
 
     public void setCustomAmount(int index, double amount) {
@@ -131,10 +134,6 @@ public class BillItem implements Parcelable {
 
     public void addCustomAmount(double amount) {
         this.customAmounts.add(amount);
-    }
-
-    public void setCustomAmounts(List<Double> customAmounts) {
-        this.customAmounts = customAmounts;
     }
 
     // 计算平均金额

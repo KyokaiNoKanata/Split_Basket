@@ -26,15 +26,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".InventoryActivity" android:launchMode="singleTop"
+        <activity
+            android:name=".InventoryActivity"
+            android:launchMode="singleTop"
             android:windowLayoutInDisplayCutoutMode="shortEdges" />
-        <activity android:name=".InventoryAddActivity" android:launchMode="singleTop"
+        <activity
+            android:name=".InventoryAddActivity"
+            android:launchMode="singleTop"
             android:windowLayoutInDisplayCutoutMode="shortEdges" />
-        <activity android:name=".ListActivity" android:launchMode="singleTop"
+        <activity
+            android:name=".ListActivity"
+            android:launchMode="singleTop"
             android:windowLayoutInDisplayCutoutMode="shortEdges" />
-        <activity android:name=".BillActivity" android:launchMode="singleTop"
+        <activity
+            android:name=".BillActivity"
+            android:launchMode="singleTop"
             android:windowLayoutInDisplayCutoutMode="shortEdges" />
-        <activity android:name=".BillDetailActivity" android:launchMode="singleTop"
+        <activity
+            android:name=".BillDetailActivity"
+            android:launchMode="singleTop"
             android:windowLayoutInDisplayCutoutMode="shortEdges" />
 
     </application>

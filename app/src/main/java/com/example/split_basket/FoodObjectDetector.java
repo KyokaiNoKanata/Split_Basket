@@ -73,7 +73,7 @@ public class FoodObjectDetector {
             outputs.put(2, scores);
             outputs.put(3, detections);
 
-            Object[] inputs = new Object[] { input };
+            Object[] inputs = new Object[]{input};
             interpreter.runForMultipleInputsOutputs(inputs, outputs);
 
             // 取最高分的类别
@@ -114,7 +114,7 @@ public class FoodObjectDetector {
     private List<String> loadLabels(String assetName) throws Exception {
         List<String> result = new ArrayList<>();
         try (InputStream is = appContext.getAssets().open(assetName);
-                BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
+             BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
             String line;
             while ((line = br.readLine()) != null) {
                 result.add(line.trim());

@@ -9,14 +9,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Collections;
+import java.util.List;
 
 public class EventLogManager {
-    private static final String TAG = "EventLogManager";
-    private static final String PREF_NAME = "event_logs";
-    private static final String KEY_LOGS = "logs_array";
-
     // 事件类型
     public static final String EVENT_TYPE_INVENTORY_ADD = "INVENTORY_ADD";
     public static final String EVENT_TYPE_INVENTORY_REMOVE = "INVENTORY_REMOVE";
@@ -30,46 +26,11 @@ public class EventLogManager {
     public static final String EVENT_TYPE_BILL_UPDATE = "BILL_UPDATE";
     public static final String EVENT_TYPE_BILL_ADD = "BILL_ADD";
     public static final String EVENT_TYPE_BILL_REMOVE = "BILL_REMOVE";
-
+    private static final String TAG = "EventLogManager";
+    private static final String PREF_NAME = "event_logs";
+    private static final String KEY_LOGS = "logs_array";
     private static EventLogManager instance;
-    private SharedPreferences prefs;
-
-    // 日志条目类
-    public static class LogEntry {
-        private long timestamp;
-        private String actionType;
-        private String description;
-        private String user;
-
-        public LogEntry(long timestamp, String actionType, String description, String user) {
-            this.timestamp = timestamp;
-            this.actionType = actionType;
-            this.description = description;
-            this.user = user;
-        }
-
-        // Getters
-        public long getTimestamp() {
-            return timestamp;
-        }
-
-        public String getActionType() {
-            return actionType;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public String getUser() {
-            return user;
-        }
-
-        public String getItemName() {
-            // 从描述中提取物品名称（简单实现）
-            return description;
-        }
-    }
+    private final SharedPreferences prefs;
 
     private EventLogManager(Context context) {
         prefs = context.getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
@@ -83,8 +44,28 @@ public class EventLogManager {
     }
 
     /**
+     * 格式化时间为"x minutes/hours ago"格式
+     */
+    public static String formatTimeAgo(long timestamp) {
+        long currentTime = System.currentTimeMillis();
+        long diff = currentTime - timestamp;
+
+        long minutes = diff / (60 * 1000);
+        long hours = diff / (60 * 60 * 1000);
+        long days = diff / (24 * 60 * 60 * 1000);
+
+        if (minutes < 60) {
+            return minutes + (minutes == 1 ? " minute" : " minutes") + " ago";
+        } else if (hours < 24) {
+            return hours + (hours == 1 ? " hour" : " hours") + " ago";
+        } else {
+            return days + (days == 1 ? " day" : " days") + " ago";
+        }
+    }
+
+    /**
      * 添加一条日志记录
-     * 
+     *
      * @param type     事件类型
      * @param content  事件内容
      * @param quantity 数量（可选）
@@ -97,7 +78,7 @@ public class EventLogManager {
 
     /**
      * 添加一条日志记录
-     * 
+     *
      * @param type    事件类型
      * @param content 事件内容
      * @param user    用户（可选）
@@ -151,9 +132,8 @@ public class EventLogManager {
             JSONArray logsArray = new JSONArray(rawLogs);
             for (int i = 0; i < logsArray.length(); i++) {
                 Object logObj = logsArray.get(i);
-                if (logObj instanceof String) {
+                if (logObj instanceof String logString) {
                     // 旧格式：字符串形式的日志条目
-                    String logString = (String) logObj;
                     try {
                         String[] parts = logString.split(" \\| ", 3);
                         if (parts.length < 3)
@@ -180,9 +160,8 @@ public class EventLogManager {
                     } catch (Exception e) {
                         Log.e(TAG, "Failed to parse old format log: " + logString, e);
                     }
-                } else if (logObj instanceof JSONObject) {
+                } else if (logObj instanceof JSONObject jsonLog) {
                     // 新格式：JSON 对象形式的日志条目
-                    JSONObject jsonLog = (JSONObject) logObj;
                     try {
                         long timestamp = jsonLog.getLong("timestamp");
                         String actionType = jsonLog.getString("actionType");
@@ -293,23 +272,40 @@ public class EventLogManager {
         }
     }
 
-    /**
-     * 格式化时间为"x minutes/hours ago"格式
-     */
-    public static String formatTimeAgo(long timestamp) {
-        long currentTime = System.currentTimeMillis();
-        long diff = currentTime - timestamp;
+    // 日志条目类
+    public static class LogEntry {
+        private final long timestamp;
+        private final String actionType;
+        private final String description;
+        private final String user;
 
-        long minutes = diff / (60 * 1000);
-        long hours = diff / (60 * 60 * 1000);
-        long days = diff / (24 * 60 * 60 * 1000);
+        public LogEntry(long timestamp, String actionType, String description, String user) {
+            this.timestamp = timestamp;
+            this.actionType = actionType;
+            this.description = description;
+            this.user = user;
+        }
 
-        if (minutes < 60) {
-            return minutes + (minutes == 1 ? " minute" : " minutes") + " ago";
-        } else if (hours < 24) {
-            return hours + (hours == 1 ? " hour" : " hours") + " ago";
-        } else {
-            return days + (days == 1 ? " day" : " days") + " ago";
+        // Getters
+        public long getTimestamp() {
+            return timestamp;
+        }
+
+        public String getActionType() {
+            return actionType;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public String getUser() {
+            return user;
+        }
+
+        public String getItemName() {
+            // 从描述中提取物品名称（简单实现）
+            return description;
         }
     }
 }

@@ -3,29 +3,28 @@ package com.example.split_basket;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.split_basket.data.InventoryRepository;
+import com.example.split_basket.data.ShoppingListRepository;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
-import com.google.android.material.button.MaterialButton;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import com.example.split_basket.ShoppingItem;
-import com.example.split_basket.data.ShoppingListRepository;
-import com.example.split_basket.data.InventoryRepository;
 import java.util.concurrent.Future;
-import java.util.ArrayList;
 
 public class InventoryActivity extends AppCompatActivity {
 
+    private static final int SOON_DAYS = 3;
     private MaterialButton btnHome, btnInventory, btnList, btnBill;
     private android.widget.LinearLayout itemsContainer;
     private String selectedCategory = "All";
-    private static final int SOON_DAYS = 3;
     private android.widget.TextView tvRemain, tvSoon, tvConsumed;
     private InventoryRepository inventoryRepository;
 
@@ -237,7 +236,7 @@ public class InventoryActivity extends AppCompatActivity {
     private void showItemActions(InventoryItem item) {
         new android.app.AlertDialog.Builder(this)
                 .setTitle("Item actions")
-                .setItems(new CharSequence[] { "Edit", "Delete" }, (dialog, which) -> {
+                .setItems(new CharSequence[]{"Edit", "Delete"}, (dialog, which) -> {
                     if (which == 0) {
                         showEditDialog(item);
                     } else if (which == 1) {
@@ -274,7 +273,7 @@ public class InventoryActivity extends AppCompatActivity {
         tvCat.setText("Category");
 
         android.widget.Spinner spCat = new android.widget.Spinner(this);
-        String[] cats = new String[] { "Vegetable", "Meat", "Fruit", "Other" };
+        String[] cats = new String[]{"Vegetable", "Meat", "Fruit", "Other"};
         android.widget.ArrayAdapter<String> adapter = new android.widget.ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, cats);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

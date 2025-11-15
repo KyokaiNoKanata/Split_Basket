@@ -14,8 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class StatusLogAdapter extends ListAdapter<EventLogManager.LogEntry, StatusLogAdapter.LogViewHolder> {
 
-    private final Context context;
-
     private static final DiffUtil.ItemCallback<EventLogManager.LogEntry> DIFF_CALLBACK = new DiffUtil.ItemCallback<EventLogManager.LogEntry>() {
         @Override
         public boolean areItemsTheSame(@NonNull EventLogManager.LogEntry oldItem, @NonNull EventLogManager.LogEntry newItem) {
@@ -30,6 +28,7 @@ public class StatusLogAdapter extends ListAdapter<EventLogManager.LogEntry, Stat
                     && oldItem.getTimestamp() == newItem.getTimestamp();
         }
     };
+    private final Context context;
 
     public StatusLogAdapter(@NonNull Context context) {
         super(DIFF_CALLBACK);

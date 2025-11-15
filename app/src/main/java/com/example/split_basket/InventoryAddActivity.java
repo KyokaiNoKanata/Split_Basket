@@ -10,8 +10,8 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.material.button.MaterialButton;
 import com.example.split_basket.data.InventoryRepository;
+import com.google.android.material.button.MaterialButton;
 
 public class InventoryAddActivity extends AppCompatActivity {
     private static final int REQ_CAMERA = 101;

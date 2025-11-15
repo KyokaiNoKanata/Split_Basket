@@ -1,13 +1,8 @@
 package com.example.split_basket;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
 public class ReminderReceiver extends BroadcastReceiver {
     private static final String CHANNEL_ID = "expiry_notify";
@@ -34,8 +29,9 @@ public class ReminderReceiver extends BroadcastReceiver {
                 .setContentText("即将到期: " + (itemName == null ? "未知物品" : itemName))
                 .setPriority(androidx.core.app.NotificationCompat.PRIORITY_HIGH);
         try {
-            androidx.core.app.NotificationManagerCompat.from(context).notify((int)System.currentTimeMillis(), b.build());
-        } catch (SecurityException ignored) {}
+            androidx.core.app.NotificationManagerCompat.from(context).notify((int) System.currentTimeMillis(), b.build());
+        } catch (SecurityException ignored) {
+        }
     }
 
     private void ensureChannel(Context ctx) {

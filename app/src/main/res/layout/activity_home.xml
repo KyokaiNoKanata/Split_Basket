@@ -13,10 +13,10 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="4dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bottomBar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/bottomBar">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -28,43 +28,45 @@
             <!-- 统一的大标题 -->
             <TextView
                 android:id="@+id/pageTitleHome"
+                style="@style/PageTitleText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/PageTitleText"
-                android:text="@string/split_basket"
                 android:layout_marginStart="0dp"
                 android:layout_marginEnd="0dp"
                 android:paddingBottom="12dp"
-                tools:ignore="HardcodedText"/>
+                android:text="@string/split_basket"
+                tools:ignore="HardcodedText" />
 
             <!-- Quick Actions -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:weightSum="2"
-                android:paddingTop="8dp">
+                android:paddingTop="8dp"
+                android:weightSum="2">
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardQuickAdd"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
-                    app:cardUseCompatPadding="true"
+                    android:layout_weight="1"
                     app:cardElevation="2dp"
-                    app:layout_constraintWidth_percent="0.5"
-                    android:layout_weight="1">
+                    app:cardUseCompatPadding="true"
+                    app:layout_constraintWidth_percent="0.5">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:padding="12dp">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Quick Add"
                             android:textStyle="bold" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -79,20 +81,22 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    app:cardUseCompatPadding="true"
+                    android:layout_weight="1"
                     app:cardElevation="2dp"
-                    android:layout_weight="1">
+                    app:cardUseCompatPadding="true">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:padding="12dp">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Overview"
                             android:textStyle="bold" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -107,26 +111,30 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:weightSum="2"
-                android:paddingTop="8dp">
+                android:paddingTop="8dp"
+                android:weightSum="2">
+
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardNewList"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
-                    app:cardUseCompatPadding="true"
+                    android:layout_weight="1"
                     app:cardElevation="2dp"
-                    android:layout_weight="1">
+                    app:cardUseCompatPadding="true">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:padding="12dp">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="New List"
                             android:textStyle="bold" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -141,19 +149,22 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    app:cardUseCompatPadding="true"
+                    android:layout_weight="1"
                     app:cardElevation="2dp"
-                    android:layout_weight="1">
+                    app:cardUseCompatPadding="true">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:padding="12dp">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="New Bill"
                             android:textStyle="bold" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -168,19 +179,20 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Reminder"
-                android:textStyle="bold"
-                android:textSize="24sp"
                 android:paddingTop="12dp"
-                android:paddingBottom="6dp" />
+                android:paddingBottom="6dp"
+                android:text="Reminder"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardReminder1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardUseCompatPadding="true"
+                android:layout_marginBottom="8dp"
                 app:cardElevation="1dp"
-                android:layout_marginBottom="8dp">
+                app:cardUseCompatPadding="true">
+
                 <TextView
                     android:id="@+id/tvReminder1"
                     android:layout_width="match_parent"
@@ -193,9 +205,10 @@
                 android:id="@+id/cardReminder2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardUseCompatPadding="true"
+                android:layout_marginBottom="8dp"
                 app:cardElevation="1dp"
-                android:layout_marginBottom="8dp">
+                app:cardUseCompatPadding="true">
+
                 <TextView
                     android:id="@+id/tvReminder2"
                     android:layout_width="match_parent"
@@ -208,11 +221,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Status"
-                android:textStyle="bold"
-                android:textSize="24sp"
                 android:paddingTop="12dp"
-                android:paddingBottom="6dp" />
+                android:paddingBottom="6dp"
+                android:text="Status"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewStatus"
@@ -225,8 +238,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@android:color/darker_gray"
-                android:layout_marginBottom="16dp" />
+                android:layout_marginBottom="16dp"
+                android:background="@android:color/darker_gray" />
 
         </LinearLayout>
     </ScrollView>
@@ -239,16 +252,16 @@
         android:background="@color/white"
         android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
 
         <LinearLayout
             android:id="@+id/bottomBarContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:baselineAligned="false" android:orientation="horizontal">
+            android:baselineAligned="false"
+            android:orientation="horizontal">
 
             <FrameLayout
                 android:layout_width="0dp"
@@ -257,17 +270,17 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnHome"
+                    style="@style/BottomNavButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Home"
-                    style="@style/BottomNavButton"
+                    android:background="@drawable/button_background_selector"
                     android:checkable="true"
                     android:checked="true"
+                    android:text="Home"
                     android:textColor="@color/bottom_nav_tint"
-                    app:iconTint="@color/bottom_nav_tint"
+                    app:icon="@drawable/ic_home"
                     app:iconGravity="textTop"
-                    android:background="@drawable/button_background_selector"
-                    app:icon="@drawable/ic_home" />
+                    app:iconTint="@color/bottom_nav_tint" />
             </FrameLayout>
 
             <FrameLayout
@@ -277,16 +290,16 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnInventory"
+                    style="@style/BottomNavButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Inventory"
-                    style="@style/BottomNavButton"
-                    android:checkable="true"
-                    android:textColor="@color/bottom_nav_tint"
-                    app:iconTint="@color/bottom_nav_tint"
-                    app:iconGravity="textTop"
                     android:background="@drawable/button_background_selector"
-                    app:icon="@drawable/ic_inventory" />
+                    android:checkable="true"
+                    android:text="Inventory"
+                    android:textColor="@color/bottom_nav_tint"
+                    app:icon="@drawable/ic_inventory"
+                    app:iconGravity="textTop"
+                    app:iconTint="@color/bottom_nav_tint" />
             </FrameLayout>
 
             <FrameLayout
@@ -296,16 +309,16 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnList"
+                    style="@style/BottomNavButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="List"
-                    style="@style/BottomNavButton"
-                    android:checkable="true"
-                    android:textColor="@color/bottom_nav_tint"
-                    app:iconTint="@color/bottom_nav_tint"
-                    app:iconGravity="textTop"
                     android:background="@drawable/button_background_selector"
-                    app:icon="@drawable/ic_list" />
+                    android:checkable="true"
+                    android:text="List"
+                    android:textColor="@color/bottom_nav_tint"
+                    app:icon="@drawable/ic_list"
+                    app:iconGravity="textTop"
+                    app:iconTint="@color/bottom_nav_tint" />
             </FrameLayout>
 
             <FrameLayout
@@ -315,16 +328,16 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnBill"
+                    style="@style/BottomNavButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Bill"
-                    style="@style/BottomNavButton"
-                    android:checkable="true"
-                    android:textColor="@color/bottom_nav_tint"
-                    app:iconTint="@color/bottom_nav_tint"
-                    app:iconGravity="textTop"
                     android:background="@drawable/button_background_selector"
-                    app:icon="@drawable/ic_bill" />
+                    android:checkable="true"
+                    android:text="Bill"
+                    android:textColor="@color/bottom_nav_tint"
+                    app:icon="@drawable/ic_bill"
+                    app:iconGravity="textTop"
+                    app:iconTint="@color/bottom_nav_tint" />
             </FrameLayout>
         </LinearLayout>
     </FrameLayout>

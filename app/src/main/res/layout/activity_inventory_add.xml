@@ -1,67 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
     <LinearLayout
-        android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:orientation="vertical" android:padding="16dp" android:paddingTop="12dp">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:paddingTop="12dp">
 
         <!-- 顶部标题，风格与其它页面一致 -->
         <TextView
             android:id="@+id/pageTitleInventoryAdd"
+            style="@style/PageTitleText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/PageTitleText"
-            android:text="Inventory Add"
-            android:paddingBottom="8dp" />
+            android:paddingBottom="8dp"
+            android:text="Inventory Add" />
 
         <!-- Camera scan -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnCamera"
-            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:text="Scan by Camera"
             app:icon="@android:drawable/ic_menu_camera"
-            app:iconPadding="8dp"
             app:iconGravity="textStart"
-            android:layout_marginTop="8dp" />
+            app:iconPadding="8dp" />
 
         <!-- Category 放在 Name 之前 -->
         <TextView
-            android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:text="Category" android:textSize="14sp"
-            android:layout_marginTop="12dp" android:textColor="?attr/colorOnSurface" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Category"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="14sp" />
+
         <Spinner
             android:id="@+id/spinnerCategory"
-            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="4dp" />
 
         <!-- Name -->
         <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="12dp">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/inputName"
-                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:hint="Name" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Quantity -->
         <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/inputQty"
-                android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:hint="Quantity" android:inputType="number" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Quantity"
+                android:inputType="number" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Reminder days before expiry -->
         <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/inputDays"
-                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:hint="Reminder days before expiry"
                 android:inputType="number" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -69,11 +90,12 @@
         <!-- Save -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSave"
-            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:text="Save"
             app:icon="@android:drawable/ic_menu_save"
-            app:iconPadding="8dp"
             app:iconGravity="textStart"
-            android:layout_marginTop="16dp" />
+            app:iconPadding="8dp" />
     </LinearLayout>
 </ScrollView>

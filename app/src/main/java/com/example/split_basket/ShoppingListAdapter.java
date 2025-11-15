@@ -16,14 +16,6 @@ import com.google.android.material.checkbox.MaterialCheckBox;
 
 public class ShoppingListAdapter extends ListAdapter<ShoppingItem, ShoppingListAdapter.ItemViewHolder> {
 
-    public interface ItemInteractionListener {
-        void onItemChecked(@NonNull ShoppingItem item, boolean isChecked, int position);
-        void onItemLongPressed(@NonNull ShoppingItem item, int position);
-    }
-
-    private final ItemInteractionListener listener;
-    private final Context context;
-
     private static final DiffUtil.ItemCallback<ShoppingItem> DIFF_CALLBACK = new DiffUtil.ItemCallback<ShoppingItem>() {
         @Override
         public boolean areItemsTheSame(@NonNull ShoppingItem oldItem, @NonNull ShoppingItem newItem) {
@@ -42,6 +34,8 @@ public class ShoppingListAdapter extends ListAdapter<ShoppingItem, ShoppingListA
                     && oldItem.getAddedBy().equals(newItem.getAddedBy());
         }
     };
+    private final ItemInteractionListener listener;
+    private final Context context;
 
     public ShoppingListAdapter(@NonNull Context context, @NonNull ItemInteractionListener listener) {
         super(DIFF_CALLBACK);
@@ -76,8 +70,14 @@ public class ShoppingListAdapter extends ListAdapter<ShoppingItem, ShoppingListA
         return item != null ? item.getId() : RecyclerView.NO_ID;
     }
 
+    public interface ItemInteractionListener {
+        void onItemChecked(@NonNull ShoppingItem item, boolean isChecked, int position);
+
+        void onItemLongPressed(@NonNull ShoppingItem item, int position);
+    }
+
     class ItemViewHolder extends RecyclerView.ViewHolder {
-    private final MaterialCheckBox checkPurchased;
+        private final MaterialCheckBox checkPurchased;
         private final TextView textName;
         private final TextView textAddedBy;
         private final TextView textQuantity;

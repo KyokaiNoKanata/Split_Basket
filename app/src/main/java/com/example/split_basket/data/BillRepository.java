@@ -4,12 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 
 import com.example.split_basket.BillItem;
 import com.example.split_basket.EventLogManager;
-import com.example.split_basket.R;
 
 import java.util.ArrayList;
 import java.util.List;
