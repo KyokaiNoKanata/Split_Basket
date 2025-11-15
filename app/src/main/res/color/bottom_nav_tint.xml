@@ -4,6 +4,6 @@
     <item android:state_pressed="true" android:color="@color/nav_active_text" />
     <!-- Selected: active page text color (usually white) -->
     <item android:state_checked="true" android:color="@color/nav_active_text" />
-    <!-- Default: theme primary color -->
-    <item android:color="?attr/colorPrimary" />
+    <!-- Default: white color for visibility on all backgrounds -->
+    <item android:color="@color/white" />
 </selector>
