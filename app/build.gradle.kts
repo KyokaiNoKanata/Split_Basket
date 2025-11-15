@@ -27,8 +27,14 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_22
+        targetCompatibility = JavaVersion.VERSION_22
+    }
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(22)
+        }
     }
     lint {
         disable += "PropertyEscape"
@@ -41,7 +47,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.constraintlayout)
     // 添加Gson依赖
-    implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.google.code.gson:gson:2.13.2")
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

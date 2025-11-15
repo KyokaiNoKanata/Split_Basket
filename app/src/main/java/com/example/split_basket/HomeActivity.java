@@ -87,6 +87,8 @@ public class HomeActivity extends AppCompatActivity {
         newBill.setOnClickListener(v -> showNewBillDialog());
     }
 
+    //底部导航
+
     private void updateButtonStates(MaterialButton selectedButton) {
         btnHome.setSelected(false);
         btnInventory.setSelected(false);
@@ -234,8 +236,7 @@ public class HomeActivity extends AppCompatActivity {
             ArrayList<String> selectedItems = new ArrayList<>();
             for (int i = 0; i < count; i++) {
                 View child = container.getChildAt(i);
-                if (child instanceof MaterialCheckBox) {
-                    MaterialCheckBox cb = (MaterialCheckBox) child;
+                if (child instanceof MaterialCheckBox cb) {
                     if (cb.isChecked()) {
                         selectedItems.add(cb.getText().toString());
                     }
