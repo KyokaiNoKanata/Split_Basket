@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.split_basket.data.BillRepository;
 import com.example.split_basket.data.InventoryRepository;
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.radiobutton.MaterialRadioButton;
@@ -48,8 +47,10 @@ public class HomeActivity extends AppCompatActivity {
 
     // 新增提醒功能相关变量
     private TextView tvReminder1, tvReminder2;
-    private MaterialCardView cardReminder1, cardReminder2;
-    // 新增日志功能相关变量
+    private RecyclerView recyclerViewReminders;
+    private ReminderAdapter reminderAdapter;
+
+    // 日志相关新增日志功能相关变量
     private RecyclerView recyclerViewStatus;
     private StatusLogAdapter statusLogAdapter;
 
@@ -105,12 +106,10 @@ public class HomeActivity extends AppCompatActivity {
         // New Bill → 快速创建账单
         newBill.setOnClickListener(v -> showNewBillDialog());
 
-        // 初始化提醒文本框
-        tvReminder1 = findViewById(R.id.tvReminder1);
-        tvReminder2 = findViewById(R.id.tvReminder2);
-        // 初始化提醒卡片
-        cardReminder1 = findViewById(R.id.cardReminder1);
-        cardReminder2 = findViewById(R.id.cardReminder2);
+        // 初始化提醒RecyclerView
+        recyclerViewReminders = findViewById(R.id.recyclerViewReminders);
+        reminderAdapter = new ReminderAdapter(new ArrayList<>());
+        recyclerViewReminders.setAdapter(reminderAdapter);
         // 更新提醒内容
         updateReminders();
         // 初始化日志RecyclerView
@@ -433,19 +432,10 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         // 更新提醒界面
-        if (!inventoryReminders.isEmpty()) {
-            tvReminder1.setText(inventoryReminders.get(0));
-            cardReminder1.setVisibility(View.VISIBLE);
-        } else {
-            cardReminder1.setVisibility(View.GONE);
-        }
-
-        if (!billReminders.isEmpty()) {
-            tvReminder2.setText(billReminders.get(0));
-            cardReminder2.setVisibility(View.VISIBLE);
-        } else {
-            cardReminder2.setVisibility(View.GONE);
-        }
+        List<String> allReminders = new ArrayList<>();
+        allReminders.addAll(inventoryReminders);
+        allReminders.addAll(billReminders);
+        reminderAdapter.setReminders(allReminders);
     }
 
     @Override

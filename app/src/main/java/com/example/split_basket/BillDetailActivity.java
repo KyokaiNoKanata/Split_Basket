@@ -25,15 +25,13 @@ public class BillDetailActivity extends AppCompatActivity {
     public static final String EXTRA_BILL_METHOD = "bill_method";
     public static final String EXTRA_BILL_ID = "bill_id";
     public static final int RESULT_BILL_PAID = 1001;
-
+    // 用于格式化金额显示
+    private final DecimalFormat df = new DecimalFormat("0.00");
     private String billId;
     private boolean isPaid = false;
     private BillRepository billStorage;
     private BillItem currentBill;
     private boolean isCustomAmountMode = false;
-
-    // 用于格式化金额显示
-    private final DecimalFormat df = new DecimalFormat("0.00");
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
