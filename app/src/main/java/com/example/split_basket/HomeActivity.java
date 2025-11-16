@@ -9,9 +9,9 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.split_basket.data.BillRepository;
 import com.example.split_basket.data.InventoryRepository;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
@@ -54,10 +54,16 @@ public class HomeActivity extends AppCompatActivity {
     private RecyclerView recyclerViewStatus;
     private StatusLogAdapter statusLogAdapter;
 
+    private HomeViewModel homeViewModel;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        // Initialize ViewModel
+        homeViewModel = new ViewModelProvider(this, new HomeViewModel.Factory(getApplication()))
+                .get(HomeViewModel.class);
 
         View scroll = findViewById(R.id.scrollContent);
         scroll.setAlpha(0f);
@@ -111,11 +117,22 @@ public class HomeActivity extends AppCompatActivity {
         reminderAdapter = new ReminderAdapter(new ArrayList<>());
         recyclerViewReminders.setAdapter(reminderAdapter);
         // Update reminder content
-        updateReminders();
+        homeViewModel.updateReminders();
+        // Observe reminders LiveData
+        homeViewModel.reminders.observe(this, reminderAdapter::setReminders);
+
         // Initialize log RecyclerView
         initStatusRecyclerView();
         // Load log data
-        loadLogs();
+        homeViewModel.loadLogs();
+        // Observe logs LiveData (handle both list update and scrolling)
+        homeViewModel.logs.observe(this, logs -> {
+            statusLogAdapter.submitList(logs);
+            // Scroll to latest log entry if list is not empty
+            if (logs != null && !logs.isEmpty()) {
+                recyclerViewStatus.post(() -> recyclerViewStatus.scrollToPosition(0));
+            }
+        });
     }
 
     // Bottom navigation
@@ -177,9 +194,8 @@ public class HomeActivity extends AppCompatActivity {
                     System.currentTimeMillis() + (30L * 24 * 60 * 60 * 1000), // Default 30 days
                     System.currentTimeMillis(), null); // null for photoUri
 
-            // Add to inventory
-            InventoryRepository inventoryRepo = InventoryRepository.getInstance(this);
-            Future<Void> addItemFuture = inventoryRepo.addItem(item);
+            // Add to inventory using ViewModel
+            Future<Void> addItemFuture = homeViewModel.addInventoryItem(item);
 
             try {
                 // Wait for the item to be added and log to be written
@@ -188,9 +204,9 @@ public class HomeActivity extends AppCompatActivity {
                 Toast.makeText(this, "Item added to inventory", Toast.LENGTH_SHORT).show();
 
                 // Update reminders
-                updateReminders();
+                homeViewModel.updateReminders();
                 // Update logs immediately after adding item
-                loadLogs();
+                homeViewModel.loadLogs();
             } catch (Exception e) {
                 // Show error message if something goes wrong
                 Toast.makeText(this, "Failed to add item", Toast.LENGTH_SHORT).show();
@@ -400,49 +416,11 @@ public class HomeActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    // Core logic for reminder feature
-    private void updateReminders() {
-        // Get inventory data
-        InventoryRepository inventoryRepo = InventoryRepository.getInstance(this);
-        List<InventoryItem> items = inventoryRepo.getItems();
-
-        // Get bill data
-        BillRepository billRepository = BillRepository.getInstance(this);
-        List<BillItem> unpaidBills = billRepository.getUnpaidBills();
-
-        // Check for inventory items expiring soon (within 7 days)
-        long currentTime = System.currentTimeMillis();
-        long sevenDays = 7 * 24 * 60 * 60 * 1000;
-        List<String> inventoryReminders = new ArrayList<>();
-
-        for (InventoryItem item : items) {
-            if (item.expireDateMillis != null && item.expireDateMillis <= currentTime + sevenDays
-                    && item.expireDateMillis > currentTime) {
-                String dateStr = formatDate(item.expireDateMillis);
-                inventoryReminders.add(item.name + " will expire on " + dateStr + ".");
-            }
-        }
-
-        // Check for unpaid bills
-        List<String> billReminders = new ArrayList<>();
-        if (!unpaidBills.isEmpty()) {
-            for (BillItem bill : unpaidBills) {
-                billReminders.add("Unpaid bill: " + bill.getName() + " (" + bill.getAmount() + ")");
-            }
-        }
-
-        // Update reminder interface
-        List<String> allReminders = new ArrayList<>();
-        allReminders.addAll(inventoryReminders);
-        allReminders.addAll(billReminders);
-        reminderAdapter.setReminders(allReminders);
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
         // Update reminders when returning to the main interface
-        updateReminders();
+        homeViewModel.updateReminders();
         // Reload logs when returning to the main interface
         loadLogs();
     }
@@ -455,16 +433,9 @@ public class HomeActivity extends AppCompatActivity {
         // Use the default LinearLayoutManager (already set in XML)
     }
 
-    // Load log data
+    // Load log data - now handled by ViewModel
     private void loadLogs() {
-        EventLogManager eventLogManager = EventLogManager.getInstance(this);
-        List<EventLogManager.LogEntry> logs = eventLogManager.getLogs();
-        statusLogAdapter.submitList(logs);
-        // Use post to ensure scrolling happens after list update is complete
-        recyclerViewStatus.post(() -> {
-            // Scroll to the latest log entry
-            recyclerViewStatus.scrollToPosition(0);
-        });
+        homeViewModel.loadLogs();
     }
 
     // Date formatting utility method

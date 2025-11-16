@@ -7,8 +7,8 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
-import com.example.split_basket.data.InventoryRepository;
 import com.example.split_basket.data.ShoppingListRepository;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
@@ -26,15 +26,16 @@ public class InventoryActivity extends AppCompatActivity {
     private android.widget.LinearLayout itemsContainer;
     private String selectedCategory = "All";
     private android.widget.TextView tvRemain, tvSoon, tvConsumed;
-    private InventoryRepository inventoryRepository;
+    private InventoryViewModel inventoryViewModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inventory);
 
-        // Initialize inventory repository
-        inventoryRepository = InventoryRepository.getInstance(this);
+        // Initialize ViewModel
+        inventoryViewModel = new ViewModelProvider(this, new InventoryViewModel.Factory(getApplication()))
+                .get(InventoryViewModel.class);
 
         View scroll = findViewById(R.id.scrollContent);
         scroll.setAlpha(0f);
@@ -101,6 +102,11 @@ public class InventoryActivity extends AppCompatActivity {
         // Render when first entering the page
         renderItems(selectedCategory);
         updateOverview(selectedCategory);
+        // Observe inventory items for real-time updates
+        inventoryViewModel.getInventoryItems().observe(this, items -> {
+            renderItems(selectedCategory);
+            updateOverview(selectedCategory);
+        });
     }
 
     private void importPurchasedItems() {
@@ -132,7 +138,7 @@ public class InventoryActivity extends AppCompatActivity {
             );
 
             // Add to inventory (async operation, save Future)
-            futures.add(inventoryRepository.addItem(inventoryItem));
+            futures.add(inventoryViewModel.addItem(inventoryItem));
             // Delete imported items from shopping list
             shoppingListRepository.deleteItem(item);
         }
@@ -183,8 +189,10 @@ public class InventoryActivity extends AppCompatActivity {
     }
 
     private void renderItems(String category) {
-        InventoryRepository repo = InventoryRepository.getInstance(this);
-        java.util.List<InventoryItem> items = repo.getItems();
+        java.util.List<InventoryItem> items = inventoryViewModel.getInventoryItems().getValue();
+        if (items == null) {
+            items = new java.util.ArrayList<>();
+        }
 
         itemsContainer.removeAllViews();
 
@@ -243,8 +251,7 @@ public class InventoryActivity extends AppCompatActivity {
                     } else if (which == 1) {
                         // Delete: cancel reminder + remove data
                         ExpiryReminderScheduler.cancelReminder(this, item.id);
-                        InventoryRepository repo = InventoryRepository.getInstance(this);
-                        repo.removeItem(item.id);
+                        inventoryViewModel.removeItem(item.id);
                         android.widget.Toast.makeText(this, "Deleted: " + item.name, android.widget.Toast.LENGTH_SHORT)
                                 .show();
                         renderItems(selectedCategory);
@@ -323,7 +330,6 @@ public class InventoryActivity extends AppCompatActivity {
                         }
                     }
 
-                    InventoryRepository repo = InventoryRepository.getInstance(this);
                     InventoryItem updated = new InventoryItem(item.id, name.isEmpty() ? item.name : name, qty, cat,
                             expire, item.createdAtMillis);
 
@@ -340,7 +346,7 @@ public class InventoryActivity extends AppCompatActivity {
                         }
                     }
 
-                    repo.updateItem(updated);
+                    inventoryViewModel.updateItem(updated);
                     android.widget.Toast.makeText(this, "Updated: " + updated.name, android.widget.Toast.LENGTH_SHORT)
                             .show();
                     renderItems(selectedCategory);
@@ -355,8 +361,10 @@ public class InventoryActivity extends AppCompatActivity {
     }
 
     private void updateOverview(String category) {
-        InventoryRepository repo = InventoryRepository.getInstance(this);
-        java.util.List<InventoryItem> items = repo.getItems();
+        java.util.List<InventoryItem> items = inventoryViewModel.getInventoryItems().getValue();
+        if (items == null) {
+            items = new java.util.ArrayList<>();
+        }
 
         long now = System.currentTimeMillis();
         long soonWindow = SOON_DAYS * 24L * 60 * 60 * 1000;
@@ -378,7 +386,7 @@ public class InventoryActivity extends AppCompatActivity {
         }
 
         int consumed = 0;
-        java.util.List<String> logs = repo.getLogs();
+        java.util.List<String> logs = inventoryViewModel.getLogs();
         for (String line : logs) {
             if (!line.contains(" | OUT | "))
                 continue;
