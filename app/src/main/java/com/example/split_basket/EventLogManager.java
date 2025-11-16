@@ -126,6 +126,10 @@ public class EventLogManager {
                 logsCache.clear();
                 logsCache.addAll(loadedLogs);
             }
+            // Add default logs if cache is empty
+            if (logsCache.isEmpty()) {
+                addDefaultLogs();
+            }
         });
     }
 
@@ -141,6 +145,20 @@ public class EventLogManager {
      */
     public synchronized List<LogEntry> getLogs() {
         return getAllLogs();
+    }
+
+    /**
+     * Add default log entries when app is first started
+     */
+    private void addDefaultLogs() {
+        // Add sample inventory entries
+        addLog(EVENT_TYPE_INVENTORY_ADD, "Milk", 2, "Alice");
+        addLog(EVENT_TYPE_INVENTORY_ADD, "Bread", 1, "Bob");
+        addLog(EVENT_TYPE_INVENTORY_ADD, "Eggs", 12, "Alice");
+        // Add sample shopping list entry
+        addLog(EVENT_TYPE_SHOPPING_LIST_ADD, "Grocery List", "Charlie");
+        // Add sample bill entry
+        addLog(EVENT_TYPE_BILL_ADD, "Groceries", "Charlie");
     }
 
     /**

@@ -40,6 +40,10 @@ public class HomeViewModel extends AndroidViewModel {
         inventoryRepository = InventoryRepository.getInstance(application);
         billRepository = BillRepository.getInstance(application);
         eventLogManager = EventLogManager.getInstance(application);
+
+        // Ensure seed data for inventory
+        inventoryRepository.ensureSeedData();
+
         inventoryItems = inventoryRepository.observeItems();
         totalItems = Transformations.map(inventoryItems, List::size);
     }

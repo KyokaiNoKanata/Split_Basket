@@ -48,7 +48,24 @@ public class InventoryRepository {
             return;
         executorService.execute(() -> {
             if (inventoryDao.countItems() == 0) {
-                // No seed data for inventory
+                // Add default inventory items
+                long currentTime = System.currentTimeMillis();
+                InventoryItem milk = new InventoryItem("milk-001", "Milk", 2, "Dairy",
+                        currentTime + (30L * 24 * 60 * 60 * 1000), currentTime, null);
+                InventoryItem bread = new InventoryItem("bread-001", "Bread", 1, "Bakery",
+                        currentTime + (7L * 24 * 60 * 60 * 1000), currentTime, null);
+                InventoryItem eggs = new InventoryItem("eggs-001", "Eggs", 12, "Dairy",
+                        currentTime + (14L * 24 * 60 * 60 * 1000), currentTime, null);
+                InventoryItem apple = new InventoryItem("apple-001", "Apple", 5, "Fruit",
+                        currentTime + (10L * 24 * 60 * 60 * 1000), currentTime, null);
+                InventoryItem yogurt = new InventoryItem("yogurt-001", "Yogurt", 3, "Dairy",
+                        currentTime + (21L * 24 * 60 * 60 * 1000), currentTime, null);
+
+                inventoryDao.insert(milk);
+                inventoryDao.insert(bread);
+                inventoryDao.insert(eggs);
+                inventoryDao.insert(apple);
+                inventoryDao.insert(yogurt);
             }
             seeded = true;
         });
